@@ -1,0 +1,23 @@
+" hide all toolbars, etc. by default
+set gui=none
+
+" don't allow Google search field to automatically grab focus
+set focuscontent
+
+" hide/unhide Tree Style Tabs
+nmap t :set gui+=tabs<CR>
+nmap T :set gui+=notabs<CR>
+
+" speed up scrolling
+nnoremap j 3j
+nnoremap k 3k
+nnoremap <C-y> 3<C-y>
+nnoremap <C-e> 3<C-e>
+
+" remap Escape key
+noremap <C-c> <Esc>
+inoremap <C-c> <Esc>
+cnoremap <C-c> <Esc>
+
+" case-insensitive search by default
+set ignorecase
