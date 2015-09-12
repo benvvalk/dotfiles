@@ -26,10 +26,10 @@ Plugin 'vimscripts/taglist.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'justinmk/vim-sneak'
+Plugin 'kana/vim-textobj-user'
 call vundle#end()
 
 filetype plugin indent on
-
 filetype on
 
 "------------------------------------------------------------
@@ -37,6 +37,12 @@ filetype on
 "------------------------------------------------------------
 
 au BufNewFile,BufRead *.py set filetype=python
+
+"------------------------------------------------------------
+" GNU make settings
+"------------------------------------------------------------
+
+au BufNewFile,BufRead *.mk set filetype=make
 
 "------------------------------------------------------------
 " taglist settings
@@ -54,6 +60,25 @@ nnoremap <leader>t :TlistToggle<CR>
 let NERDTreeMapJumpNextSibling=''
 " disable default <C-k> keybinding (interferes with other mappings)
 let NERDTreeMapJumpPrevSibling=''
+
+"------------------------------------------------------------
+" VimDiff settings
+"------------------------------------------------------------
+
+au FilterWritePre * if &diff | colorscheme elmindreda | endif
+
+"------------------------------------------------------------
+" custom text objects
+"------------------------------------------------------------
+
+call textobj#user#plugin('path', {
+\ 'path': {
+\ 'pattern': '\f', 'select': ['ap', 'ip']
+\ },
+\ 'pathcomponent': {
+\ 'pattern': "[^\/\\s\"']\\+", 'select': ['af', 'if']
+\ }
+\ })
 
 "------------------------------------------------------------
 " unorganized settings
@@ -78,5 +103,4 @@ nmap <S-L> 2<C-W>>
 imap <C-g> <Esc>
 
 set isfname=@,48-57,/,.,-,_,+,,,#,$,%,~
-filetype plugin indent on
 syntax on
