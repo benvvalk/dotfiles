@@ -22,10 +22,5 @@ cnoremap <C-c> <Esc>
 " case-insensitive search by default
 set ignorecase
 
-" shortcuts for Tile Tabs extension
-nnoremap <C-w><C-v> :emenu Tile.Tile Duplicate Tab.Right<CR>
-nnoremap <C-w><C-s> :emenu Tile.Tile Duplicate Tab.Below<CR>
-nnoremap S <C-S-Right>
-nnoremap H <C-S-Left>
-nnoremap N <C-S-Up>
-nnoremap T <C-S-Down>
+" press Ctrl-I to invoke external editor from edit box
+set editor="gnome-terminal --disable-factory -x vim"
