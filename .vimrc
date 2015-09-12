@@ -25,6 +25,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'vimscripts/taglist.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
+Plugin 'justinmk/vim-sneak'
 call vundle#end()
 
 filetype plugin indent on
