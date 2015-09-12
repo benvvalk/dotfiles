@@ -1,54 +1,33 @@
 "------------------------------------------------------------
-" Vundle setup begin
+" Vundle settings
 "------------------------------------------------------------
-
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" plugins list
-Plugin 'tpope/vim-fugitive'
-"Plugin 'bling/vim-airline'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'scrooloose/nerdtree'
-Plugin 'vimscripts/taglist.vim'
-Plugin 'majutsushi/tagbar'
-"
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
 
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just
-":PluginUpdate
+" :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to
 "auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
-"------------------------------------------------------------
-" Vundle setup end
-"------------------------------------------------------------
+" be iMproved, required
+set nocompatible
+filetype off
 
-"execute pathogen#infect()
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
 
-"------------------------------------------------------------
-" airline conf (fancy status bar)
-"------------------------------------------------------------
-"
-"let g:airline_powerline_fonts = 1
-"set laststatus=2
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'scrooloose/nerdtree'
+Plugin 'vimscripts/taglist.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'kien/ctrlp.vim'
+call vundle#end()
+
+filetype plugin indent on
 
 filetype on
 
