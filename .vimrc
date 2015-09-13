@@ -27,6 +27,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'kien/ctrlp.vim'
 Plugin 'justinmk/vim-sneak'
 Plugin 'kana/vim-textobj-user'
+Plugin 'tpope/vim-surround'
 call vundle#end()
 
 filetype plugin indent on
