@@ -40,6 +40,13 @@ filetype on
 au BufNewFile,BufRead *.py set filetype=python
 
 "------------------------------------------------------------
+" ruby settings
+"------------------------------------------------------------
+
+au BufNewFile,BufRead *.rb set filetype=ruby
+au BufNewFile,BufRead *.rk set filetype=ruby
+
+"------------------------------------------------------------
 " GNU make settings
 "------------------------------------------------------------
 
