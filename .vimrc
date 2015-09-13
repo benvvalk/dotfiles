@@ -89,6 +89,13 @@ call textobj#user#plugin('path', {
 \ })
 
 "------------------------------------------------------------
+" custom motions
+"------------------------------------------------------------
+
+" move to end of prev word
+nnoremap W ge
+
+"------------------------------------------------------------
 " unorganized settings
 "------------------------------------------------------------
 
@@ -98,6 +105,8 @@ set noexpandtab
 set ignorecase
 set smartcase
 set incsearch
+set relativenumber
+
 "colorscheme evening
 "colorscheme blue
 colorscheme default
