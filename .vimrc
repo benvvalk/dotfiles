@@ -96,6 +96,13 @@ call textobj#user#plugin('path', {
 nnoremap W ge
 
 "------------------------------------------------------------
+" editing natural language text
+"------------------------------------------------------------
+
+" turn on "word wrap"
+nnoremap <leader>w :set wrap\|set linebreak\|set nolist<CR>
+
+"------------------------------------------------------------
 " unorganized settings
 "------------------------------------------------------------
 
