@@ -20,6 +20,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-repeat'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vimscripts/taglist.vim'
@@ -28,6 +29,11 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'justinmk/vim-sneak'
 Plugin 'kana/vim-textobj-user'
 Plugin 'tpope/vim-surround'
+Plugin 'kana/vim-textobj-entire'
+Plugin 'kana/vim-textobj-indent'
+Plugin 'kana/vim-textobj-line'
+Plugin 'sgur/vim-textobj-parameter'
+Plugin 'vim-scripts/InsertChar'
 call vundle#end()
 
 filetype plugin indent on
@@ -101,6 +107,12 @@ nnoremap W ge
 
 " turn on "word wrap"
 nnoremap <leader>w :set wrap\|set linebreak\|set nolist<CR>
+"
+"------------------------------------------------------------
+" InsertChar plugin
+"------------------------------------------------------------
+
+nnoremap <Space> :<C-U>call InsertChar#insert(v:count1)<CR>
 
 "------------------------------------------------------------
 " unorganized settings
