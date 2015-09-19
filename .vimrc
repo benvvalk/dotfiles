@@ -132,4 +132,6 @@ nmap <S-L> 2<C-W>>
 imap <C-g> <Esc>
 
 set isfname=@,48-57,/,.,-,_,+,,,#,$,%,~
+" backspace over everything in insert mode
+set backspace=indent,eol,start
 syntax on
