@@ -41,23 +41,15 @@ filetype plugin indent on
 filetype on
 
 "------------------------------------------------------------
-" python settings
+" file types by extension
 "------------------------------------------------------------
 
 au BufNewFile,BufRead *.py set filetype=python
-
-"------------------------------------------------------------
-" ruby settings
-"------------------------------------------------------------
-
 au BufNewFile,BufRead *.rb set filetype=ruby
 au BufNewFile,BufRead *.rk set filetype=ruby
-
-"------------------------------------------------------------
-" GNU make settings
-"------------------------------------------------------------
-
 au BufNewFile,BufRead *.mk set filetype=make
+au BufNewFile,BufRead *.cpp set filetype=cpp
+au BufNewFile,BufRead *.h set filetype=cpp
 
 "------------------------------------------------------------
 " taglist settings
