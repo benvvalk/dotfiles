@@ -34,6 +34,7 @@ Plugin 'kana/vim-textobj-indent'
 Plugin 'kana/vim-textobj-line'
 Plugin 'sgur/vim-textobj-parameter'
 Plugin 'vim-scripts/InsertChar'
+Plugin 'jeetsukumaran/vim-indentwise'
 call vundle#end()
 
 filetype plugin indent on
@@ -106,6 +107,13 @@ nnoremap <leader>w :set wrap\|set linebreak\|set nolist<CR>
 "------------------------------------------------------------
 
 nnoremap <Space> :<C-U>call InsertChar#insert(v:count1)<CR>
+
+"------------------------------------------------------------
+" IndentWise plugin
+"------------------------------------------------------------
+
+map <C-b> <Plug>(IndentWisePreviousEqualIndent)
+map <C-f> <Plug>(IndentWiseNextEqualIndent)
 
 "------------------------------------------------------------
 " unorganized settings
