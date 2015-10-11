@@ -24,3 +24,8 @@ set ignorecase
 
 " press Ctrl-I to invoke external editor from edit box
 set editor="gnome-terminal --disable-factory -x vim"
+
+" tab history extension
+" (download from http://vimpr.github.io/plugins-en.html)
+nnoremap <S-o> :tabhistory back<CR>
+nnoremap <S-i> :tabhistory forward<CR>
