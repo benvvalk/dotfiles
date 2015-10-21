@@ -101,7 +101,7 @@ call textobj#user#plugin('path', {
 
 " turn on "word wrap"
 nnoremap <leader>w :set wrap\|set linebreak\|set nolist<CR>
-"
+
 "------------------------------------------------------------
 " InsertChar plugin
 "------------------------------------------------------------
@@ -114,6 +114,13 @@ nnoremap <Space> :<C-U>call InsertChar#insert(v:count1)<CR>
 
 map <C-b> <Plug>(IndentWisePreviousEqualIndent)
 map <C-f> <Plug>(IndentWiseNextEqualIndent)
+
+"------------------------------------------------------------
+" insert mode keybindings
+"------------------------------------------------------------
+
+inoremap <C-c> <nop>
+inoremap <CR> <Esc>l
 
 "------------------------------------------------------------
 " unorganized settings
