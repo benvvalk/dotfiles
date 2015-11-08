@@ -206,7 +206,10 @@ layers configuration. You are free to put any user code."
   (add-hook 'magit-mode-hook 'evil-emacs-state)
   ;; map Enter => Esc in insert mode
   (define-key evil-insert-state-map (kbd "<return>") (kbd "<escape> l"))
+  ;; set default tab width to 4 spaces
   (setq-default tab-width 4)
+  ;; don't permanently highlight search matches
+  (global-evil-search-highlight-persist nil)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
