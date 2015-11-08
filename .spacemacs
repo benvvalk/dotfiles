@@ -206,6 +206,7 @@ layers configuration. You are free to put any user code."
   (add-hook 'magit-mode-hook 'evil-emacs-state)
   ;; map Enter => Esc in insert mode
   (define-key evil-insert-state-map (kbd "<return>") (kbd "<escape> l"))
+  (setq-default tab-width 4)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
