@@ -210,6 +210,9 @@ layers configuration. You are free to put any user code."
   (setq-default tab-width 4)
   ;; don't permanently highlight search matches
   (global-evil-search-highlight-persist nil)
+  ;; set default browser to firefox
+  (setq browse-url-browser-function 'browse-url-generic
+       browse-url-generic-program "firefox")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
