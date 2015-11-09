@@ -155,4 +155,5 @@ imap <C-g> <Esc>
 set isfname=@,48-57,/,.,-,_,+,,,#,$,%,~
 " backspace over everything in insert mode
 set backspace=indent,eol,start
+set pastetoggle=<F2>
 syntax on
