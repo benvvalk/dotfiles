@@ -35,6 +35,11 @@ Plugin 'kana/vim-textobj-line'
 Plugin 'sgur/vim-textobj-parameter'
 Plugin 'vim-scripts/InsertChar'
 Plugin 'jeetsukumaran/vim-indentwise'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-vinegar'
 call vundle#end()
 
 filetype plugin indent on
@@ -50,6 +55,7 @@ au BufNewFile,BufRead *.rk set filetype=ruby
 au BufNewFile,BufRead *.mk set filetype=make
 au BufNewFile,BufRead *.cpp set filetype=cpp
 au BufNewFile,BufRead *.h set filetype=cpp
+au BufNewFile,BufRead qsub* set filetype=sh
 
 "------------------------------------------------------------
 " taglist settings
@@ -106,6 +112,14 @@ nnoremap <Space> :<C-U>call InsertChar#insert(v:count1)<CR>
 
 map <C-b> <Plug>(IndentWisePreviousEqualIndent)
 map <C-f> <Plug>(IndentWiseNextEqualIndent)
+
+"------------------------------------------------------------
+" vim-snipmate plugin (requires vim 7.4)
+"------------------------------------------------------------
+
+" clear selected text in SELECT mode (used for tab stops
+" within snippets)
+snoremap <C-d> <space><C-h>
 
 "------------------------------------------------------------
 " insert mode keybindings
