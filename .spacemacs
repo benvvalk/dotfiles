@@ -215,6 +215,9 @@ layers configuration. You are free to put any user code."
   ;; set default browser to firefox
   (setq browse-url-browser-function 'browse-url-generic
        browse-url-generic-program "firefox")
+  ;; make window splits vertical by default
+  (setq-default split-width-threshold nil)
+  (setq split-width-threshold 1)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
