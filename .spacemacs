@@ -210,6 +210,11 @@ layers configuration. You are free to put any user code."
   (define-key evil-insert-state-map (kbd "<return>") (kbd "<escape> l"))
   ;; set default tab width to 4 spaces
   (setq-default tab-width 4)
+  ;; use tabs for indentation
+  (setq-default indent-tabs-mode t)
+  ;; C code style (see: https://en.wikipedia.org/wiki/Indent_style)
+  (setq c-default-style "stroustrup"
+       c-basic-offset 4)
   ;; don't permanently highlight search matches
   (global-evil-search-highlight-persist nil)
   ;; set default browser to firefox
