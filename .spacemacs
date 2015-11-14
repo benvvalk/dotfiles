@@ -208,6 +208,7 @@ layers configuration. You are free to put any user code."
   (add-hook 'magit-mode-hook 'evil-emacs-state)
   ;; map Enter => Esc in insert mode
   (define-key evil-insert-state-map (kbd "<return>") (kbd "<escape> l"))
+  (define-key evil-insert-state-map (kbd "RET") (kbd "<escape> l"))
   ;; set default tab width to 4 spaces
   (setq-default tab-width 4)
   ;; use tabs for indentation
