@@ -31,6 +31,7 @@ values."
      org
      c-c++
      ranger
+     themes-megapack
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
