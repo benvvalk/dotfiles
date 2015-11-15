@@ -1,0 +1,34 @@
+* External Programs
+#+BEGIN_SRC emacs-lisp
+;; set default browser to firefox
+(setq browse-url-browser-function 'browse-url-generic
+     browse-url-generic-program "firefox")
+#+END_SRC
+* Indentation Settings
+#+BEGIN_SRC emacs-lisp
+;; set default tab width to 4 spaces
+(setq-default tab-width 4)
+;; use tabs for indentation
+(setq-default indent-tabs-mode t)
+;; C code style (see: https://en.wikipedia.org/wiki/Indent_style)
+(setq c-default-style "stroustrup"
+     c-basic-offset 4)
+#+END_SRC
+* Key Bindings
+#+BEGIN_SRC emacs-lisp
+;; disable evil mode when using magit (because of keybinding conflicts)
+(add-hook 'magit-mode-hook 'evil-emacs-state)
+;; map Enter => Esc in insert mode
+(define-key evil-insert-state-map (kbd "RET") (kbd "<escape> l"))
+#+END_SRC
+* Line Numbering
+#+BEGIN_SRC emacs-lisp
+(global-linum-mode)
+;; enable relative line numbering
+(linum-relative-mode)
+;; don't permanently highlight search matches
+(global-evil-search-highlight-persist nil)
+;; make window splits vertical by default
+(setq-default split-width-threshold nil)
+(setq split-width-threshold 1)
+#+END_SRC

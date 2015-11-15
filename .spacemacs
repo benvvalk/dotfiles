@@ -201,30 +201,8 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
-  ;; enable line numbering
-  (global-linum-mode)
-  ;; enable relative line numbering
-  (linum-relative-mode)
-  ;; disable evil mode when using magit (because of keybinding conflicts)
-  (add-hook 'magit-mode-hook 'evil-emacs-state)
-  ;; map Enter => Esc in insert mode
-  (define-key evil-insert-state-map (kbd "<return>") (kbd "<escape> l"))
-  (define-key evil-insert-state-map (kbd "RET") (kbd "<escape> l"))
-  ;; set default tab width to 4 spaces
-  (setq-default tab-width 4)
-  ;; use tabs for indentation
-  (setq-default indent-tabs-mode t)
-  ;; C code style (see: https://en.wikipedia.org/wiki/Indent_style)
-  (setq c-default-style "stroustrup"
-       c-basic-offset 4)
-  ;; don't permanently highlight search matches
-  (global-evil-search-highlight-persist nil)
-  ;; set default browser to firefox
-  (setq browse-url-browser-function 'browse-url-generic
-       browse-url-generic-program "firefox")
-  ;; make window splits vertical by default
-  (setq-default split-width-threshold nil)
-  (setq split-width-threshold 1)
+  ;; load my configuration an ORG file
+  (org-babel-load-file "~/.emacs.d/emacs.org")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
