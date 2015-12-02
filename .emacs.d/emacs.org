@@ -25,6 +25,10 @@
 (add-hook 'magit-mode-hook 'evil-emacs-state)
 ;; map Enter => Esc in insert mode
 (define-key evil-insert-state-map (kbd "RET") (kbd "<escape> l"))
+;; custom keys for org mod
+(evil-define-key 'normal evil-org-mode-map
+ "L" 'org-demote-subtree
+ "H" 'org-promote-subtree)
 #+END_SRC
 * Line Numbering
 #+BEGIN_SRC emacs-lisp
