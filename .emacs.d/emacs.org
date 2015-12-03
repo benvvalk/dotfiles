@@ -28,7 +28,9 @@
 ;; custom keys for org mode
 (evil-define-key 'normal evil-org-mode-map
  "L" 'org-demote-subtree
- "H" 'org-promote-subtree)
+ "H" 'org-promote-subtree
+ "\C-j" 'org-move-subtree-down
+ "\C-k" 'org-move-subtree-up)
 #+END_SRC
 * Line Numbering
 #+BEGIN_SRC emacs-lisp
