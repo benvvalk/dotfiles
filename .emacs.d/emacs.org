@@ -31,6 +31,9 @@
  "H" 'org-promote-subtree
  "\C-j" 'org-move-subtree-down
  "\C-k" 'org-move-subtree-up)
+;; vim-sneak replacement (avy mode)
+(evil-leader/set-key "c" 'avy-goto-char-2)
+(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
 #+END_SRC
 * Line Numbering
 #+BEGIN_SRC emacs-lisp
