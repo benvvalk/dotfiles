@@ -41,7 +41,10 @@
 #+END_SRC
 * Splitting Windows
 #+BEGIN_SRC emacs-lisp
-;; make window splits vertical by default
+;; disable automatic window splitting
+;; where possible
 (setq-default split-width-threshold nil)
-(setq split-width-threshold 1)
+(setq split-width-threshold nil)
+(setq-default split-height-threshold nil)
+(setq split-height-threshold nil)
 #+END_SRC
