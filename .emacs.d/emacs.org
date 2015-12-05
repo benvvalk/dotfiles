@@ -47,4 +47,6 @@
 (setq split-width-threshold nil)
 (setq-default split-height-threshold nil)
 (setq split-height-threshold nil)
+(shackle-mode)
+(setq shackle-default-rule '(:same t))
 #+END_SRC
