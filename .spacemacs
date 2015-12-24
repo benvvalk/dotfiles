@@ -27,7 +27,7 @@ values."
      ;; better-defaults
      emacs-lisp
      git
-     ;; markdown
+     markdown
      org
      c-c++
      ranger
