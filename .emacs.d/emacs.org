@@ -21,8 +21,6 @@
 #+END_SRC
 * Key Bindings
 #+BEGIN_SRC emacs-lisp
-;; map Enter => Esc in insert mode
-(define-key evil-insert-state-map (kbd "RET") (kbd "<escape> l"))
 ;; custom keys for org mode
 (evil-define-key 'normal evil-org-mode-map
  "L" 'org-demote-subtree
