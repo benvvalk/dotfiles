@@ -65,7 +65,7 @@ bindsym $win+Shift+Right move right
 # resize focused window
 bindsym $mod+h resize grow left 2 px or 2 ppt
 bindsym $mod+Shift+h resize shrink left 2 px or 2 ppt
-bindsym $mod+t resize graw down 2 px or 2 ppt
+bindsym $mod+t resize grow down 2 px or 2 ppt
 bindsym $mod+Shift+t resize shrink down 2 px or 2 ppt
 bindsym $mod+n resize grow up 2 px or 2 ppt
 bindsym $mod+Shift+n resize shrink up 2 px or 2 ppt
@@ -75,7 +75,7 @@ bindsym $mod+Shift+s resize shrink right 2 px or 2 ppt
 # alternate resize bindings for Win key
 bindsym $win+Mod1+h resize grow left 2 px or 2 ppt
 bindsym $win+Mod1+Shift+h resize shrink left 2 px or 2 ppt
-bindsym $win+Mod1+t resize graw down 2 px or 2 ppt
+bindsym $win+Mod1+t resize grow down 2 px or 2 ppt
 bindsym $win+Mod1+Shift+t resize shrink down 2 px or 2 ppt
 bindsym $win+Mod1+n resize grow up 2 px or 2 ppt
 bindsym $win+Mod1+Shift+n resize shrink up 2 px or 2 ppt
