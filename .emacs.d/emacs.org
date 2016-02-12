@@ -13,6 +13,11 @@
                    auto-completion-private-snippets-directory nil)
                    ))
 #+END_SRC
+* Avy
+#+BEGIN_SRC emacs-lisp
+;; don't grey out the background when prompting for jump target
+(setq avy-background nil)
+#+END_SRC
 * Evil Mode Settings
 #+BEGIN_SRC emacs-lisp
 ;; don't permanently highlight search matches
