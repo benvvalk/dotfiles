@@ -33,6 +33,12 @@
 ;; C code style (see: https://en.wikipedia.org/wiki/Indent_style)
 (setq c-default-style "stroustrup"
      c-basic-offset 4)
+;; C/C++ statements split across multiple lines
+(defun abyss-c-style ()
+    (c-set-offset 'arglist-cont-nonempty '+)
+    (c-set-offset 'arglist-cont '+)
+    (c-set-offset 'stream-op '+))
+(add-hook 'c-mode-common-hook 'abyss-c-style)
 #+END_SRC
 * Key Bindings
 #+BEGIN_SRC emacs-lisp
