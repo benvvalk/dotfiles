@@ -22,6 +22,9 @@
 #+BEGIN_SRC emacs-lisp
 ;; don't permanently highlight search matches
 (global-evil-search-highlight-persist nil)
+;; don't move cursor left after escaping
+;; from insert mode
+(setq evil-move-cursor-back nil)
 #+END_SRC
 * External Programs
 #+BEGIN_SRC emacs-lisp
