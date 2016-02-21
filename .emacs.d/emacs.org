@@ -68,6 +68,11 @@
 ;; make line numbers relative to current line
 (linum-relative-mode)
 #+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp
+;; FIX: make sure projectile using the correct `ctags` binary
+(setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s")
+#+END_SRC
 * Splitting Windows
 #+BEGIN_SRC emacs-lisp
 ;; disable automatic window splitting
