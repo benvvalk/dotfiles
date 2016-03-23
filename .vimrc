@@ -33,7 +33,6 @@ Plugin 'kana/vim-textobj-entire'
 Plugin 'kana/vim-textobj-indent'
 Plugin 'kana/vim-textobj-line'
 Plugin 'sgur/vim-textobj-parameter'
-Plugin 'vim-scripts/InsertChar'
 Plugin 'jeetsukumaran/vim-indentwise'
 Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
@@ -56,6 +55,24 @@ au BufNewFile,BufRead *.mk set filetype=make
 au BufNewFile,BufRead *.cpp set filetype=cpp
 au BufNewFile,BufRead *.h set filetype=cpp
 au BufNewFile,BufRead qsub* set filetype=sh
+
+"------------------------------------------------------------
+" spacemacs bindings
+"------------------------------------------------------------
+
+let mapleader = "\<Space>"
+
+" split windows
+nnoremap <leader>wv <C-W><C-V>
+nnoremap <leader>ws <C-W>s
+nnoremap <leader>wc <C-W>q
+nnoremap <leader>wh <C-W>h
+nnoremap <leader>wj <C-W>j
+nnoremap <leader>wk <C-W>k
+nnoremap <leader>wl <C-W>l
+
+" save file
+nnoremap <leader>fs :w<CR>
 
 "------------------------------------------------------------
 " taglist settings
@@ -98,13 +115,7 @@ call textobj#user#plugin('path', {
 "------------------------------------------------------------
 
 " turn on "word wrap"
-nnoremap <leader>w :set wrap\|set linebreak\|set nolist<CR>
-
-"------------------------------------------------------------
-" InsertChar plugin
-"------------------------------------------------------------
-
-nnoremap <Space> :<C-U>call InsertChar#insert(v:count1)<CR>
+nnoremap <leader>W :set wrap\|set linebreak\|set nolist<CR>
 
 "------------------------------------------------------------
 " IndentWise plugin
@@ -120,13 +131,6 @@ map <C-f> <Plug>(IndentWiseNextEqualIndent)
 " clear selected text in SELECT mode (used for tab stops
 " within snippets)
 snoremap <C-d> <space><C-h>
-
-"------------------------------------------------------------
-" insert mode keybindings
-"------------------------------------------------------------
-
-inoremap <C-c> <nop>
-inoremap <CR> <Esc>l
 
 "------------------------------------------------------------
 " unorganized settings
