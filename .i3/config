@@ -9,6 +9,10 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# commands on startup
+exec --no-startup-id "sleep 2; setxmodmap dvorak"
+exec --no-startup-id "sleep 2; xmodmap ~/dotfiles/.Xmodmap"
+
 set $mod Mod1+Ctrl
 set $win Mod4
 
