@@ -15,8 +15,15 @@
 #+END_SRC
 * Avy
 #+BEGIN_SRC emacs-lisp
-;; don't grey out the background when prompting for jump target
-(setq avy-background nil)
+;; make avy jump hints more readable
+(custom-set-faces
+ '(default ((t (:background nil))))
+ '(avy-lead-face ((t (:foreground "red"))))
+ '(avy-lead-face-0 ((t (:foreground "red"))))
+ '(avy-lead-face-1 ((t (:foreground "red"))))
+ '(avy-lead-face-2 ((t (:foreground "red"))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 #+END_SRC
 * Evil Mode Settings
 #+BEGIN_SRC emacs-lisp
