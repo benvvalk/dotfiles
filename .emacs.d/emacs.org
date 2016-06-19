@@ -73,6 +73,8 @@
 (define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
 ;; vim-sneak replacement (avy mode)
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
+;; "zl" to fold all code blocks at current indentation level
+(define-key evil-normal-state-map (kbd "zl") 'hs-hide-level)
 #+END_SRC
 * Line Numbering
 #+BEGIN_SRC emacs-lisp
