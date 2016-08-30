@@ -27,9 +27,11 @@ values."
      ;; better-defaults
      emacs-lisp
      git
+     html
      markdown
      org
      c-c++
+	 csharp
      ranger
      themes-megapack
      ;; (shell :variables
