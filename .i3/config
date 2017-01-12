@@ -150,6 +150,17 @@ bindsym $mod+Shift+asterisk move workspace 8
 bindsym $mod+Shift+parenleft move workspace 9
 bindsym $mod+Shift+parenright move workspace 10
 
+bindsym $win+Shift+exclam move workspace 1
+bindsym $win+Shift+at move workspace 2
+bindsym $win+Shift+numbersign move workspace 3
+bindsym $win+Shift+dollar move workspace 4
+bindsym $win+Shift+percent move workspace 5
+bindsym $win+Shift+asciicircum move workspace 6
+bindsym $win+Shift+ampersand move workspace 7
+bindsym $win+Shift+asterisk move workspace 8
+bindsym $win+Shift+parenleft move workspace 9
+bindsym $win+Shift+parenright move workspace 10
+
 # reload the configuration file
 bindsym $mod+Shift+J reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
