@@ -58,6 +58,7 @@
     (c-set-offset 'arglist-cont '+)
     (c-set-offset 'stream-op '+))
 (add-hook 'c-mode-common-hook 'abyss-c-style)
+(add-hook 'csharp-mode-hook 'abyss-c-style)
 #+END_SRC
 * Key Bindings
 #+BEGIN_SRC emacs-lisp
