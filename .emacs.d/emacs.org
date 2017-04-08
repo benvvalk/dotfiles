@@ -83,6 +83,16 @@
 ;; make line numbers relative to current line
 (linum-relative-mode)
 #+END_SRC
+* Org Mode
+** Org Babel
+#+BEGIN_SRC emacs-lisp
+(org-babel-do-load-languages 'org-babel-load-languages
+'((dot . t) (csharp . t) (asymptote . t)))
+;; don't alter indentation (e.g. tabs vs. spaces) when embedding source code blocks
+(setq org-src-preserve-indentation t)
+;; edit source code in "other window" when pressing <C-'>
+(setq org-src-window-setup 'other-window)
+#+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp
 ;; FIX: make sure projectile using the correct `ctags` binary
