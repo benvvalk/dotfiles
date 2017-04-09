@@ -15,8 +15,10 @@
 #+END_SRC
 * Avy
 #+BEGIN_SRC emacs-lisp
-;; use avy as a vim operator
-(define-key evil-motion-state-map (kbd "S") #'avy-goto-char-2)
+;; avy is "hint"-based motion. Type two leading chars of where you want to go
+(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
+;; use avy as a vim motion
+(define-key evil-motion-state-map (kbd "p") 'avy-goto-char-2)
 ;; don't grey out the background when prompting for jump target
 (setq avy-background nil)
 ;; make avy jump hints more readable
@@ -76,8 +78,6 @@
 (define-key evil-insert-state-map (kbd "M-.") 'company-complete-common)
 ;; hippie expansion (buffer-based completion)
 (define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
-;; vim-sneak replacement (avy mode)
-(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
 ;; "zl" to fold all code blocks at current indentation level
 (define-key evil-normal-state-map (kbd "zl") 'hs-hide-level)
 #+END_SRC
