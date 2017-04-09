@@ -37,6 +37,10 @@
 ;; from insert mode
 (setq evil-move-cursor-back nil)
 #+END_SRC
+** evil-easymotion
+#+BEGIN_SRC emacs-lisp
+(evilem-default-keybindings "'")
+#+END_SRC
 * External Programs
 #+BEGIN_SRC emacs-lisp
 ;; set default browser to firefox
