@@ -74,6 +74,9 @@ nnoremap <leader>wl <C-W>l
 " save file
 nnoremap <leader>fs :w<CR>
 
+" toggles
+nnoremap <leader>tw :set list!<CR>
+
 "------------------------------------------------------------
 " taglist settings
 "------------------------------------------------------------
