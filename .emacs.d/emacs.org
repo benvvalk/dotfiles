@@ -90,6 +90,9 @@
 #+END_SRC
 * Org Mode
 ** Org Babel
+
+Some settings for source code blocks:
+
 #+BEGIN_SRC emacs-lisp
 (org-babel-do-load-languages 'org-babel-load-languages
 '((dot . t) (csharp . t) (asymptote . t)))
@@ -97,6 +100,23 @@
 (setq org-src-preserve-indentation t)
 ;; edit source code in "other window" when pressing <C-'>
 (setq org-src-window-setup 'other-window)
+#+END_SRC
+
+Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blocks by default when first opening an org file.
+
+#+BEGIN_SRC emacs-lisp
+(defvar org-blocks-hidden nil)
+
+(defun org-toggle-blocks ()
+  (interactive)
+  (if org-blocks-hidden
+      (org-show-block-all)
+    (org-hide-block-all))
+  (setq-local org-blocks-hidden (not org-blocks-hidden)))
+
+(add-hook 'org-mode-hook 'org-toggle-blocks)
+
+(define-key org-mode-map (kbd "C-c t") 'org-toggle-blocks)
 #+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp
