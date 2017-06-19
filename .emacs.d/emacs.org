@@ -47,7 +47,9 @@
 #+BEGIN_SRC emacs-lisp
 ;; set default browser to firefox
 (setq browse-url-browser-function 'browse-url-generic
-     browse-url-generic-program "firefox")
+	  browse-url-generic-program (case system-type
+								   ((gnu/linux) "firefox")
+								   ((cygwin) "cygstart")))
 #+END_SRC
 * Indentation Settings
 #+BEGIN_SRC emacs-lisp
