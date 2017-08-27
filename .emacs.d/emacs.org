@@ -31,6 +31,17 @@
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 #+END_SRC
+* Direx
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'direx
+  (add-hook 'direx:direx-mode-hook
+			(lambda ()
+			  (define-key evil-normal-state-local-map (kbd "RET") 'direx:display-item)
+			  (define-key evil-normal-state-local-map (kbd "za") 'direx:toggle-item)
+			  (define-key evil-normal-state-local-map (kbd "zc") 'direx:collapse-item)
+			  (define-key evil-normal-state-local-map (kbd "zo") 'direx:expand-item)
+			  (define-key evil-normal-state-local-map (kbd "zO") 'direx:expand-item-recursively))))
+#+END_SRC
 * Evil Mode Settings
 #+BEGIN_SRC emacs-lisp
 ;; don't permanently highlight search matches
