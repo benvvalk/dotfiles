@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: logf
+# key: logf
+# --
+Debug.LogFormat("$1: {0}", $1);$0
