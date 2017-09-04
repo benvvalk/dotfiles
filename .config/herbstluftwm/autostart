@@ -171,3 +171,9 @@ herbstclient set tree_style '╾│ ├└╼─┐'
 # hc set_monitors 1280x1024+0+0 1280x1024+1280+0
 # or simply:
 # hc detect_monitors
+
+# Hack to set initial frame to default layout,
+# as configured by `hc set default_frame_layout`.
+# This is needed because changes to the `default_frame_layout`
+# only affect newly created frames.
+hc split vertical 0.5; hc remove
