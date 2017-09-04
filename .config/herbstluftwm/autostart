@@ -79,15 +79,11 @@ hc rename default "${tag_names[0]}" || true
 for i in ${!tag_names[@]} ; do
     hc add "${tag_names[$i]}"
     key="${tag_keys[$i]}"
-	hc use "${tag_names[$i]}"
-	hc layout $DEFAULT_LAYOUT
     if ! [ -z "$key" ] ; then
         hc keybind "$Mod-$key" use_index "$i"
         hc keybind "$Mod-Shift-$key" move_index "$i"
     fi
 done
-hc use "${tag_names[0]}"
-hc layout $DEFAULT_LAYOUT
 
 # cycle through tags
 hc keybind $Mod-period use_index +1 --skip-visible
