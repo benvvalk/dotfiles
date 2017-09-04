@@ -49,8 +49,8 @@ hc keybind $Mod-Shift-Down  shift down
 hc keybind $Mod-Shift-Up    shift up
 hc keybind $Mod-Shift-Right shift right
 hc keybind $Mod-Shift-h     shift left
-hc keybind $Mod-Shift-j     shift down
-hc keybind $Mod-Shift-k     shift up
+hc keybind $Mod-Shift-j spawn hlwm-swap-clients next
+hc keybind $Mod-Shift-k spawn hlwm-swap-clients prev
 hc keybind $Mod-Shift-l     shift right
 
 # splitting frames
