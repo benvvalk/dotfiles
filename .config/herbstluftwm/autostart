@@ -29,6 +29,7 @@ hc keybind F12 spawn i3lock --color 000000
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
+hc keybind $Mod-Shift-o spawn hlwm-only-frame
 hc keybind $Mod-x close_and_remove
 hc keybind $Mod-Return spawn ${TERMINAL:-xterm} # use your $TERMINAL with xterm as fallback
 
