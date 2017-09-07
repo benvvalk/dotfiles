@@ -88,7 +88,7 @@
  "\C-j" 'org-move-subtree-down
  "\C-k" 'org-move-subtree-up)
 ;; bindings for company mode
-(define-key evil-insert-state-map (kbd "M-.") 'company-complete-common)
+(define-key evil-insert-state-map (kbd "M-.") 'company-complete)
 ;; hippie expansion (buffer-based completion)
 (define-key evil-insert-state-map (kbd "M-/") 'hippie-expand)
 ;; "zl" to fold all code blocks at current indentation level
