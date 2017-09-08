@@ -66,10 +66,6 @@ hc keybind Control-Shift-h       resize left +$resizestep
 hc keybind Control-Shift-j       resize down +$resizestep
 hc keybind Control-Shift-k       resize up +$resizestep
 hc keybind Control-Shift-l       resize right +$resizestep
-hc keybind Control-Shift-Left    resize left +$resizestep
-hc keybind Control-Shift-Down    resize down +$resizestep
-hc keybind Control-Shift-Up      resize up +$resizestep
-hc keybind Control-Shift-Right   resize right +$resizestep
 
 # tags
 tag_names=( {1..9} )
