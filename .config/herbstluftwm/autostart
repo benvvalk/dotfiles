@@ -22,7 +22,7 @@ hc keyunbind --all
 # keybindings
 # if you have a super key you will be much happier with Mod set to Mod4
 Mod=Mod1-Control    # Use alt as the main modifier
-#Mod=Mod4   # Use the super key as the main modifier
+Win=Mod4
 
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
@@ -37,11 +37,15 @@ hc keybind $Mod-Down  focus down
 hc keybind $Mod-Up    focus up
 hc keybind $Mod-Right focus right
 hc keybind $Mod-h     focus left
+hc keybind $Win-h     focus left
 #hc keybind $Mod-j     focus down
 #hc keybind $Mod-k     focus up
 hc keybind $Mod-j cycle_frame 1
+hc keybind $Win-j cycle_frame 1
 hc keybind $Mod-k cycle_frame -1
+hc keybind $Win-k cycle_frame -1
 hc keybind $Mod-l     focus right
+hc keybind $Win-l     focus right
 
 # moving clients
 hc keybind $Mod-Shift-Left  shift left
@@ -91,8 +95,11 @@ hc keybind $Mod-s floating toggle
 hc keybind $Mod-f fullscreen toggle
 
 hc keybind $Mod-p spawn rofi -show run -normal-window
+hc keybind $Win-p spawn rofi -show run -normal-window
 hc keybind $Mod-b spawn rofi-bring-window
+hc keybind $Win-b spawn rofi-bring-window
 hc keybind $Mod-n spawn zenity-set-window-name
+hc keybind $Win-n spawn zenity-set-window-name
 
 # The following cycles through the available layouts within a frame, but skips
 # layouts, if the layout change wouldn't affect the actual window positions.
