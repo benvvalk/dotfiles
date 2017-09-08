@@ -29,3 +29,5 @@ set editor="gnome-terminal --disable-factory -x vim"
 " (download from http://vimpr.github.io/plugins-en.html)
 nnoremap <S-o> :tabhistory back<CR>
 nnoremap <S-i> :tabhistory forward<CR>
+
+highlight Hint font-size:100%;color:white;background-color:red;padding:2px;
