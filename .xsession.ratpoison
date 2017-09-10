@@ -1,0 +1,8 @@
+#!/bin/bash
+source $HOME/.nix-profile/etc/profile.d/nix.sh
+export PATH=$HOME/dotfiles/ratpoison/bin:$PATH
+export MANPATH=$HOME/.nix-profile/share/man
+xsetroot -solid black &
+setxkbmap dvorak &
+if [ -e $HOME/dotfiles/.Xmodmap ]; then xmodmap $HOME/dotfiles/.Xmodmap; fi
+exec $HOME/.nix-profile/bin/ratpoison

@@ -1,0 +1,68 @@
+# improve behaviour of java programs
+set wmname LG3D
+
+# font
+set font Mono-18
+
+# move to next/prev window in frame
+definekey top C-M-n next
+definekey top s-n next
+definekey top C-M-N prev
+definekey top s-N prev
+
+# move to next/prev frame
+definekey top C-M-j focus
+definekey top s-j focus
+definekey top C-M-k focusprev
+definekey top s-M-k focusprev
+
+# swap windows in adjacent frames
+definekey top C-M-H exchangeleft
+definekey top s-H exchangeleft
+definekey top C-M-L exchangeright
+definekey top s-L exchangeright
+definekey top C-M-J exchangedown
+definekey top s-J exchangedown
+definekey top C-M-K exchangeup
+definekey top s-K exchangeup
+
+# remove all other frames
+definekey top C-M-o only
+definekey top s-o only
+
+# delete current frame
+definekey top C-M-d remove
+definekey top s-d remove
+
+# undo/redo frame operations
+definekey top C-M-u undo
+definekey top C-M-U redo
+
+# split frame horizontally/vertical
+definekey top C-M-v hsplit
+definekey top s-v hsplit
+definekey top C-M-V split
+definekey top s-V split
+
+# move to next/prev monitor
+definekey top C-M-period nextscreen
+definekey top s-M-period nextscreen
+definekey top C-M-comma prevscreen
+definekey top s-M-comma prevscreen
+
+# reload configuration
+definekey top C-M-s exec ratpoison -c 'source .ratpoisonrc'
+definekey top s-s exec ratpoison -c 'source .ratpoisonrc'
+
+# start program
+definekey top C-M-p exec rofi -show run -normal-window
+definekey top s-p exec rofi -show run -normal-window
+
+# bring window to current frame
+definekey top C-M-b exec bring-window
+definekey top s-b exec bring-window
+
+# start terminal
+definekey top C-M-Return exec gnome-terminal
+definekey top s-Return exec gnome-terminal
+
