@@ -54,6 +54,7 @@ definekey top C-M-d remove
 definekey top s-d remove
 
 # undo/redo frame operations
+set maxundos 10000
 definekey top C-M-u undo
 definekey top C-M-U redo
 
