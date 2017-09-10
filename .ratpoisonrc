@@ -4,6 +4,25 @@ set wmname LG3D
 # font
 set font Mono-18
 
+# border width/colors
+set border 7
+set fwcolor SpringGreen
+set bwcolor Black
+
+# padding around edges of screen (in pixels)
+set padding 7 7 7 7
+
+# center windows that are smaller than the frame
+set wingravity c
+
+# location where ratpoison input prompt appears
+set bargravity c
+
+# ratpoison message/input text color
+set fgcolor Black
+# ratpoison message/input background color
+set bgcolor SpringGreen
+
 # move to next/prev window in frame
 definekey top C-M-n next
 definekey top s-n next
