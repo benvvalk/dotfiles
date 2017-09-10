@@ -89,3 +89,6 @@ definekey top s-Return exec gnome-terminal
 # set window title
 definekey top C-M-t title
 definekey top s-t title
+
+# lock screen
+definekey top F12 exec i3lock -c 000000
