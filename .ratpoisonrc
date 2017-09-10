@@ -66,3 +66,6 @@ definekey top s-b exec bring-window
 definekey top C-M-Return exec gnome-terminal
 definekey top s-Return exec gnome-terminal
 
+# set window title
+definekey top C-M-t title
+definekey top s-t title
