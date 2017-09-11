@@ -24,6 +24,8 @@ hc keyunbind --all
 Mod=Mod1-Control    # Use alt as the main modifier
 Win=Mod4
 
+hc keybind F12 spawn i3lock --color 000000
+
 hc keybind $Mod-Shift-q quit
 hc keybind $Mod-Shift-r reload
 hc keybind $Mod-Shift-c close
