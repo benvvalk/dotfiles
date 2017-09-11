@@ -62,6 +62,10 @@
 								   ((gnu/linux) "firefox")
 								   ((cygwin) "cygstart")))
 #+END_SRC
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+(setq flycheck-display-errors-function 'flycheck-display-error-messages)
+#+END_SRC
 * Indentation Settings
 #+BEGIN_SRC emacs-lisp
 ;; set default tab width to 4 spaces
