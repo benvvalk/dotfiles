@@ -36,7 +36,7 @@ definekey top s-N prev
 definekey top C-M-j focus
 definekey top s-j focus
 definekey top C-M-k focusprev
-definekey top s-M-k focusprev
+definekey top s-k focusprev
 
 # swap windows in adjacent frames
 definekey top C-M-H exchangeleft
@@ -69,9 +69,9 @@ definekey top s-V split
 
 # move to next/prev monitor
 definekey top C-M-period nextscreen
-definekey top s-M-period nextscreen
+definekey top s-period nextscreen
 definekey top C-M-comma prevscreen
-definekey top s-M-comma prevscreen
+definekey top s-comma prevscreen
 
 # reload configuration
 definekey top C-M-s exec ratpoison -c 'source .ratpoisonrc'
