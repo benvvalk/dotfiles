@@ -62,6 +62,12 @@
 								   ((gnu/linux) "firefox")
 								   ((cygwin) "cygstart")))
 #+END_SRC
+* Email
+#+BEGIN_SRC emacs-lisp
+(setq email-config-org "~/.emacs.d/private/local/email-config.org")
+(if (file-exists-p email-config-org)
+    (org-babel-load-file email-config-org))
+#+END_SRC
 * Flycheck
 #+BEGIN_SRC emacs-lisp
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
