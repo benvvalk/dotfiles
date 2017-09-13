@@ -2,7 +2,7 @@
 exec rpws init 9 -k
 
 # improve behaviour of java programs
-set wmname LG3D
+exec wmname LG3D
 
 # font
 set font Mono-18
