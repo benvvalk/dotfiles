@@ -153,6 +153,8 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 (require 'rtags)
 (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
 (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
+
+(rtags-enable-standard-keybindings)
 (evil-leader/set-key-for-mode 'c-mode
     "mgg" 'rtags-find-symbol-at-point
     "mgs" 'rtags-find-symbol)
