@@ -1,10 +1,16 @@
 #!/bin/bash
-set -eux -o pipefail
+set -eu -o pipefail
+
+killall rofi || true
 
 current_win=$(ratpoison -c 'windows %s %n' | awk '$1=="*" {print $2}')
 
-target_win=$(ratpoison -c 'windows %n %t' \
-	| rofi -normal-window -dmenu -i | awk '{print $1}')
+target_win=$( (ratpoison -c 'windows %n %t' \
+	| rofi -normal-window -dmenu -i | awk '{print $1}') || echo '')
+if [ -z "$target_win"]; then
+	exit 0;
+fi
+
 target_frame=$(ratpoison -c 'windows %n %f' \
 	| awk -v target_win=$target_win '$1==target_win {print $2}')
 
