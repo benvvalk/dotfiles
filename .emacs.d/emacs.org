@@ -18,7 +18,8 @@
 ;; avy is "hint"-based motion. Type two leading chars of where you want to go
 (define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
 ;; use avy as a vim motion
-(define-key evil-motion-state-map (kbd "p") 'avy-goto-char-2)
+;; (disabled because it conflicts with vim paste operator)
+;(define-key evil-motion-state-map (kbd "p") 'avy-goto-char-2)
 ;; don't grey out the background when prompting for jump target
 (setq avy-background nil)
 ;; make avy jump hints more readable
