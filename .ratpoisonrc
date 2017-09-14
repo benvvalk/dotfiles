@@ -78,8 +78,8 @@ definekey top C-M-s exec ratpoison -c 'source .ratpoisonrc'
 definekey top s-s exec ratpoison -c 'source .ratpoisonrc'
 
 # start program
-definekey top C-M-p exec rofi -show run -normal-window
-definekey top s-p exec rofi -show run -normal-window
+definekey top C-M-p exec killall rofi; rofi -show run -normal-window || true
+definekey top s-p exec killall rofi; rofi -show run -normal-window || true
 
 # bring window to current frame
 definekey top C-M-b exec bring-window
