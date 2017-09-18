@@ -32,6 +32,12 @@
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 #+END_SRC
+* Dired
+  #+BEGIN_SRC emacs-lisp
+  ;; if two dired windows are open, make the default
+  ;; target of copy/move commands the other dired window
+  (setq dired-dwim-target t)
+  #+END_SRC
 * Direx
 #+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'direx
