@@ -31,8 +31,9 @@ values."
      markdown
      org
      c-c++
-	 csharp
+     csharp
      ranger
+     shell
      themes-megapack
      ;; (shell :variables
      ;;        shell-default-height 30
