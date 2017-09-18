@@ -4,6 +4,9 @@ exec rpws init 9 -k
 # improve behaviour of java programs
 exec wmname LG3D
 
+# swap CapsLock and Escape keys
+exec xmodmap ~/dotfiles/.Xmodmap
+
 # font
 set font Mono-18
 
