@@ -30,4 +30,4 @@ set editor="gnome-terminal --disable-factory -x vim"
 nnoremap <S-o> :tabhistory back<CR>
 nnoremap <S-i> :tabhistory forward<CR>
 
-highlight Hint font-size:100%;font-weight:bold;color:white;background-color:red;padding:2px;
+highlight Hint font-size:125%;font-weight:bold;color:white;background-color:red;padding:2px;
