@@ -88,23 +88,32 @@
 #+BEGIN_SRC emacs-lisp
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
 #+END_SRC
-* Indentation Settings
-#+BEGIN_SRC emacs-lisp
-;; set default tab width to 4 spaces
-(setq-default tab-width 4)
-;; use tabs for indentation
-(setq-default indent-tabs-mode t)
-;; C code style (see: https://en.wikipedia.org/wiki/Indent_style)
-(setq c-default-style "stroustrup"
-     c-basic-offset 4)
-;; C/C++ statements split across multiple lines
-(defun abyss-c-style ()
-    (c-set-offset 'arglist-cont-nonempty '+)
-    (c-set-offset 'arglist-cont '+)
-    (c-set-offset 'stream-op '+))
-(add-hook 'c-mode-common-hook 'abyss-c-style)
-(add-hook 'csharp-mode-hook 'abyss-c-style)
-#+END_SRC
+* Code Indentation Settings
+  #+BEGIN_SRC emacs-lisp
+  ;; set default tab width to 4 spaces
+  (setq-default tab-width 4)
+  ;; use tabs for indentation
+  (setq-default indent-tabs-mode t)
+
+  (c-add-style "abyss-style"
+	  '("linux"
+		(indent-tabs-mode . t)
+		(c-basic-offset . 4)
+		(c-offsets-alist . ((inline-open . 0)
+							(arglist-cont-nonempty . +)
+							(arglist-cont . +)
+							(stream-op . +)))))
+
+  (defun my-c++-mode-hook()
+	(c-set-style "abyss-style"))
+
+  (defun my-csharp-mode-hook()
+	(my-c++-mode-hook)
+	(setq company-idle-delay 0.1))
+
+  (add-hook 'c-mode-common-hook 'my-c++-mode-hook)
+  (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
+  #+END_SRC
 * Key Bindings
 #+BEGIN_SRC emacs-lisp
 ;; custom keys for org mode
