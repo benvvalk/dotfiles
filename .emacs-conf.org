@@ -92,6 +92,12 @@
 #+BEGIN_SRC emacs-lisp
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
 #+END_SRC
+* GDB
+#+BEGIN_SRC emacs-lisp
+;; bring up one window with GDB REPL and one window with source code
+(setq gdb-many-windows nil)
+(setq gdb-show-main t)
+#+END_SRC
 * Code Indentation Settings
   #+BEGIN_SRC emacs-lisp
   ;; set default tab width to 4 spaces
