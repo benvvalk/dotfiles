@@ -207,7 +207,7 @@ user code."
  This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
   ;; load my configuration an ORG file
-  (org-babel-load-file "~/.emacs.d/emacs.org")
+  (org-babel-load-file "~/.emacs-conf.org")
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
