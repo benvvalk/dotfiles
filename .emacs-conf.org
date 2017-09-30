@@ -41,11 +41,17 @@
  '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
 #+END_SRC
 * Dired
-  #+BEGIN_SRC emacs-lisp
-  ;; if two dired windows are open, make the default
-  ;; target of copy/move commands the other dired window
-  (setq dired-dwim-target t)
-  #+END_SRC
+#+BEGIN_SRC emacs-lisp
+;; if two dired windows are open, make the default
+;; target of copy/move commands the other dired window
+(setq dired-dwim-target t)
+
+(defun dired-open-file ()
+    "In dired, open the file named on this line."
+    (interactive)
+    (let* ((file (dired-get-filename nil t)))
+        (call-process "xdg-open" nil 0 nil file)))
+#+END_SRC
 * Direx
 #+BEGIN_SRC emacs-lisp
 (with-eval-after-load 'direx
