@@ -15,9 +15,6 @@ set border 7
 set fwcolor SpringGreen
 set bwcolor Black
 
-# padding around edges of screen (in pixels)
-set padding 7 7 7 7
-
 # center windows that are smaller than the frame
 set wingravity c
 
