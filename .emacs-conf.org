@@ -140,7 +140,7 @@
 		(c-basic-offset . 4)
 		(c-offsets-alist . ((inline-open . 0)
 							(arglist-cont-nonempty . +)
-							(arglist-cont . +)
+							(arglist-cont . 0)
 							(stream-op . +)))))
 
   (defun my-c++-mode-hook()
