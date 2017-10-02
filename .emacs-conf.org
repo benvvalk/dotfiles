@@ -251,6 +251,11 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 	(kbd "C-k") 'kill-line
 	(kbd "M-r") 'spacemacs/helm-shell-history))
 
+(spacemacs/declare-prefix "am" "multishell")
+(evil-leader/set-key
+  "ams" (lambda() (interactive)
+		  (setq current-prefix-arg '(4))
+		  (call-interactively 'multishell-pop-to-shell)))
 #+END_SRC
 * Splitting Windows
 #+BEGIN_SRC emacs-lisp
