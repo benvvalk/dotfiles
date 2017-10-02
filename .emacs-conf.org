@@ -115,6 +115,13 @@
 ;; bring up one window with GDB REPL and one window with source code
 (setq gdb-many-windows nil)
 (setq gdb-show-main t)
+
+;; Hack to show current source line while stepping in GDB:
+;; highlight current line in buffer, even when window is
+;; not focused
+(setq global-hl-line-sticky-flag t)
+(global-hl-line-mode)
+#+END_SRC
 #+END_SRC
 * Code Indentation Settings
   #+BEGIN_SRC emacs-lisp
