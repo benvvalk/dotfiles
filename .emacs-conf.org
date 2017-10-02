@@ -244,12 +244,13 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 	(kbd "C-a") 'beginning-of-line
 	(kbd "C-e") 'end-of-line
 	(kbd "C-k") 'kill-line
-	(kbd "C-r") 'spacemacs/helm-shell-history)
+	(kbd "M-r") 'spacemacs/helm-shell-history)
   (evil-define-key 'insert shell-mode-map
 	(kbd "C-a") 'beginning-of-line
 	(kbd "C-e") 'end-of-line
 	(kbd "C-k") 'kill-line
-	(kbd "C-r") 'spacemacs/helm-shell-history))
+	(kbd "M-r") 'spacemacs/helm-shell-history))
+
 #+END_SRC
 * Splitting Windows
 #+BEGIN_SRC emacs-lisp
