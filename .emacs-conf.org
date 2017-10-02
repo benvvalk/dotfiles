@@ -122,6 +122,10 @@
 (setq global-hl-line-sticky-flag t)
 (global-hl-line-mode)
 #+END_SRC
+* Helm
+#+BEGIN_SRC emacs-lisp
+;; workaround helm bug: https://github.com/syl20bnr/spacemacs/pull/9547
+(require 'helm-bookmark)
 #+END_SRC
 * Code Indentation Settings
   #+BEGIN_SRC emacs-lisp
