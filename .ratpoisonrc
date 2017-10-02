@@ -59,7 +59,9 @@ definekey top s-d remove
 # undo/redo frame operations
 set maxundos 10000
 definekey top C-M-u undo
+definekey top s-u undo
 definekey top C-M-U redo
+definekey top s-U redo
 
 # split frame horizontally/vertical
 definekey top C-M-v hsplit
