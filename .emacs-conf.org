@@ -213,40 +213,52 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 * rtags
 #+BEGIN_SRC emacs-lisp
 ;; basic rtags setup
-(add-to-list 'load-path "/projects/btl/benv/arch/centos6/linuxbrew-supplement/rtags-2.9/share/emacs/site-lisp/rtags")
-(require 'rtags)
-(add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
-(add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
 
-(rtags-enable-standard-keybindings)
-(evil-leader/set-key-for-mode 'c-mode
-    "mgg" 'rtags-find-symbol-at-point
-    "mgs" 'rtags-find-symbol)
-(evil-leader/set-key-for-mode 'c++-mode
-    "mgg" 'rtags-find-symbol-at-point
-    "mgs" 'rtags-find-symbol)
+(setq rtags-lisp-directory "/projects/btl/benv/arch/centos6/linuxbrew-supplement/rtags-2.9/share/emacs/site-lisp/rtags")
 
-;; rtags-company
-(setq rtags-autostart-diagnostics t)
-(setq rtags-completions-enabled t)
-(push 'company-rtags company-backends)
+(when (file-accessible-directory-p rtags-lisp-directory)
+  (progn
+	;; load rtags package
+	(add-to-list 'load-path rtags-lisp-directory)
+	(require 'rtags)
 
-;; rtags-helm
-(require 'rtags-helm)
-(setq rtags-display-result-backend 'helm)
+	;; start rtags automatically when editing C/C++ files
+	(add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+	(add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
 
-;; flycheck-rtags
-(require 'flycheck-rtags)
+	;; enable default keybindings
+	(rtags-enable-standard-keybindings)
 
-(defun my-flycheck-rtags-setup ()
-  (flycheck-select-checker 'rtags)
-  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
-  (setq-local flycheck-check-syntax-automatically nil))
-(add-hook 'c-mode-hook #'my-flycheck-rtags-setup)
-(add-hook 'c++-mode-hook #'my-flycheck-rtags-setup)
-(add-hook 'objc-mode-hook #'my-flycheck-rtags-setup)
+	;; custom keybindings
+	(evil-leader/set-key-for-mode 'c-mode
+	  "mgg" 'rtags-find-symbol-at-point
+	  "mgs" 'rtags-find-symbol)
+	(evil-leader/set-key-for-mode 'c++-mode
+	  "mgg" 'rtags-find-symbol-at-point
+	  "mgs" 'rtags-find-symbol)
+
+	;; rtags-company
+	(setq rtags-autostart-diagnostics t)
+	(setq rtags-completions-enabled t)
+	(push 'company-rtags company-backends)
+
+	;; rtags-helm
+	(require 'rtags-helm)
+	(setq rtags-display-result-backend 'helm)
+
+	;; flycheck-rtags
+	(require 'flycheck-rtags)
+	(defun my-flycheck-rtags-setup ()
+	  (flycheck-select-checker 'rtags)
+	  (setq-local flycheck-highlighting-mode nil) ;; RTags creates more accurate overlays.
+	  (setq-local flycheck-check-syntax-automatically nil))
+	(add-hook 'c-mode-hook #'my-flycheck-rtags-setup)
+	(add-hook 'c++-mode-hook #'my-flycheck-rtags-setup)
+	(add-hook 'objc-mode-hook #'my-flycheck-rtags-setup)))
+
 #+END_SRC
 * Shell
+
 #+BEGIN_SRC emacs-lisp
 ;; set to bash instead of zsh to avoid avoid unsupported escape codes in prompt, etc.
 (setq shell-file-name "/bin/bash")
