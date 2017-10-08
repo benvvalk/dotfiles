@@ -152,7 +152,7 @@
 ** Enable/Disable EXWM
 #+BEGIN_SRC emacs-lisp
 ;; Do not forget to enable EXWM. It will start by itself when things are ready.
-(exwm-enable)
+;(exwm-enable)
 #+END_SRC
 * Load Path
 #+BEGIN_SRC emacs-lisp
