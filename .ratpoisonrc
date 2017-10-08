@@ -68,6 +68,8 @@ definekey top C-M-v hsplit
 definekey top s-v hsplit
 definekey top C-M-V split
 definekey top s-V split
+definekey top C-M-s split
+definekey top s-s split
 
 # move to next/prev monitor
 definekey top C-M-period nextscreen
@@ -76,8 +78,8 @@ definekey top C-M-comma prevscreen
 definekey top s-comma prevscreen
 
 # reload configuration
-definekey top C-M-s exec ratpoison -c 'source .ratpoisonrc'
-definekey top s-s exec ratpoison -c 'source .ratpoisonrc'
+definekey top C-M-S exec ratpoison -c 'source .ratpoisonrc'
+definekey top s-S exec ratpoison -c 'source .ratpoisonrc'
 
 # start program
 definekey top C-M-p exec killall rofi; rofi -show run -normal-window || true
