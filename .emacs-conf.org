@@ -178,12 +178,8 @@
 	(define-key company-active-map (kbd "C-p") 'company-select-previous))
 #+END_SRC
 * Avy
+** Aesthetics
 #+BEGIN_SRC emacs-lisp
-;; avy is "hint"-based motion. Type two leading chars of where you want to go
-(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
-;; use avy as a vim motion
-;; (disabled because it conflicts with vim paste operator)
-;(define-key evil-motion-state-map (kbd "p") 'avy-goto-char-2)
 ;; don't grey out the background when prompting for jump target
 (setq avy-background nil)
 ;; make avy jump hints more readable
@@ -194,7 +190,39 @@
  '(avy-lead-face-1 ((t (:foreground "red" :background "white"))))
  '(avy-lead-face-2 ((t (:foreground "red" :background "white"))))
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+#+END_SRC
+** Jumping Around the Buffer
+#+BEGIN_SRC emacs-lisp
+;; avy is "hint"-based motion. Type two leading chars of where you want to go
+(define-key evil-normal-state-map (kbd "s") 'avy-goto-char-2)
+(define-key evil-motion-state-map (kbd "s") 'avy-goto-char-2)
+;; use avy as a vim motion
+;; (disabled because it conflicts with vim paste operator)
+;(define-key evil-motion-state-map (kbd "p") 'avy-goto-char-2)
+#+END_SRC
+** Copy/Paste
+#+BEGIN_SRC emacs-lisp
+(defun benv/copy-word-here (pt)
+    (message "Calling")
+    (save-excursion
+    (goto-char pt)
+    (kill-new (thing-at-point 'symbol))))
+
+(defun benv/avy-word-regex (c)
+   (concat
+   "\\b"
+   (string c)))
+
+(defun benv/avy-copy-word-here (char)
+   "Paste a word selected with avy"
+   (interactive (list (read-char "char:" t)))
+   (let ((avy-action 'benv/copy-word-here))
+       (avy--generic-jump (benv/avy-word-regex char) nil avy-style)
+       (yank)))
+
+(spacemacs/declare-prefix "y" "yank")
+(evil-leader/set-key
+  "yw" 'benv/avy-copy-word-here)
 #+END_SRC
 * Clock
 Display the time in the modeline.
