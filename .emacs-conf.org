@@ -189,7 +189,7 @@
  '(avy-lead-face-0 ((t (:foreground "red" :background "white"))))
  '(avy-lead-face-1 ((t (:foreground "red" :background "white"))))
  '(avy-lead-face-2 ((t (:foreground "red" :background "white"))))
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil)))))
 #+END_SRC
 ** Jumping Around the Buffer
 #+BEGIN_SRC emacs-lisp
