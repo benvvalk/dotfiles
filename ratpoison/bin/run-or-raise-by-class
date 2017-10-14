@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu -o pipefail
+
+# key = lowercase ClassName, value = binary
+declare -A cmd=( ["firefox"]=firefox ["emacs"]=emacs ["vlc"]=vlc ["deluge"]=deluge )
+
+class="$(echo $1 | awk '{print tolower($1)}')"
+
+win=$(ratpoison -c 'windows %n %c %f' \
+	| awk -vclass="$class" 'NF==2 && tolower($2)==class {print $1}' \
+	| head -1)
+
+if [ -n "$win" ]; then
+	ratpoison -c "select $win"
+elif [ ${cmd[$class]+foo} ]; then
+	${cmd[$class]}
+fi
