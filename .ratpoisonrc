@@ -97,5 +97,16 @@ definekey top s-Return exec gnome-terminal
 definekey top C-M-t title
 definekey top s-t title
 
+# keymap for running or raising specific applications
+newkmap apps
+definekey top C-M-a readkey apps
+definekey top s-a readkey apps
+
+# shortcut to specific applications
+definekey apps d exec run-or-raise-by-class deluge
+definekey apps e exec run-or-raise-by-class emacs
+definekey apps f exec run-or-raise-by-class firefox
+definekey apps v exec run-or-raise-by-class vlc
+
 # lock screen
 definekey top F12 exec i3lock -c 000000
