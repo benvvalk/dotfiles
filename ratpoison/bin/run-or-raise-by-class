@@ -6,6 +6,14 @@ declare -A cmd=( ["firefox"]=firefox ["emacs"]=emacs ["vlc"]=vlc ["deluge"]=delu
 
 class="$(echo $1 | awk '{print tolower($1)}')"
 
+# if currently focused window belongs to the target class,
+# don't do anything at all
+
+current_class=$(ratpoison -c 'windows %s %c' | awk '$1=="*" {print tolower($2)}')
+if [ -n "$current_class" -a "$current_class" = "$class" ]; then
+	exit 0
+fi
+
 win=$(ratpoison -c 'windows %n %c %f' \
 	| awk -vclass="$class" 'NF==2 && tolower($2)==class {print $1}' \
 	| head -1)
