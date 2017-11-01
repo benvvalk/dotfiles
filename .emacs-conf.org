@@ -338,6 +338,27 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 	(kbd "C-e") 'end-of-line
 	(kbd "C-k") 'kill-line
 	(kbd "M-r") 'spacemacs/helm-shell-history))
+#+END_SRC
+** compilation-minor-mode
+#+BEGIN_SRC emacs-lisp
+(add-hook 'shell-mode-hook 'compilation-shell-minor-mode)
+
+(defun benv/compile-error-next ()
+  "Go to next compile error and display source line in other window"
+	(interactive)
+	(compilation-next-error 1)
+	(compilation-display-error))
+
+(defun benv/compile-error-prev ()
+  "Go to previous compile error and display source line in other window"
+  (interactive)
+  (compilation-previous-error 1)
+  (compilation-display-error))
+
+(evil-leader/set-key-for-mode 'shell-mode
+    (kbd "en") 'benv/compile-error-next
+    (kbd "ep") 'benv/compile-error-prev)
+#+END_SRC
 
 (spacemacs/declare-prefix "am" "multishell")
 (evil-leader/set-key
