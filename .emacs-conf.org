@@ -118,6 +118,7 @@ Display the time in the modeline.
 #+BEGIN_SRC emacs-lisp
 ;; fixes ESS error when projectile has not yet been used/loaded
 (autoload 'projectile-project-p "projectile")
+(require 'ess-site)
 #+END_SRC
 * Evil Mode Settings
 #+BEGIN_SRC emacs-lisp
