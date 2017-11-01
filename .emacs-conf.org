@@ -186,6 +186,11 @@ Display the time in the modeline.
 #+BEGIN_SRC emacs-lisp
 ;; workaround helm bug: https://github.com/syl20bnr/spacemacs/pull/9547
 (require 'helm-bookmark)
+
+;; don't truncate buffer names in the buffer list
+;; (the default truncation length of 20 chars often makes
+;; it impossible to identify the buffer I am looking for)
+(setq helm-buffer-max-length nil)
 #+END_SRC
 * Code Indentation Settings
   #+BEGIN_SRC emacs-lisp
