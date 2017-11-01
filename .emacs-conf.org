@@ -145,6 +145,14 @@ Display the time in the modeline.
 (setq email-config-org "~/.emacs.d/private/local/email-config.org")
 (if (file-exists-p email-config-org)
     (org-babel-load-file email-config-org))
+
+;; run when composing e-mails (notmuch-message-mode / message-mode)
+
+(defun benv/message-setup-hook ()
+  (spacemacs/toggle-auto-fill-mode-off)
+  (visual-line-mode))
+
+(add-hook 'message-setup-hook 'benv/message-setup-hook)
 #+END_SRC
 * Flycheck
 #+BEGIN_SRC emacs-lisp
