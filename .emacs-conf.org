@@ -359,12 +359,18 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
     (kbd "en") 'benv/compile-error-next
     (kbd "ep") 'benv/compile-error-prev)
 #+END_SRC
+** multishell
+#+BEGIN_SRC emacs-lisp
+(defun benv/multishell-helm ()
+  "Bring up menu to create/select an emacs shell"
+  (interactive)
+  (setq current-prefix-arg '(4))
+  (call-interactively 'multishell-pop-to-shell))
 
 (spacemacs/declare-prefix "am" "multishell")
 (evil-leader/set-key
-  "ams" (lambda() (interactive)
-		  (setq current-prefix-arg '(4))
-		  (call-interactively 'multishell-pop-to-shell)))
+  "amm" 'multishell-pop-to-shell
+  "amp" 'benv/multishell-helm)
 #+END_SRC
 * Splitting Windows
 #+BEGIN_SRC emacs-lisp
