@@ -74,6 +74,11 @@ Display the time in the modeline.
 (setq display-time-default-load-average nil)
 (display-time-mode t)
 #+END_SRC
+* Buffer Wrangling
+#+BEGIN_SRC emacs-lisp
+(evil-leader/set-key
+    "br" 'rename-buffer)
+#+END_SRC
 * Dired / Ranger / Deer
 #+BEGIN_SRC emacs-lisp
 ;; if two dired windows are open, make the default
