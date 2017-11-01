@@ -159,6 +159,7 @@ Display the time in the modeline.
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
 #+END_SRC
 * GDB
+** Window/Buffer Management
 #+BEGIN_SRC emacs-lisp
 ;; bring up one window with GDB REPL and one window with source code
 (setq gdb-many-windows nil)
@@ -169,6 +170,18 @@ Display the time in the modeline.
 ;; not focused
 (setq global-hl-line-sticky-flag t)
 (global-hl-line-mode)
+
+;; force gdb-mi to not dedicate any windows
+(advice-add 'gdb-display-buffer
+	    :around (lambda (orig-fun &rest r)
+		      (let ((window (apply orig-fun r)))
+			(set-window-dedicated-p window nil)
+			window)))
+
+(advice-add 'gdb-set-window-buffer
+	    :around (lambda (orig-fun name &optional ignore-dedicated window)
+		      (funcall orig-fun name ignore-dedicated window)
+		      (set-window-dedicated-p window nil)))
 #+END_SRC
 * Helm
 #+BEGIN_SRC emacs-lisp
