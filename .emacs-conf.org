@@ -383,3 +383,13 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 (shackle-mode)
 (setq shackle-default-rule '(:same t))
 #+END_SRC
+* TRAMP
+#+BEGIN_SRC emacs-lisp
+(setq auto-revert-remote-files t)
+;; don't write command history to ~/.tramp_history, use the default
+;; HISTFILE instead (e.g. ~/.bash_history)
+(setq tramp-histfile-override nil)
+;; make TRAMP use the PATH set up by ~/.profile rather than the
+;; default system path
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+#+END_SRC
