@@ -2,7 +2,14 @@
 set -eu -o pipefail
 
 # key = lowercase ClassName, value = binary
-declare -A cmd=( ["firefox"]=firefox ["emacs"]=emacs ["vlc"]=vlc ["deluge"]=deluge )
+declare -A cmd=( \
+	["emacs"]=emacs \
+	["deluge"]=deluge \
+	["firefox"]=firefox \
+	["qbittorrent"]=qbittorrent \
+	["thunderbird"]=thunderbird \
+	["vlc"]=vlc \
+	)
 
 class="$(echo $1 | awk '{print tolower($1)}')"
 
