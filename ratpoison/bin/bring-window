@@ -1,13 +1,14 @@
 #!/bin/bash
 set -eu -o pipefail
 
-killall rofi || true
+killall dmenu || true
 
 current_win=$(ratpoison -c 'windows %s %n' | awk '$1=="*" {print $2}')
 
 target_win=$( (ratpoison -c 'windows %n %t' \
-	| rofi -normal-window -dmenu -i | awk '{print $1}') || echo '')
-if [ -z "$target_win"]; then
+	| dmenu -l 10 -b -i | awk '{print $1}') || echo '')
+
+if [ -z "$target_win" ]; then
 	exit 0;
 fi
 
