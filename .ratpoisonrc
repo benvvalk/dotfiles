@@ -32,11 +32,15 @@ definekey top s-n next
 definekey top C-M-N prev
 definekey top s-N prev
 
-# move to next/prev frame
-definekey top C-M-j focus
-definekey top s-j focus
-definekey top C-M-k focusprev
-definekey top s-k focusprev
+# switch focus to other frames
+definekey top C-M-l focusright
+definekey top s-l focusright
+definekey top C-M-h focusleft
+definekey top s-h focusleft
+definekey top C-M-j focusdown
+definekey top s-j focusdown
+definekey top C-M-k focusup
+definekey top s-k focusup
 
 # swap windows in adjacent frames
 definekey top C-M-H exchangeleft
