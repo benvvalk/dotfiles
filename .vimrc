@@ -164,3 +164,4 @@ set isfname=@,48-57,/,.,-,_,+,,,#,$,%,~
 set backspace=indent,eol,start
 set pastetoggle=<F2>
 syntax on
+set visualbell
