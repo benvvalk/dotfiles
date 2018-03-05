@@ -91,8 +91,6 @@ Display the time in the modeline.
     (let* ((file (dired-get-filename nil t)))
         (call-process "xdg-open" nil 0 nil file)))
 
-(add-hook 'dired-mode-hook 'dired-hide-details-mode)
-
 ;; Replace default `ranger-search-files`, used for
 ;; rapid navigation by fuzzy finding.  `helm-find-files-1`
 ;; does not correctly handle directory names
