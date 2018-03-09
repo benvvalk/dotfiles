@@ -89,6 +89,10 @@ definekey top s-S exec ratpoison -c 'source .ratpoisonrc'
 definekey top C-M-p exec killall dmenu; dmenu_run -l 10 -b -i || true
 definekey top s-p exec killall dmenu; dmenu_run -l 10 -b -i || true
 
+# google search
+definekey top C-M-g exec dmenu-google
+definekey top s-g exec dmenu-google
+
 # bring window to current frame
 definekey top C-M-b exec bring-window
 definekey top s-b exec bring-window

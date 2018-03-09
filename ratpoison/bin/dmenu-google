@@ -1,0 +1,27 @@
+#!/bin/bash
+set -eux -o pipefail
+
+# lifted from https://gist.github.com/cdown/1163649/8a35c36fdd24b373788a7057ed483a5bcd8cd43e
+_encode() {
+    local _length="${#1}"
+    for (( _offset = 0 ; _offset < _length ; _offset++ )); do
+        _print_offset="${1:_offset:1}"
+        case "${_print_offset}" in
+            [a-zA-Z0-9.~_-]) printf "${_print_offset}" ;;
+            ' ') printf + ;;
+            *) printf '%%%X' "'${_print_offset}" ;;
+        esac
+    done
+}
+
+killall dmenu || true
+
+MAX_LINES=10000
+hist=~/.google-history
+if [ ! -e "$hist" ]; then touch "$hist"; fi
+
+search="$(cat $hist | dmenu -b -l 10 -p 'google')"
+(echo $search; cat $hist) | head -$MAX_LINES | sponge $hist;
+
+encoded=$(_encode "$search")
+qutebrowser --target window "https://google.ca/search?q=$encoded"
