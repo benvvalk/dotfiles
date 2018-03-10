@@ -24,4 +24,4 @@ search="$(cat $hist | dmenu -b -l 10 -p 'google')"
 (echo $search; cat $hist) | head -$MAX_LINES | sponge $hist;
 
 encoded=$(_encode "$search")
-qutebrowser --target window "https://google.ca/search?q=$encoded"
+firefox --new-window "https://google.ca/search?q=$encoded"
