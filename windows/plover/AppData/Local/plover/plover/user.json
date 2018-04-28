@@ -142,6 +142,7 @@
 "KWR*GS": "{#control(y)}",
 "STKPW*GS": "{#control(z)}",
 "*BG": "{#alt}",
+"S*PBG": "{#alt(space)}",
 "A*BG": "{#alt(a)}",
 "PW*BG": "{#alt(b)}",
 "KR*BG": "{#alt(c)}",
