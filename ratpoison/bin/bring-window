@@ -3,10 +3,12 @@ set -eu -o pipefail
 
 killall dmenu || true
 
+dmenu_opt='-l 10 -b -i -fn -adobe-*-*-r-*-*-*-180-*-*-*-*-*-*'
+
 current_win=$(ratpoison -c 'windows %s %n' | awk '$1=="*" {print $2}')
 
 target_win=$( (ratpoison -c 'windows %n %t' \
-	| dmenu -l 10 -b -i | awk '{print $1}') || echo '')
+	| dmenu $dmenu_opt | awk '{print $1}') || echo '')
 
 if [ -z "$target_win" ]; then
 	exit 0;
