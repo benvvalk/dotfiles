@@ -86,8 +86,8 @@ definekey top C-M-S exec ratpoison -c 'source .ratpoisonrc'
 definekey top s-S exec ratpoison -c 'source .ratpoisonrc'
 
 # start program
-definekey top C-M-p exec killall dmenu; dmenu_run -l 10 -b -i || true
-definekey top s-p exec killall dmenu; dmenu_run -l 10 -b -i || true
+definekey top C-M-p exec run-program
+definekey top s-p exec run-program
 
 # google search
 definekey top C-M-g exec dmenu-google || true

@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eux -o pipefail
+
+killall dmenu || true
+
+dmenu_opt='-p run: -l 10 -b -i -fn -adobe-*-*-r-*-*-*-180-*-*-*-*-*-*'
+dmenu_run $dmenu_opt || true
