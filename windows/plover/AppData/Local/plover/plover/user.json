@@ -1,6 +1,7 @@
 {
 "TKHRUP": "{PLOVER:LOOKUP}",
 "#": "{#escape}",
+"SKHR-PB": "{^};",
 "HRO*ER": "{>}",
 "HRO*ERD": "{*>}",
 "S-PD": "{*?}",
