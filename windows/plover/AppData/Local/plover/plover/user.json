@@ -134,7 +134,6 @@
 "KP*R": "{#control(x)}",
 "KWR*R": "{#control(y)}",
 "STKPW*R": "{#control(z)}",
-"*F": "{#alt}",
 "S*FB": "{#alt(space)}",
 "SH*P": "{#alt(space)}",
 "HO*EU": "{#alt(slash)}",
