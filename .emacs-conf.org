@@ -381,6 +381,12 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 ;;(shackle-mode)
 ;;(setq shackle-default-rule '(:same t))
 #+END_SRC
+* symlinks
+#+BEGIN_SRC emacs-lisp
+;; automatically follow symlinks to git-managed files
+;; (disables annoying prompts)
+(setq vc-follow-symlinks t)
+#+END_SRC
 * TRAMP
 #+BEGIN_SRC emacs-lisp
 (setq auto-revert-remote-files t)
