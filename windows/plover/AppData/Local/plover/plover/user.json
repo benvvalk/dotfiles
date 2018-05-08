@@ -179,6 +179,7 @@
 "TKR-": "{MODE:SET_SPACE: }{^cd }{MODE:SET_SPACE:}",
 "KR-D": "{MODE:SET_SPACE: }{^cd }{MODE:SET_SPACE:}",
 "PH-D": "{MODE:SET_SPACE: }{^mkdir }{MODE:SET_SPACE:}",
+"PH-F": "{MODE:SET_SPACE: }{^mv }{MODE:SET_SPACE:}",
 "R-D": "{MODE:SET_SPACE: }{^rmdir }{MODE:SET_SPACE:}",
 "PW-D": "{MODE:SET_SPACE: }{^pwd }{MODE:SET_SPACE:}",
 "TK-RB": "{MODE:SET_SPACE: }{^ --}{MODE:SET_SPACE:}",
