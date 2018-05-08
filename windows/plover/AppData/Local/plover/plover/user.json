@@ -138,6 +138,7 @@
 "KP*R": "{#control(x)}",
 "KWR*R": "{#control(y)}",
 "STKPW*R": "{#control(z)}",
+"KHR*FPB": "{#alt(shift(colon))}",
 "PH*P": "{#alt(period)}",
 "P*FP": "{#alt(period)}",
 "S*FP": "{#alt(space)}",
