@@ -140,7 +140,7 @@
 "STKPW*R": "{#control(z)}",
 "PH*P": "{#alt(period)}",
 "P*FP": "{#alt(period)}",
-"S*FB": "{#alt(space)}",
+"S*FP": "{#alt(space)}",
 "SH*P": "{#alt(space)}",
 "HO*EU": "{#alt(slash)}",
 "O*EUF": "{#alt(slash)}",
