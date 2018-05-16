@@ -262,5 +262,11 @@
 "W-RPBG": "{MODE:RESET}{^ -W}{MODE:LOWER}{MODE:SET_SPACE:}",
 "KP-RPBG": "{MODE:RESET}{^ -X}{MODE:LOWER}{MODE:SET_SPACE:}",
 "KPR-RPBG": "{MODE:RESET}{^ -Y}{MODE:LOWER}{MODE:SET_SPACE:}",
-"STKPW-RPBG": "{MODE:RESET}{^ -Z}{MODE:LOWER}{MODE:SET_SPACE:}"
+"STKPW-RPBG": "{MODE:RESET}{^ -Z}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KWH-EU": "{^ciw}",
+"KWH-A": "{^caw}",
+"KH-EUFR": "{^ci(}",
+"KH-AFR": "{^ca(}",
+"KH-EUGS": "{^ci\"}",
+"KH-AGS": "{^ca\"}"
 }
