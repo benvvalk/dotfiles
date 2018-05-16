@@ -81,6 +81,7 @@
 "R*PL": "{MODE:RESET}",
 "P*PL": "{MODE:LOWER}{MODE:SET_SPACE:}",
 "HR*PL": "{MODE:LOWER}",
+"KR*PL": "{MODE:CAPS}{MODE:SET_SPACE:}",
 "SH*EUPBS": "{#shift(insert)}",
 "SH*P": "{#shift(up)}",
 "SH*B": "{#shift(down)}",
