@@ -12,7 +12,7 @@
 "SEUT/KA": "Sitka",
 "TPHUBGS": "tmux",
 "TKHRUP": "{PLOVER:LOOKUP}",
-"#": "{#escape}",
+"#": "{#escape}{MODE:LOWER}{MODE:SET_SPACE:}",
 "SKHR-PB": "{^};",
 "HRO*ER": "{>}",
 "HRO*ERD": "{*>}",
