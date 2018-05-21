@@ -17,7 +17,7 @@
 "HRO*ER": "{>}",
 "HRO*ERD": "{*>}",
 "S-PD": "{*?}",
-"S-P": "{MODE:SET_SPACE: }{^ ^}{MODE:SET_SPACE:}",
+"*FP": "{#space}",
 "TK-FPD": "{*!}",
 "TK-FP": "{^}",
 "#*": "#",
