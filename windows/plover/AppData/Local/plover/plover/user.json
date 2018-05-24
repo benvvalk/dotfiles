@@ -296,6 +296,7 @@
 "PO*P": "O{MODE:LOWER}{MODE:SET_SPACE:}",
 "HRO*P": "O{MODE:LOWER}{MODE:SET_SPACE: }",
 "KRO*P": "O{MODE:CAPS}{MODE:SET_SPACE:_}",
+"SKWR-L": "{#space j l}",
 "A-PBZ": "{^}ab",
 "A-RGZ": "{^}ac",
 "A-LGZ": "{^}ad",
