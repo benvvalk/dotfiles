@@ -135,7 +135,7 @@
 "KHR-P": "{#control(up)}",
 "KHR-B": "{#control(down)}",
 "R*EUPBS": "{#control(insert)}",
-"R*T": "{#control(plus)}",
+"R*T": "{#control(shift(plus))}",
 "R*S": "{#control(minus)}",
 "RO*EU": "{#control(slash)}",
 "O*EUR": "{#control(slash)}",
