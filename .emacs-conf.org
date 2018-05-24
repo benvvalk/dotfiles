@@ -321,6 +321,10 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
 
 #+END_SRC
 * Shell
+** environment
+#+BEGIN_SRC emacs-lisp
+(setq explicit-shell-file-name "/bin/bash")
+#+END_SRC
 ** readline-like key bindings
 #+BEGIN_SRC emacs-lisp
 ;; set to bash instead of zsh to avoid avoid unsupported escape codes in prompt, etc.
