@@ -1,4 +1,5 @@
 {
+"KHR-PBS": "{^}::{^}",
 "PWEUS": "ABySS",
 "ARBGS": "arcs",
 "A*RBGS": "arks",
@@ -12,8 +13,11 @@
 "REPB/AEU": "Rene",
 "SHAUPB": "Shaun",
 "SEUT/KA": "Sitka",
+"ST-D": "std{^}",
 "TEUG/PHEUPBT": "Tigmint",
 "TPHUBGS": "tmux",
+"TAOEUP/TKEF": "typedef",
+"TAOEUP/TPHAEUPL": "typename",
 "TKHRUP": "{PLOVER:LOOKUP}",
 "#": "{#escape}{MODE:LOWER}{MODE:SET_SPACE:}",
 "SKHR-PB": "{^};",
