@@ -25,6 +25,7 @@
 "TAOEUP/TPHAEUPL": "typename",
 "AOUPB/TEUG": "unitig",
 "AOUPB/TEUGS": "unitigs",
+"KPARGS": "xargs",
 "TKHRUP": "{PLOVER:LOOKUP}",
 "#": "{#escape}{MODE:LOWER}{MODE:SET_SPACE:}",
 "SKHR-PB": "{^};",
