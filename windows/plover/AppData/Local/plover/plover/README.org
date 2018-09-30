@@ -2,20 +2,15 @@
 #+PROPERTY: header-args :tangle user.json
 
 * about this config
-* preamble
-Open JSON list.
+* start dictionary
 #+BEGIN_SRC js
 {
 #+END_SRC
-* body
-** work-related jargon
+* bioinformatics
 #+BEGIN_SRC js
 "PWEUS": "ABySS",
 "ARBGS": "arcs",
 "A*RBGS": "arks",
-"KRER": "cerr",
-"KROUT": "cout",
-"KOPBTS": "const",
 "KOPB/TEUG": "contig",
 "KOPB/TEUGS": "contigs",
 "TKEUFT": "dist",
@@ -30,13 +25,52 @@ Open JSON list.
 "AOUPB/TEUG": "unitig",
 "AOUPB/TEUGS": "unitigs",
 #+END_SRC
-** TODO C/C++
+
+* brackets
+#+BEGIN_SRC js
+"HR-RPB": "{^}({^}",
+"PW-RPB": "{^}[{^}",
+"TK-RPB": "{^}\\{{^}",
+"S-RPB":  "{^}<",
+"S-RPBS":  "<<",
+"PWR-FR": "{^})",
+"PWR-PB": "{^}]",
+"PWR-LG": "{^}\\}",
+"PWR-TS": "{^}>",
+"PWR-S": "{^}>",
+#+END_SRC
+* C/C++
 #+BEGIN_SRC js
 "KHR-PBS": "{^}::{^}",
+"KRER": "cerr",
+"KROUT": "cout",
+"KOPBTS": "const",
 "ST-D": "std{^}",
 "STRUBGT": "struct",
 "TAOEUP/TKEF": "typedef",
 "TAOEUP/TPHAEUPL": "typename",
+#+END_SRC
+* command-line
+#+BEGIN_SRC js
+"POEUP": "{&../}",
+"POEU": "{&./}",
+"OEUP": "{&./}",
+"TPHUBGS": "tmux",
+"SH": "ssh",
+"KPARGS": "xargs",
+#+END_SRC
+* escape key mappings
+
+Pressing the number bar on its own triggers the Esc key. I love this mapping because the location is similar to the Escape key on a regular keyboard but is much easier to reach.
+
+At the same time, pressing the number bar on its own also resets plover to its default mode.
+
+#+BEGIN_SRC js
+"#": "{#escape}{MODE:RESET}{MODE:LOWER}",
+"#*": "{#escape}",
+#+END_SRC
+* uncategorized
+#+BEGIN_SRC js
 "TKHRUP": "{PLOVER:LOOKUP}",
 "SKHR-PB": "{^};",
 "KPA": "{MODE:RESET}{-|}",
@@ -1047,43 +1081,9 @@ Open JSON list.
 "STKPW-BZ": "{^}zw",
 "STKPW-PGZ": "{^}zx",
 "STKPW-RBGZ": "{^}zy",
-"STKPW-PBLGSZ": "{^}zz",
+"STKPW-PBLGSZ": "{^}zz"
 #+END_SRC
-** command-line
-#+BEGIN_SRC js
-"POEUP": "{&../}",
-"POEU": "{&./}",
-"OEUP": "{&./}",
-"TPHUBGS": "tmux",
-"SH": "ssh",
-"KPARGS": "xargs",
-#+END_SRC
-** escape key mappings
-
-Pressing the number bar on its own triggers the Esc key. I love this mapping because the location is similar to the Escape key on a regular keyboard but is much easier to reach.
-
-At the same time, pressing the number bar on its own also resets plover to its default mode.
-
-#+BEGIN_SRC js
-"#": "{#escape}{MODE:RESET}{MODE:LOWER}",
-"#*": "{#escape}",
-#+END_SRC
-
-* brackets
-#+BEGIN_SRC js
-"HR-RPB": "{^}({^}",
-"PW-RPB": "{^}[{^}",
-"TK-RPB": "{^}\\{{^}",
-"S-RPB":  "{^}<",
-"S-RPBS":  "<<",
-"PWR-FR": "{^})",
-"PWR-PB": "{^}]",
-"PWR-LG": "{^}\\}",
-"PWR-TS": "{^}>",
-"PWR-S": "{^}>"
-#+END_SRC
-* postamble
-Close JSON list.
+* close dictionary
 #+BEGIN_SRC js
 }
 #+END_SRC
