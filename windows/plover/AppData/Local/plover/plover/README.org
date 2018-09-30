@@ -1,5 +1,15 @@
+#+TITLE: A Coder's Plover Dictionary
+#+PROPERTY: header-args :tangle user.json
+
+* about this config
+* preamble
+Open JSON list.
+#+BEGIN_SRC js
 {
-"KHR-PBS": "{^}::{^}",
+#+END_SRC
+* body
+** work-related jargon
+#+BEGIN_SRC js
 "PWEUS": "ABySS",
 "ARBGS": "arcs",
 "A*RBGS": "arks",
@@ -16,18 +26,18 @@
 "REPB/AEU": "Rene",
 "SHAUPB": "Shaun",
 "SEUT/KA": "Sitka",
-"SH": "ssh",
-"ST-D": "std{^}",
-"STRUBGT": "struct",
 "TEUG/PHEUPBT": "Tigmint",
-"TPHUBGS": "tmux",
-"TAOEUP/TKEF": "typedef",
-"TAOEUP/TPHAEUPL": "typename",
 "AOUPB/TEUG": "unitig",
 "AOUPB/TEUGS": "unitigs",
-"KPARGS": "xargs",
+#+END_SRC
+** TODO C/C++
+#+BEGIN_SRC js
+"KHR-PBS": "{^}::{^}",
+"ST-D": "std{^}",
+"STRUBGT": "struct",
+"TAOEUP/TKEF": "typedef",
+"TAOEUP/TPHAEUPL": "typename",
 "TKHRUP": "{PLOVER:LOOKUP}",
-"#": "{#escape}{MODE:RESET}{MODE:LOWER}",
 "SKHR-PB": "{^};",
 "KPA": "{MODE:RESET}{-|}",
 "KPA*": "{MODE:RESET}{^}{-|}",
@@ -42,20 +52,6 @@
 "UFP": "{^}_{^}",
 "TK-FPD": "{*!}",
 "TK-FP": "{^}",
-"#*": "{#escape}",
-"POEUP": "{&../}",
-"POEU": "{&./}",
-"OEUP": "{&./}",
-"HR-RPB": "{^}({^}",
-"PW-RPB": "{^}[{^}",
-"TK-RPB": "{^}\\{{^}",
-"S-RPB":  "{^}<",
-"S-RPBS":  "<<",
-"PWR-FR": "{^})",
-"PWR-PB": "{^}]",
-"PWR-LG": "{^}\\}",
-"PWR-TS": "{^}>",
-"PWR-S": "{^}>",
 "SPWR-TS": ">>",
 "SPWR-S": ">>",
 "KWA*L": "{^=^}",
@@ -1051,5 +1047,43 @@
 "STKPW-BZ": "{^}zw",
 "STKPW-PGZ": "{^}zx",
 "STKPW-RBGZ": "{^}zy",
-"STKPW-PBLGSZ": "{^}zz"
+"STKPW-PBLGSZ": "{^}zz",
+#+END_SRC
+** command-line
+#+BEGIN_SRC js
+"POEUP": "{&../}",
+"POEU": "{&./}",
+"OEUP": "{&./}",
+"TPHUBGS": "tmux",
+"SH": "ssh",
+"KPARGS": "xargs",
+#+END_SRC
+** escape key mappings
+
+Pressing the number bar on its own triggers the Esc key. I love this mapping because the location is similar to the Escape key on a regular keyboard but is much easier to reach.
+
+At the same time, pressing the number bar on its own also resets plover to its default mode.
+
+#+BEGIN_SRC js
+"#": "{#escape}{MODE:RESET}{MODE:LOWER}",
+"#*": "{#escape}",
+#+END_SRC
+
+* brackets
+#+BEGIN_SRC js
+"HR-RPB": "{^}({^}",
+"PW-RPB": "{^}[{^}",
+"TK-RPB": "{^}\\{{^}",
+"S-RPB":  "{^}<",
+"S-RPBS":  "<<",
+"PWR-FR": "{^})",
+"PWR-PB": "{^}]",
+"PWR-LG": "{^}\\}",
+"PWR-TS": "{^}>",
+"PWR-S": "{^}>"
+#+END_SRC
+* postamble
+Close JSON list.
+#+BEGIN_SRC js
 }
+#+END_SRC
