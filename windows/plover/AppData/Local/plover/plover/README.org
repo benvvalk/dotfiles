@@ -69,13 +69,28 @@ At the same time, pressing the number bar on its own also resets plover to its d
 "#": "{#escape}{MODE:RESET}{MODE:LOWER}",
 "#*": "{#escape}",
 #+END_SRC
-* uncategorized
+* Plover meta commands
+** capitalization
+   Capitalize the next word.
+#+BEGIN_SRC js
+"KPA": "{MODE:RESET}{-|}",
+#+END_SRC
+Capitalize the next word and join it to the end of the current word (suppress automatic spacing).
+#+BEGIN_SRC js
+"KPA*": "{MODE:RESET}{^}{-|}",
+#+END_SRC
+Retroactively capitalize the last word.
+#+BEGIN_SRC js
+"KPA-D": "{MODE:RESET}{*-|}",
+#+END_SRC
+** dictionary lookup
+  Open up Plover's handy reverse dictionary lookup dialog, where one can type (fingerspell) any word and see what steno chords generate that word.
 #+BEGIN_SRC js
 "TKHRUP": "{PLOVER:LOOKUP}",
+#+END_SRC
+* uncategorized
+#+BEGIN_SRC js
 "SKHR-PB": "{^};",
-"KPA": "{MODE:RESET}{-|}",
-"KPA*": "{MODE:RESET}{^}{-|}",
-"KPA-D": "{MODE:RESET}{*-|}",
 "HRO*ER": "{>}",
 "-FRD": "{MODE:RESET}{*>}",
 "-RGD": "{MODE:RESET}{*<}",
