@@ -134,6 +134,21 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 "KPR-RPBG": "{MODE:RESET}{& -Y}",
 "STKPW-RPBG": "{MODE:RESET}{& -Z}",
 #+END_SRC
+* function keys
+To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
+#+BEGIN_SRC js
+"178": "{#F1}",
+"278": "{#F2}",
+"378": "{#F3}",
+"478": "{#F4}",
+"578": "{#F5}",
+"678": "{#F6}",
+"778": "{#F7}",
+"878": "{#F8}",
+"978": "{#F9}",
+"1078": "{#F10}",
+"1278": "{#F12}",
+#+END_SRC
 * modifier keys (alt/control/shift/win)
 ** alt
 #+BEGIN_SRC js
@@ -1248,7 +1263,7 @@ NOTE: The Plover dictionary format has the quirk that chords can not specified u
 "3-9D": "{^}39k"
 #+END_SRC
 
-* close dictionary
+* end dictionary
 #+BEGIN_SRC js
 }
 #+END_SRC
