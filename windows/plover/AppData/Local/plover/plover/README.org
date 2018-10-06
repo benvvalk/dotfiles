@@ -409,6 +409,11 @@ At the same time, pressing the number bar on its own also resets plover to its d
 "*9": "{^}(",
 #+END_SRC
 ** digrams
+
+I find the ability to fingerspell digrams (two-letter combinations) to be very handy. For example, I have used various vim plugins for Firefox/Chrome (e.g. Vimperator, Vimium, VimFX, tridactyl) that allow keyboard navigation of hyperlinks by labeling the links with two-letter "hints".
+
+The idea behind these chords is to fingerspell the first letter with the left hand as usual, and to use the right hand to fingerspell the second letter. The chords for fingerspelling the right hand are the mirror image of the chords for the left hand. For example, the right hand chord for "m" is -FP. Finally, all digram chords end with the Z key.
+
 #+BEGIN_SRC js
 "A-PBZ": "{^}ab",
 "A-RGZ": "{^}ac",
