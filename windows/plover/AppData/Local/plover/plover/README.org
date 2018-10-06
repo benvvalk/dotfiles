@@ -285,7 +285,38 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "KWR*PB": "{#windows(y)}",
 "STKPW*PB": "{#windows(z)}",
 #+END_SRC
-* escape key mappings
+** win+shift
+Same as the Windows key chords, but with the S key appended at the end.
+#+BEGIN_SRC js
+"A*PBS": "{#windows(shift(a))}",
+"PW*PBS": "{#windows(shift(b))}",
+"KR*PBS": "{#windows(shift(c))}",
+"TK*PBS": "{#windows(shift(d))}",
+"*EPBS": "{#windows(shift(e))}",
+"TP*PBS": "{#windows(shift(f))}",
+"TKPW*PBS": "{#windows(shift(g))}",
+"H*PBS": "{#windows(shift(h))}",
+"*EUPBS": "{#windows(shift(i))}",
+"SKWR*PBS": "{#windows(shift(j))}",
+"K*PBS": "{#windows(shift(k))}",
+"HR*PBS": "{#windows(shift(l))}",
+"PH*PBS": "{#windows(shift(m))}",
+"TPH*PBS": "{#windows(shift(n))}",
+"O*PBS": "{#windows(shift(o))}",
+"P*PBS": "{#windows(shift(p))}",
+"KW*PBS": "{#windows(shift(q))}",
+"R*PBS": "{#windows(shift(r))}",
+"S*PBS": "{#windows(shift(s))}",
+"T*PBS": "{#windows(shift(t))}",
+"*UPBS": "{#windows(shift(u))}",
+"SR*PBS": "{#windows(shift(v))}",
+"W*PBS": "{#windows(shift(w))}",
+"KP*PBS": "{#windows(shift(x))}",
+"KWR*PBS": "{#windows(shift(y))}",
+"STKPW*PBS": "{#windows(shift(z))}",
+#+END_SRC
+
+* escape key
 
 Pressing the number bar on its own triggers the Esc key. I love this mapping because the location is similar to the Escape key on a regular keyboard but is much easier to reach.
 
