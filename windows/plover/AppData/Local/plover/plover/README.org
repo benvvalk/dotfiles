@@ -327,6 +327,7 @@ At the same time, pressing the number bar on its own also resets plover to its d
 "#*": "{#escape}",
 #+END_SRC
 * fingerspelling
+In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
 ** letters
 #+BEGIN_SRC js
 "A*": "{^}a",
@@ -397,6 +398,50 @@ At the same time, pressing the number bar on its own also resets plover to its d
 "7": "{^}7",
 "8": "{^}8",
 "9": "{^}9",
+"00": "{^}00",
+"00": "{^}01",
+"02": "{^}02",
+"03": "{^}03",
+"04": "{^}04",
+"05": "{^}05",
+"06": "{^}06",
+"07": "{^}07",
+"08": "{^}08",
+"09": "{^}09",
+"10": "{^}10",
+"11": "{^}11",
+"12": "{^}12",
+"13": "{^}13",
+"14": "{^}14",
+"15": "{^}15",
+"16": "{^}16",
+"17": "{^}17",
+"18": "{^}18",
+"19": "{^}19",
+"20": "{^}20",
+"21": "{^}21",
+"22": "{^}22",
+"23": "{^}23",
+"24": "{^}24",
+"25": "{^}25",
+"26": "{^}26",
+"27": "{^}27",
+"28": "{^}28",
+"29": "{^}29",
+"30": "{^}30",
+"31": "{^}31",
+"32": "{^}32",
+"33": "{^}33",
+"34": "{^}34",
+"35": "{^}35",
+"36": "{^}36",
+"37": "{^}37",
+"38": "{^}38",
+"39": "{^}39",
+#+END_SRC
+** symbol chars (e.g. !, @, #)
+Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
+#+BEGIN_SRC js
 "0*": "{^})",
 "1*": "{^}!",
 "2*": "{^}@",
