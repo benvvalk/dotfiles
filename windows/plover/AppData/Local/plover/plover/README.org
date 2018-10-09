@@ -258,6 +258,8 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "SH*G": "{#shift(right)}",
 "SH*RB": "{#shift(control(left))}",
 "SH*BG": "{#shift(control(right))}",
+"ST*B": "{#shift(tab)}",
+"T*BS": "{#shift(tab)}",
 #+END_SRC
 ** win
 #+BEGIN_SRC js
