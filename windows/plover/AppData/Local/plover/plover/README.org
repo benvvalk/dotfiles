@@ -1149,6 +1149,11 @@ Retroactively capitalize the last word.
 "KPA-D": "{MODE:RESET}{*-|}",
 #+END_SRC
 
+Retroactively lowercase the last word. (Mnemonic: "U" for uncapitalize.)
+#+BEGIN_SRC js
+"KPA-UD": "{*>}",
+#+END_SRC
+
 Make the next word all uppercase/lowercase.
 #+BEGIN_SRC js
 "HRO*ER": "{>}",
