@@ -192,6 +192,16 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 #+END_SRC
 ** control
 #+BEGIN_SRC js
+"0*R": "{#control(0)}",
+"1*R": "{#control(1)}",
+"2*R": "{#control(2)}",
+"3*R": "{#control(3)}",
+"4*R": "{#control(4)}",
+"5*R": "{#control(5)}",
+"R*6": "{#control(6)}",
+"R*7": "{#control(7)}",
+"R*8": "{#control(8)}",
+"R*9": "{#control(9)}",
 "HR*RPB": "{#control(parenleft)}",
 "PW*RPB": "{#control(bracketleft)}",
 "TK*RPB": "{#control(braceleft)}",
