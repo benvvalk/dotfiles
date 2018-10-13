@@ -52,6 +52,7 @@ values."
    dotspacemacs-additional-packages
    '(multishell
      evil-easymotion
+     evil-snipe
      graphviz-dot-mode
      org-ref
      shackle)

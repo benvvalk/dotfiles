@@ -152,6 +152,16 @@ Display the time in the modeline.
 
 (add-hook 'message-setup-hook 'benv/message-setup-hook)
 #+END_SRC
+* evil-snipe
+Override default f/F/t/T motions to search across lines.
+
+In addition, a search can be repeated/reversed by pressing f/F/t/T,
+just like the standard ;/, bindings (which still work).
+#+BEGIN_SRC emacs-lisp
+(require 'evil-snipe)
+(setq evil-snipe-scope 'buffer)
+(evil-snipe-override-mode +1)
+#+END_SRC
 * Flycheck
 #+BEGIN_SRC emacs-lisp
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
