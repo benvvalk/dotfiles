@@ -40,7 +40,7 @@
 ;; avy is "hint"-based motion. Type two leading chars of where you want to go
 (define-key evil-normal-state-map (kbd "s") 'evil-avy-goto-char-timer)
 ;; note: can't use "s" here because it conflicts with evil-surround
-(define-key evil-motion-state-map (kbd "z") 'evil-avy-goto-char-timer)
+(define-key evil-motion-state-map (kbd "r") 'evil-avy-goto-char-timer)
 #+END_SRC
 ** Copy/Paste
 #+BEGIN_SRC emacs-lisp
