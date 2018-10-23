@@ -1161,6 +1161,12 @@ Make the next word all uppercase/lowercase.
 "HRO*ER": "{>}",
 #+END_SRC
 
+Retroactively lowercase/uppercase.
+#+BEGIN_SRC js
+"-FRD": "{MODE:RESET}{*>}",
+"-RGD": "{MODE:RESET}{*<}",
+#+END_SRC
+
 ** dictionary lookup
   Open up Plover's handy reverse dictionary lookup dialog, where one can type (fingerspell) any word and see what steno chords generate that word.
 #+BEGIN_SRC js
@@ -1175,12 +1181,6 @@ Make the next word all uppercase/lowercase.
 "KR*PL": "{MODE:CAPS}{MODE:SET_SPACE:_}",
 #+END_SRC
 ** spacing
-
-   Retroactively lowercase/uppercase.
-#+BEGIN_SRC js
-"-FRD": "{MODE:RESET}{*>}",
-"-RGD": "{MODE:RESET}{*<}",
-#+END_SRC
 
 Retroactively insert a space before the last word.
 #+BEGIN_SRC js
