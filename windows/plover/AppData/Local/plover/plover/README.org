@@ -528,7 +528,46 @@ r['z'] = "PBLGS"
 
 for key1, value1 in l.iteritems():
     for key2, value2 in r.iteritems():
+        # both letters lowercase
         print('"{}-{}Z": "{{^{}{}^}}",'.format(value1,value2,key1,key2))
+        # first letter uppercase
+        print('"{}*-{}Z": "{{^{}{}^}}",'.format(value1,value2,key1.upper(),key2))
+        # second letter uppercase
+        print('"{}-{}DZ": "{{^{}{}^}}",'.format(value1,value2,key1,key2.upper()))
+        # both letters uppercase
+        print('"{}*-{}DZ": "{{^{}{}^}}",'.format(value1,value2,key1.upper(),key2.upper()))
+
+# number-letter combos
+
+ldigit = ["0","1","2","3","4","5","O*","K","W","R"]
+
+for i in xrange(1, 99):
+    for key2, value2 in r.iteritems():
+        # EU is reserved for inverting digits
+        if key2 == "i":
+            continue
+        if i < 10:
+            if i <= 5: # single digit number
+                print('"{}-{}Z": "{{^{}{}^}}",'.format(ldigit[i],value2,i,key2))
+            else:
+                print('"#{}-{}Z": "{{^{}{}^}}",'.format(ldigit[i],value2,i,key2))
+        else: # double digit number
+            digit1 = i // 10
+            digit2 = i % 10
+            if digit1 <= 5 or digit2 <= 5:
+                if digit1 == digit2:
+                    continue # not sure how to handle this case
+                if digit1 > digit2:
+                    print('"{}{}-EU{}Z": "{{^{}{}^}}",'.format(digit2,digit1,value2,i,key2))
+                else:
+                    print('"{}-{}Z": "{{^{}{}^}}",'.format(i,value2,i,key2))
+            else:
+                if digit1 == digit2:
+                    continue # not sure how to handle this case
+                if digit1 > digit2:
+                    print('"#{}{}-EU{}Z": "{{^{}{}^}}",'.format(ldigit[digit2],ldigit[digit1],value2,i,key2))
+                else:
+                    print('"#{}{}-{}Z": "{{^{}{}^}}",'.format(ldigit[digit1],ldigit[digit2],value2,i,key2))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
