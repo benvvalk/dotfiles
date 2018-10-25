@@ -149,6 +149,12 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "1078": "{#F10}",
 "1278": "{#F12}",
 #+END_SRC
+* coding shortcuts
+
+#+BEGIN_SRC js
+"KWA*LS": "{MODE:RESET}{^ = ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+#+END_SRC
+
 * modifier keys (alt/control/shift/win)
 ** alt
 #+BEGIN_SRC js
@@ -1210,8 +1216,6 @@ Attach the next word to the end of the current word.
 "TK-FP": "{^}",
 "SPWR-TS": ">>",
 "SPWR-S": ">>",
-"KWA*L": "{^=^}",
-"KWA*LS": "{^ = ^}",
 "T-B": "{#tab}",
 "T-PB": "{#shift(tab)}",
 "TP-B": "{#shift(tab)}",
