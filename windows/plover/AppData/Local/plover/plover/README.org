@@ -581,6 +581,19 @@ for i in xrange(1, 99):
 #+BEGIN_SRC js :noweb tangle
 <<digrams()>>
 #+END_SRC
+** trigrams
+
+Handy trigrams for vim.
+
+#+BEGIN_SRC js
+"KR-EUBZ": "{^ciw^}",
+"KRA-BZ": "{^caw^}",
+"KR-EUGSZ": "{^ci\"^}",
+"KRA-GSZ": "{^ca\"^}",
+"KRA-BZ": "{^caw^}",
+"TK-EUBZ": "{^diw^}",
+"TKA-BZ": "{^daw^}",
+#+END_SRC
 
 * Plover meta commands
 ** capitalization
