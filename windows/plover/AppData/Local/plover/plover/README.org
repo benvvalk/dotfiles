@@ -146,7 +146,8 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "1078": "{#F10}",
 "1278": "{#F12}",
 #+END_SRC
-* coding shortcuts
+* coding
+** expressions/assignment
 
 #+BEGIN_SRC js
 "KWA*L": "{MODE:RESET}{^=^}{MODE:LOWER}{MODE:SET_SPACE:}",
@@ -158,6 +159,8 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "HR*ET": "{MODE:RESET}{^ <= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 "TKPW*T": "{MODE:RESET}{^ > ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 "TKPW*ET": "{MODE:RESET}{^ >= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*PBD": "{MODE:RESET}{^ && ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HRO*R": "{MODE:RESET}{^ || ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
 
 * modifier keys (alt/control/shift/win)
