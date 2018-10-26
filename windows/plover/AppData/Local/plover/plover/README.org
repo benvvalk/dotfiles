@@ -152,7 +152,15 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 * coding shortcuts
 
 #+BEGIN_SRC js
+"KWA*L": "{MODE:RESET}{^=^}{MODE:LOWER}{MODE:SET_SPACE:}",
 "KWA*LS": "{MODE:RESET}{^ = ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KW*LT": "{MODE:RESET}{^ == ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"K*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KR*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*T": "{MODE:RESET}{^ < ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*ET": "{MODE:RESET}{^ <= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"TKPW*T": "{MODE:RESET}{^ > ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"TKPW*ET": "{MODE:RESET}{^ >= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
 
 * modifier keys (alt/control/shift/win)
@@ -619,7 +627,6 @@ Retroactively lowercase/uppercase.
 "R*PL": "{MODE:RESET}",
 "P*PL": "{MODE:LOWER}{MODE:SET_SPACE:}",
 "HR*PL": "{MODE:LOWER}{MODE:SET_SPACE: }",
-"KR*PL": "{MODE:CAPS}{MODE:SET_SPACE:_}",
 #+END_SRC
 ** spacing
 
