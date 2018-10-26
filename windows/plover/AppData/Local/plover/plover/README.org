@@ -18,11 +18,8 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 "KOPB/TEUGS": "contigs",
 "TKEUFT": "dist",
 "EPL": "emc",
-"TPHAFRPB": "Inanc",
 "PRAG": "pragma",
 "KWAFT": "quast",
-"REPB/AEU": "Rene",
-"SHAUPB": "Shaun",
 "SEUT/KA": "Sitka",
 "TEUG/PHEUPBT": "Tigmint",
 "AOUPB/TEUG": "unitig",
@@ -595,6 +592,14 @@ Handy trigrams for vim.
 "TKA-BZ": "{^daw^}",
 #+END_SRC
 
+* people's names
+#+BEGIN_SRC js
+"TPHAFRPB": "Inanc",
+"REPB/AEU": "Rene",
+"RUP": "Rup",
+"RAOUP": "Rup",
+"SHAUPB": "Shaun",
+#+END_SRC
 * Plover meta commands
 ** capitalization
 
