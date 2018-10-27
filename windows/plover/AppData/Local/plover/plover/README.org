@@ -537,14 +537,16 @@ r['z'] = "PBLGS"
 
 for key1, value1 in l.iteritems():
     for key2, value2 in r.iteritems():
+        prefix = "{MODE:RESET}"
+        suffix = "{MODE:LOWER}{MODE:SET_SPACE:}"
         # both letters lowercase
-        print('"{}-{}Z": "{{^{}{}^}}",'.format(value1,value2,key1,key2))
+        print('"{}-{}Z": "{{^{}{}}}",'.format(value1,value2,key1,key2))
         # first letter uppercase
-        print('"{}*-{}Z": "{{^{}{}^}}",'.format(value1,value2,key1.upper(),key2))
+        print('"{}*-{}Z": "{}{{^{}{}}}{}",'.format(value1,value2,prefix,key1.upper(),key2,suffix))
         # second letter uppercase
-        print('"{}-{}DZ": "{{^{}{}^}}",'.format(value1,value2,key1,key2.upper()))
+        print('"{}-{}DZ": "{}{{^{}{}}}{}",'.format(value1,value2,prefix,key1,key2.upper(),suffix))
         # both letters uppercase
-        print('"{}*-{}DZ": "{{^{}{}^}}",'.format(value1,value2,key1.upper(),key2.upper()))
+        print('"{}*-{}DZ": "{}{{^{}{}}}{}",'.format(value1,value2,prefix,key1.upper(),key2.upper(),suffix))
 
 # number-letter combos
 
