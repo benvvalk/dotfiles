@@ -9,6 +9,63 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 #+BEGIN_SRC js
 {
 #+END_SRC
+* shared python code
+#+NAME: fingerspelling
+#+BEGIN_SRC python :tangle no :results output silent
+# fingerspelling chords for the left hand
+l = {}
+l['a'] = "A"
+l['b'] = "PW"
+l['c'] = "KR"
+l['d'] = "TK"
+l['f'] = "TP"
+l['g'] = "TKPW"
+l['h'] = "H"
+l['j'] = "SKWR"
+l['k'] = "K"
+l['l'] = "HR"
+l['m'] = "PH"
+l['n'] = "TPH"
+l['o'] = "O"
+l['p'] = "P"
+l['q'] = "KW"
+l['r'] = "R"
+l['s'] = "S"
+l['t'] = "T"
+l['v'] = "SR"
+l['w'] = "W"
+l['x'] = "KP"
+l['y'] = "KWR"
+l['z'] = "STKPW"
+
+# fingerspelling chords for the right hand
+r = {}
+r['b'] = "PB"
+r['c'] = "RG"
+r['d'] = "LG"
+r['e'] = "E"
+r['f'] = "PL"
+r['g'] = "PBLG"
+r['h'] = "F"
+r['i'] = "EU"
+r['j'] = "RBGS"
+r['k'] = "G"
+r['l'] = "FR"
+r['m'] = "FP"
+r['n'] = "FPL"
+r['p'] = "P"
+r['q'] = "BG"
+r['r'] = "R"
+r['s'] = "S"
+r['t'] = "L"
+r['u'] = "U"
+r['v'] = "RS"
+r['w'] = "B"
+r['x'] = "PG"
+r['y'] = "RBG"
+r['z'] = "PBLGS"
+#+END_SRC
+
 * bioinformatics
 #+BEGIN_SRC js
 "PWEUS": "ABySS",
@@ -481,59 +538,9 @@ I find the ability to fingerspell digrams (two-letter combinations) to be very h
 The idea behind these chords is to fingerspell the first letter with the left hand as usual, and to use the right hand to fingerspell the second letter. The chords for fingerspelling with the right hand are the mirror image of the chords for the left hand. For example, the right hand chord for "m" is -FP. Finally, all digram chords end with the Z key.
 
 #+NAME: digrams
-#+BEGIN_SRC python :tangle no :results output silent
-# fingerspelling chords for the left hand
-l = {}
-l['a'] = "A"
-l['b'] = "PW"
-l['c'] = "KR"
-l['d'] = "TK"
-l['f'] = "TP"
-l['g'] = "TKPW"
-l['h'] = "H"
-l['j'] = "SKWR"
-l['k'] = "K"
-l['l'] = "HR"
-l['m'] = "PH"
-l['n'] = "TPH"
-l['o'] = "O"
-l['p'] = "P"
-l['q'] = "KW"
-l['r'] = "R"
-l['s'] = "S"
-l['t'] = "T"
-l['v'] = "SR"
-l['w'] = "W"
-l['x'] = "KP"
-l['y'] = "KWR"
-l['z'] = "STKPW"
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
 
-# fingerspelling chords for the right hand
-r = {}
-r['b'] = "PB"
-r['c'] = "RG"
-r['d'] = "LG"
-r['e'] = "E"
-r['f'] = "PL"
-r['g'] = "PBLG"
-r['h'] = "F"
-r['i'] = "EU"
-r['j'] = "RBGS"
-r['k'] = "G"
-r['l'] = "FR"
-r['m'] = "FP"
-r['n'] = "FPL"
-r['p'] = "P"
-r['q'] = "BG"
-r['r'] = "R"
-r['s'] = "S"
-r['t'] = "L"
-r['u'] = "U"
-r['v'] = "RS"
-r['w'] = "B"
-r['x'] = "PG"
-r['y'] = "RBG"
-r['z'] = "PBLGS"
+<<fingerspelling>>
 
 for key1, value1 in l.iteritems():
     for key2, value2 in r.iteritems():
