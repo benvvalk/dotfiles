@@ -150,62 +150,24 @@ r['z'] = "PBLGS"
 ** command-line switches
 #+BEGIN_SRC js
 "TK-RB": "{MODE:RESET}{& --}",
-"A-RBG": "{MODE:RESET}{& -a}",
-"PW-RBG": "{MODE:RESET}{& -b}",
-"KR-RBG": "{MODE:RESET}{& -c}",
-"TK-RBG": "{MODE:RESET}{& -d}",
-"-ERBG": "{MODE:RESET}{& -e}",
-"TP-RBG": "{MODE:RESET}{& -f}",
-"TKPW-RBG": "{MODE:RESET}{& -g}",
-"H-RBG": "{MODE:RESET}{& -h}",
-"-EUFP": "{MODE:RESET}{& -i}",
-"SKWR-RBG": "{MODE:RESET}{& -j}",
-"K-RBG": "{MODE:RESET}{& -k}",
-"HR-RBG": "{MODE:RESET}{& -l}",
-"PH-RBG": "{MODE:RESET}{& -m}",
-"TPH-RBG": "{MODE:RESET}{& -n}",
-"O-RBG": "{MODE:RESET}{& -o}",
-"P-RBG": "{MODE:RESET}{& -p}",
-"KW-RBG": "{MODE:RESET}{& -q}",
-"R-RBG": "{MODE:RESET}{& -r}",
-"S-RBG": "{MODE:RESET}{& -s}",
-"T-RBG": "{MODE:RESET}{& -t}",
-"-URBG": "{MODE:RESET}{& -u}",
-"SR-RBG": "{MODE:RESET}{& -v}",
-"W-RBG": "{MODE:RESET}{& -w}",
-"KP-RBG": "{MODE:RESET}{& -x}",
-"KPR-RBG": "{MODE:RESET}{& -y}",
-"STKPW-RBG": "{MODE:RESET}{& -z}",
-"A-RPBG": "{MODE:RESET}{& -A}",
-"PW-RPBG": "{MODE:RESET}{& -B}",
-"KR-RPBG": "{MODE:RESET}{& -C}",
-"TK-RPBG": "{MODE:RESET}{& -D}",
-"-EF": "{MODE:RESET}{& -E}",
-"KPWR-E": "{MODE:RESET}{& -E}",
-"TP-RPBG": "{MODE:RESET}{& -F}",
-"TKPW-RPBG": "{MODE:RESET}{& -G}",
-"H-RPBG": "{MODE:RESET}{& -H}",
-"-EUFPL": "{MODE:RESET}{& -I}",
-"KPWR-EU": "{MODE:RESET}{& -I}",
-"SKWR-RPBG": "{MODE:RESET}{& -J}",
-"K-RPBG": "{MODE:RESET}{& -K}",
-"HR-RPBG": "{MODE:RESET}{& -L}",
-"TPH-RPBG": "{MODE:RESET}{& -M}",
-"TPH-RPBG": "{MODE:RESET}{& -N}",
-"O-RPBG": "{MODE:RESET}{& -O}",
-"P-RPBG": "{MODE:RESET}{& -P}",
-"KW-RPBG": "{MODE:RESET}{& -Q}",
-"R-RPBG": "{MODE:RESET}{& -R}",
-"S-RPBG": "{MODE:RESET}{& -S}",
-"T-RPBG": "{MODE:RESET}{& -T}",
-"-URPBG": "{MODE:RESET}{& -U}",
-"KPWR-U": "{MODE:RESET}{& -U}",
-"SR-RPBG": "{MODE:RESET}{& -V}",
-"W-RPBG": "{MODE:RESET}{& -W}",
-"KP-RPBG": "{MODE:RESET}{& -X}",
-"KPR-RPBG": "{MODE:RESET}{& -Y}",
-"STKPW-RPBG": "{MODE:RESET}{& -Z}",
 #+END_SRC
+
+#+NAME: command-line-switches
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+
+<<fingerspelling>>
+
+for char, chord in l.iteritems():
+        prefix = "{MODE:RESET}"
+        suffix = "{MODE:LOWER}{MODE:SET_SPACE:}"
+        print('"{}-{}": "{}{{^ -{}}}{}",'.format(chord, "RBG", prefix, char, suffix))
+        print('"{}-{}": "{}{{^ -{}}}{}",'.format(chord, "RPBG", prefix, char.upper(), suffix))
+#+END_SRC
+
+#+BEGIN_SRC js :noweb tangle
+<<command-line-switches()>>
+#+END_SRC
+
 * function keys
 To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
 #+BEGIN_SRC js
