@@ -40,7 +40,8 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 "PWR-TS": "{^}>",
 "PWR-S": "{^}>",
 #+END_SRC
-* C/C++
+* coding
+** C/C++ keywords
 #+BEGIN_SRC js
 "KHR-PBS": "{^}::{^}",
 "KRER": "cerr",
@@ -51,6 +52,22 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 "TAOEUP/TKEF": "typedef",
 "TAOEUP/TPHAEUPL": "typename",
 #+END_SRC
+** expressions/assignment
+
+#+BEGIN_SRC js
+"KWA*L": "{MODE:RESET}{^=^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KWA*LS": "{MODE:RESET}{^ = ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KW*LT": "{MODE:RESET}{^ == ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"K*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KR*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*T": "{MODE:RESET}{^ < ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*ET": "{MODE:RESET}{^ <= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"TKPW*T": "{MODE:RESET}{^ > ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"TKPW*ET": "{MODE:RESET}{^ >= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HR*PBD": "{MODE:RESET}{^ && ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"HRO*R": "{MODE:RESET}{^ || ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+#+END_SRC
+
 * command-line
 ** shell commands
 #+BEGIN_SRC js
@@ -147,23 +164,6 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "1078": "{#F10}",
 "1278": "{#F12}",
 #+END_SRC
-* coding
-** expressions/assignment
-
-#+BEGIN_SRC js
-"KWA*L": "{MODE:RESET}{^=^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KWA*LS": "{MODE:RESET}{^ = ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KW*LT": "{MODE:RESET}{^ == ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"K*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KR*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*T": "{MODE:RESET}{^ < ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*ET": "{MODE:RESET}{^ <= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"TKPW*T": "{MODE:RESET}{^ > ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"TKPW*ET": "{MODE:RESET}{^ >= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*PBD": "{MODE:RESET}{^ && ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HRO*R": "{MODE:RESET}{^ || ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-#+END_SRC
-
 * modifier keys (alt/control/shift/win)
 ** alt
 #+BEGIN_SRC js
