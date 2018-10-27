@@ -20,6 +20,7 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 "EPL": "emc",
 "PRAG": "pragma",
 "KWAFT": "quast",
+"KWAUFT": "quast",
 "SEUT/KA": "Sitka",
 "TEUG/PHEUPBT": "Tigmint",
 "AOUPB/TEUG": "unitig",
