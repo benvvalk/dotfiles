@@ -633,6 +633,12 @@ Override the default space key binding to insert a space, even when the space ch
 "S-P": "{MODE:RESET}{^ ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
 
+Insert a space and switch to the default Plover mode at the same time.
+
+#+BEGIN_SRC js
+"S-PS": "{MODE:RESET}{^ ^}",
+#+END_SRC
+
 Retroactively insert a space before the last word.
 #+BEGIN_SRC js
 "-FPD": "{MODE:RESET}{*?}",
