@@ -133,9 +133,9 @@ r['z'] = "PBLGS"
 * command-line
 ** shell commands
 #+BEGIN_SRC js
-"POEUP": "{MODE:RESET}{MODE:LOWER}{../}{^}",
-"POEU": "{MODE:RESET}{MODE:LOWER}{./}{^}",
-"OEUP": "{MODE:RESET}{MODE:LOWER}{./}{^}",
+"POEUP": "{MODE:RESET}{MODE:LOWER}../{^}",
+"POEU": "{MODE:RESET}{MODE:LOWER}./{^}",
+"OEUP": "{MODE:RESET}{MODE:LOWER}./{^}",
 "TKR-": "cd{MODE:RESET}{MODE:LOWER}",
 "KR-D": "cd{MODE:RESET}{MODE:LOWER}",
 "KR-PL": "chmod{MODE:RESET}{MODE:LOWER}",
