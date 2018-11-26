@@ -150,7 +150,7 @@ r['z'] = "PBLGS"
 #+END_SRC
 ** command-line switches
 #+BEGIN_SRC js
-"TK-RB": "--",
+"TK-RB": "{MODE:RESET}{MODE:LOWER}--{^}",
 #+END_SRC
 
 #+NAME: command-line-switches
@@ -159,10 +159,10 @@ r['z'] = "PBLGS"
 <<fingerspelling>>
 
 for char, chord in l.iteritems():
-        prefix = "{MODE:RESET}"
-        suffix = "{MODE:LOWER}{MODE:SET_SPACE:}"
-        print('"{}-{}": "-{}",'.format(chord, "RBG", char))
-        print('"{}-{}": "{}-{}{}",'.format(chord, "RPBG", prefix, char.upper(), suffix))
+        lower = "{MODE:LOWER}"
+        reset = "{MODE:RESET}"
+        print('"{}-{}": "{}-{}{}",'.format(chord, "RBG", reset, char, lower))
+        print('"{}-{}": "{}-{}{}",'.format(chord, "RPBG", reset, char.upper(), lower))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
