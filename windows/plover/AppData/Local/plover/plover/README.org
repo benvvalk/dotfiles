@@ -629,6 +629,7 @@ Retroactively lowercase/uppercase.
 #+END_SRC
 ** Plover modes (e.g. all-caps)
 #+BEGIN_SRC js
+"KR*PL": "{MODE:CAPS}{MODE:SET_SPACE:_}",
 "TK*PL": "{MODE:RESET}",
 "R*PL": "{MODE:RESET}",
 "P*PL": "{MODE:LOWER}{MODE:SET_SPACE:}",
