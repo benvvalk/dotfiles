@@ -151,6 +151,7 @@ r['z'] = "PBLGS"
 "SH": "ssh{MODE:RESET}{MODE:LOWER}",
 "TPHUBGS": "tmux{MODE:RESET}{MODE:LOWER}",
 "KPARGS": "xargs{MODE:RESET}{MODE:LOWER}",
+"PAO*EUP": "{MODE:RESET}{MODE:LOWER}{^ | ^}",
 #+END_SRC
 ** command-line switches
 #+BEGIN_SRC js
