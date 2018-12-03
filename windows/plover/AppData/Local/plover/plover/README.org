@@ -68,7 +68,8 @@ r['z'] = "PBLGS"
 
 * bioinformatics
 #+BEGIN_SRC js
-"PWEUS": "ABySS",
+"PW-EUS": "abyss",
+"PW*EUS": "ABySS",
 "ARBGS": "arcs",
 "A*RBGS": "arks",
 "PWRO-EUPB": "Bruijn",
@@ -151,6 +152,8 @@ r['z'] = "PBLGS"
 "KR-PLD": "chmod{MODE:RESET}{MODE:LOWER}",
 "KHR-PLD": "chmod{MODE:RESET}{MODE:LOWER}",
 "KR-P": "cp{MODE:RESET}{MODE:LOWER}",
+"SKWRAO-ER/RA": "jira",
+"SKWRAO*ER/RA": "JIRA",
 "SKWRA*EUFPB": "json",
 "HR-S": "ls{MODE:RESET}{MODE:LOWER}",
 "HR-PB": "ln{MODE:RESET}{MODE:LOWER}",
@@ -595,6 +598,7 @@ Handy trigrams for vim.
 "RUP": "Rup",
 "RAOUP": "Rup",
 "SHAUPB": "Shaun",
+"SRA-PBD": "Vandervalk",
 #+END_SRC
 * Plover meta commands
 ** capitalization
