@@ -73,6 +73,8 @@ r['z'] = "PBLGS"
 "ARBGS": "arcs",
 "A*RBGS": "arks",
 "PWRO-EUPB": "Bruijn",
+"PW-LT": "btl",
+"PW*LT": "BTL",
 "KOPB/TEUG": "contig",
 "KOPB/TEUGS": "contigs",
 "TKPW-PBLG": "de Bruijn graph",
@@ -87,6 +89,8 @@ r['z'] = "PBLGS"
 "KPH-ERS": "k-mers",
 "KPH*ER": "kmer",
 "KPH*ERS": "kmers",
+"PH-EUP": "mpi",
+"PH*EUP": "MPI",
 "PRAG": "pragma",
 "KWAFT": "quast",
 "KWAUFT": "quast",
@@ -96,7 +100,6 @@ r['z'] = "PBLGS"
 "AOUPB/TEUG": "unitig",
 "AOUPB/TEUGS": "unitigs",
 #+END_SRC
-
 * brackets
 #+BEGIN_SRC js
 "HR-RPB": "{^}({^}",
