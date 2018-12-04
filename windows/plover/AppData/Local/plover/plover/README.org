@@ -138,7 +138,6 @@ r['z'] = "PBLGS"
 "HR*PBD": "{MODE:RESET}{^ && ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 "HRO*R": "{MODE:RESET}{^ || ^}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
-
 * command-line
 ** shell commands
 #+BEGIN_SRC js
@@ -188,7 +187,11 @@ for char, chord in l.iteritems():
 #+BEGIN_SRC js :noweb tangle
 <<command-line-switches()>>
 #+END_SRC
-
+* emojis
+#+BEGIN_SRC js
+"AO-E/PHO-EPBLG": "emoji",
+"SPHAO*EUL": ":-)",
+#+END_SRC
 * function keys
 To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
 #+BEGIN_SRC js
