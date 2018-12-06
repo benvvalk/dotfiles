@@ -89,6 +89,8 @@ r['z'] = "PBLGS"
 "KPH-ERS": "k-mers",
 "KPH*ER": "kmer",
 "KPH*ERS": "kmers",
+"K-ERBGT": "konnector",
+"K*ERBGT": "Konnector",
 "PH-EUP": "mpi",
 "PH*EUP": "MPI",
 "PRAG": "pragma",
