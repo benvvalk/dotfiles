@@ -599,7 +599,11 @@ Handy trigrams for vim.
 "TKA-BDZ": "{MODE:RESET}{^daW}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
 * pass-through keys
-** letterst
+** Enter key
+#+BEGIN_SRC js
+"TR-Z": "{# return}",
+#+END_SRC
+** letters
 #+NAME: pass-through-letters
 #+BEGIN_SRC python :noweb yes :tangle no :results output silent
 
@@ -651,6 +655,10 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "*7Z": "{# ampersand}",
 "*8Z": "{# asterisk}",
 "*9Z": "{# parenleft}",
+#+END_SRC
+** spacebar
+#+BEGIN_SRC js
+"SP-Z": "{# space}",
 #+END_SRC
 ** digrams
 
