@@ -631,8 +631,9 @@ Retroactively delete a space before the last word.
 
 Attach the next word to the end of the current word.
 #+BEGIN_SRC js
-"SKHR-PB": "{^};",
+"T-FP": "{^}",
 #+END_SRC
+
 * uncategorized
 #+BEGIN_SRC js
 "*T": "{*}",
