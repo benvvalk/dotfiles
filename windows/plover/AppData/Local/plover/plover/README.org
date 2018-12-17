@@ -213,6 +213,13 @@ for char, chord in fingerspelling_chars.iteritems():
 "AO-E/PHO-EPBLG": "emoji",
 "SPHAO*EUL": ":-)",
 #+END_SRC
+* Enter key
+Automatic capitalization after typing Enter is quite annoying, especially when doing coding and command-line work. Define a custom chord that doesn't alter the capitalization state and doesn't introduce a leading space on the new line.
+
+Note: "{^}" attaches the next word and "{}" cancels any pending formatting on the next word (e.g. capitalization).
+#+BEGIN_SRC js
+"R-R": "\n{^}{}",
+#+END_SRC
 * fingerspelling
 In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
 ** symbol chars (e.g. !, @, #)
