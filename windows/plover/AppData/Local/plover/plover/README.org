@@ -598,6 +598,105 @@ Handy trigrams for vim.
 "TK-EUBDZ": "{MODE:RESET}{^diW}{MODE:LOWER}{MODE:SET_SPACE:}",
 "TKA-BDZ": "{MODE:RESET}{^daW}{MODE:LOWER}{MODE:SET_SPACE:}",
 #+END_SRC
+* pass-through keys
+** letterst
+#+NAME: pass-through-letters
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+
+<<fingerspelling>>
+
+for char, chord in l.iteritems():
+        print('"{}-Z": "{{# {}}}",'.format(chord, char))
+        print('"{}*Z": "{{# shift({})}}",'.format(chord, char))
+#+END_SRC
+
+#+BEGIN_SRC js :noweb tangle
+<<pass-through-letters()>>
+#+END_SRC
+** numbers
+#+NAME: pass-through-numbers
+#+BEGIN_SRC python :tangle no :results output silent
+for i in xrange(1, 99):
+    if i <= 9:
+            print('"{}Z": "{{#{}}}",'.format(i,i))
+    else:
+            digit1 = i // 10
+            digit2 = i % 10
+            swap_keys = ''
+            if digit1 > digit2 and digit2 > 0:
+                    digit1, digit2 = digit2, digit1
+                    swap_keys = 'EU'
+            if digit1 <= 5 and digit2 <= 5:
+                    chord = '{}{}-{}'.format(digit1, digit2, swap_keys)
+            if digit1 <= 5 and digit2 > 5:
+                    chord = '{}-{}{}'.format(digit1, swap_keys, digit2)
+            if digit1 > 5 and digit2 > 5:
+                    chord = '-{}{}{}'.format(swap_keys, digit1, digit2)
+            print('"{}Z": "{{#{}}}",'.format(chord, i))
+#+END_SRC
+
+#+BEGIN_SRC js :noweb tangle
+<<pass-through-numbers()>>
+#+END_SRC
+** symbol chars (e.g. !, @, #)
+Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
+#+BEGIN_SRC js
+"0*Z": "{# parenright}",
+"1*Z": "{# exclam}",
+"2*Z": "{# at}",
+"3*Z": "{# numbersign}",
+"4*Z": "{# dollar}",
+"5*Z": "{# percent}",
+"*6Z": "{# asciicircum}",
+"*7Z": "{# ampersand}",
+"*8Z": "{# asterisk}",
+"*9Z": "{# parenleft}",
+#+END_SRC
+** digrams
+
+I find the ability to fingerspell digrams (two-letter combinations) to be very handy. For example, I have used various vim plugins for Firefox/Chrome (e.g. Vimperator, Vimium, VimFX, tridactyl) that allow keyboard navigation of hyperlinks by labeling the links with two-letter "hints".
+
+The idea behind these chords is to fingerspell the first letter with the left hand as usual, and to use the right hand to fingerspell the second letter. The chords for fingerspelling with the right hand are the mirror image of the chords for the left hand. For example, the right hand chord for "m" is -FP. Finally, all digram chords end with the Z key.
+
+#+NAME: pass-through-digrams
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+
+<<fingerspelling>>
+
+for key1, value1 in l.iteritems():
+    for key2, value2 in r.iteritems():
+        # both letters lowercase
+        print('"{}-{}Z": "{{# {} {}}}",'.format(value1,value2,key1,key2))
+        # first letter uppercase
+        print('"{}*-{}Z": "{{# shift({}) {}}}",'.format(value1,value2,key1,key2))
+        # second letter uppercase
+        print('"{}-{}DZ": "{{# {} shift({})}}",'.format(value1,value2,key1,key2))
+        # both letters uppercase
+        print('"{}*-{}DZ": "{{# shift({}) shift({})}}",'.format(value1,value2,key1,key2))
+#+END_SRC
+
+#+BEGIN_SRC js :noweb tangle
+<<pass-through-digrams()>>
+#+END_SRC
+** trigrams
+Handy trigrams for vim.
+
+#+BEGIN_SRC js
+"KR-EUBZ": "{# c i w}",
+"KRA-BZ": "{# c a w}",
+"KR-EUBDZ": "{# c i shift(w)}",
+"KRA-BDZ": "{# c a shift(w)}",
+"KR-EUGSZ": "{# c i quotedbl}",
+"KRA-GSZ": "{# c a quotedbl}",
+"TK-EUBZ": "{# d i w}",
+"TKA-BZ": "{# d a w}",
+"TK-EUBDZ": "{# d i shift(w)}",
+"TKA-BDZ": "{# d a shift(w)}",
+"KWR-EUBZ": "{# y i w}",
+"KWRA-BZ": "{# y a w}",
+"KWR-EUBDZ": "{# y i shift(w)}",
+"KWRA-BDZ": "{# y a shift(w)}",
+#+END_SRC
 
 * people's names
 #+BEGIN_SRC js
@@ -684,42 +783,6 @@ Attach the next word to the end of the current word.
 #+BEGIN_SRC js
 "SKHR-PB": "{^};",
 #+END_SRC
-* vertical jumps
-
-This section provides chords for jumping up or down a given number of lines.
-
-To jump by a certain number of lines, fingerspell the number as usual, but append the D/Z key to the chord to indicate up/down.
-
-#+NAME: vertical-jumps
-#+BEGIN_SRC python :tangle no :results output silent
-for i in xrange(1, 99):
-    if i <= 5:
-            print('"{}-D": "{{^}}{{#{}}}",'.format(i, ' '.join(["up"]*i)))
-            print('"{}-Z": "{{^}}{{#{}}}",'.format(i, ' '.join(["down"]*i)))
-    elif i < 10:
-            print('"-{}D": "{{^}}{{#{}}}",'.format(i, ' '.join(["up"]*i)))
-            print('"-{}Z": "{{^}}{{#{}}}",'.format(i, ' '.join(["down"]*i)))
-    else:
-            digit1 = i // 10
-            digit2 = i % 10
-            swap_keys = ''
-            if digit1 > digit2 and digit2 > 0:
-                    digit1, digit2 = digit2, digit1
-                    swap_keys = 'EU'
-            if digit1 <= 5 and digit2 <= 5:
-                    chord = '{}{}-{}'.format(digit1, digit2, swap_keys)
-            if digit1 <= 5 and digit2 > 5:
-                    chord = '{}-{}{}'.format(digit1, swap_keys, digit2)
-            if digit1 > 5 and digit2 > 5:
-                    chord = '-{}{}{}'.format(swap_keys, digit1, digit2)
-            print('"{}D": "{{^}}{{#{}}}",'.format(chord, ' '.join(["up"]*i)))
-            print('"{}Z": "{{^}}{{#{}}}",'.format(chord, ' '.join(["down"]*i)))
-#+END_SRC
-
-#+BEGIN_SRC js :noweb tangle
-<<vertical-jumps()>>
-#+END_SRC
-
 * uncategorized
 #+BEGIN_SRC js
 "*T": "{*}",
