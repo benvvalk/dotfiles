@@ -391,13 +391,6 @@ Same as the Windows key chords, but with the S key appended at the end.
 "STKPW*PBS": "{#windows(shift(z))}",
 #+END_SRC
 
-* escape key
-
-Pressing the number bar on its own triggers the Esc key.
-
-#+BEGIN_SRC js
-"#": "{#escape}",
-#+END_SRC
 * fingerspelling
 In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
 ** letters
@@ -526,6 +519,12 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 #+BEGIN_SRC js
 "TR-Z": "{# return}",
 #+END_SRC
+** Escape key
+#+BEGIN_SRC js
+"#": "{#escape}",
+"SK-Z": "{#escape}",
+"SKP-Z": "{#escape}",
+#+END_SRC
 ** letters
 #+NAME: pass-through-letters
 #+BEGIN_SRC python :noweb yes :tangle no :results output silent
@@ -579,7 +578,7 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "*8Z": "{# asterisk}",
 "*9Z": "{# parenleft}",
 #+END_SRC
-** spacebar
+** Space
 #+BEGIN_SRC js
 "SP-Z": "{# space}",
 #+END_SRC
