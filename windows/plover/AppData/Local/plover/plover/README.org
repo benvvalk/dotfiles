@@ -2,6 +2,8 @@
 #+PROPERTY: header-args :tangle user.json
 
 * about this config
+The Python code snippets in this config use Python-2.7 syntax.
+
 I am a heavy user of emacs, vim, and the linux command line. When it comes to coding, the main challenge I have experienced with Plover is the automatic spacing and capitalization. While automatic spacing and capitalization is a big part of what makes stenography so efficient when typing natural language, it can wreak havoc in other contexts. For example, the unexpected insertion of spaces can interfere with the composition of normal mode commands in vim (e.g. "d3j" to delete the current line and the 3 lines below it). For this reason, I have overridden the default fingerspelling behavior to always attach the new letter/number to the end of the current word.
 
 Another challenge is that there is no auto-repeat when holding down keys on a steno machine. This prevents you from holding down "j" and "k" to scroll up and down in vim, for example. You might be surprised how often you use this functionality, even if you are a seasoned vimmer. While I'm still working on it, I'm attempting to overcome this issue by using a combination of =relativenumber= and numeric arguments before j/k.
