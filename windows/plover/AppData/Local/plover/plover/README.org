@@ -393,11 +393,10 @@ Same as the Windows key chords, but with the S key appended at the end.
 
 * escape key
 
-Pressing the number bar on its own triggers the Esc key and returns us to the default Plover mode, where automatic capitalization and spacing are disabled.
+Pressing the number bar on its own triggers the Esc key.
 
 #+BEGIN_SRC js
-"#": "{#escape}{MODE:RESET}{MODE:LOWER}{MODE:SET_SPACE:}",
-"#*": "{#escape}",
+"#": "{#escape}",
 #+END_SRC
 * fingerspelling
 In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
