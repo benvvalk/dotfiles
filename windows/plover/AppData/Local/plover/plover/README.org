@@ -13,57 +13,75 @@ Another challenge is that there is no auto-repeat when holding down keys on a st
 #+NAME: fingerspelling
 #+BEGIN_SRC python :tangle no :results output silent
 # fingerspelling chords for the left hand
-l = {}
-l['a'] = "A"
-l['b'] = "PW"
-l['c'] = "KR"
-l['d'] = "TK"
-l['f'] = "TP"
-l['g'] = "TKPW"
-l['h'] = "H"
-l['j'] = "SKWR"
-l['k'] = "K"
-l['l'] = "HR"
-l['m'] = "PH"
-l['n'] = "TPH"
-l['o'] = "O"
-l['p'] = "P"
-l['q'] = "KW"
-l['r'] = "R"
-l['s'] = "S"
-l['t'] = "T"
-l['v'] = "SR"
-l['w'] = "W"
-l['x'] = "KP"
-l['y'] = "KWR"
-l['z'] = "STKPW"
+
+left_consonants = {}
+left_consonants['b'] = "PW"
+left_consonants['c'] = "KR"
+left_consonants['d'] = "TK"
+left_consonants['f'] = "TP"
+left_consonants['g'] = "TKPW"
+left_consonants['h'] = "H"
+left_consonants['j'] = "SKWR"
+left_consonants['k'] = "K"
+left_consonants['l'] = "HR"
+left_consonants['m'] = "PH"
+left_consonants['n'] = "TPH"
+left_consonants['p'] = "P"
+left_consonants['q'] = "KW"
+left_consonants['r'] = "R"
+left_consonants['s'] = "S"
+left_consonants['t'] = "T"
+left_consonants['v'] = "SR"
+left_consonants['w'] = "W"
+left_consonants['x'] = "KP"
+left_consonants['y'] = "KWR"
+left_consonants['z'] = "STKPW"
+
+left_vowels = {}
+left_vowels['a'] = "A"
+left_vowels['o'] = "O"
+
+left_chars = left_consonants.copy()
+left_chars.update(left_vowels)
 
 # fingerspelling chords for the right hand
-r = {}
-r['b'] = "PB"
-r['c'] = "RG"
-r['d'] = "LG"
-r['e'] = "E"
-r['f'] = "PL"
-r['g'] = "PBLG"
-r['h'] = "F"
-r['i'] = "EU"
-r['j'] = "RBGS"
-r['k'] = "G"
-r['l'] = "FR"
-r['m'] = "FP"
-r['n'] = "FPL"
-r['p'] = "P"
-r['q'] = "BG"
-r['r'] = "R"
-r['s'] = "S"
-r['t'] = "L"
-r['u'] = "U"
-r['v'] = "RS"
-r['w'] = "B"
-r['x'] = "PG"
-r['y'] = "RBG"
-r['z'] = "PBLGS"
+
+right_consonants = {}
+right_consonants['b'] = "PB"
+right_consonants['c'] = "RG"
+right_consonants['d'] = "LG"
+right_consonants['f'] = "PL"
+right_consonants['g'] = "PBLG"
+right_consonants['h'] = "F"
+right_consonants['j'] = "RBGS"
+right_consonants['k'] = "G"
+right_consonants['l'] = "FR"
+right_consonants['m'] = "FP"
+right_consonants['n'] = "FPL"
+right_consonants['p'] = "P"
+right_consonants['q'] = "BG"
+right_consonants['r'] = "R"
+right_consonants['s'] = "S"
+right_consonants['t'] = "L"
+right_consonants['v'] = "RS"
+right_consonants['w'] = "B"
+right_consonants['x'] = "PG"
+right_consonants['y'] = "RBG"
+right_consonants['z'] = "PBLGS"
+
+right_vowels = {}
+right_vowels['e'] = "E"
+right_vowels['i'] = "EU"
+right_vowels['u'] = "U"
+
+right_chars = right_consonants.copy()
+right_chars.update(right_vowels)
+
+# all standard fingerspelling chords
+# (left-hand consonants/vowels plus right-hand vowels)
+
+fingerspelling_chars = left_chars.copy()
+fingerspelling_chars.update(right_vowels)
 #+END_SRC
 
 * bioinformatics
@@ -182,7 +200,7 @@ r['z'] = "PBLGS"
 
 <<fingerspelling>>
 
-for char, chord in l.iteritems():
+for char, chord in fingerspelling_chars.iteritems():
         print('"{}-{}": "{}",'.format(chord, "RBG", char))
         print('"{}-{}": "{}",'.format(chord, "RPBG", char.upper()))
 #+END_SRC
@@ -244,7 +262,7 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 
 <<fingerspelling>>
 
-for char, chord in l.iteritems():
+for char, chord in fingerspelling_chars.iteritems():
         print('"{}-Z": "{{# {}}}",'.format(chord, char))
         print('"{}*Z": "{{# shift({})}}",'.format(chord, char))
 #+END_SRC
@@ -485,8 +503,8 @@ The idea behind these chords is to fingerspell the first letter with the left ha
 
 <<fingerspelling>>
 
-for key1, value1 in l.iteritems():
-    for key2, value2 in r.iteritems():
+for key1, value1 in left_chars.iteritems():
+    for key2, value2 in right_chars.iteritems():
         # both letters lowercase
         print('"{}-{}Z": "{{# {} {}}}",'.format(value1,value2,key1,key2))
         # first letter uppercase
@@ -495,6 +513,28 @@ for key1, value1 in l.iteritems():
         print('"{}-{}DZ": "{{# {} shift({})}}",'.format(value1,value2,key1,key2))
         # both letters uppercase
         print('"{}*-{}DZ": "{{# shift({}) shift({})}}",'.format(value1,value2,key1,key2))
+
+for key1, value1 in left_consonants.iteritems():
+    for key2, value2 in left_vowels.iteritems():
+        # both letters lowercase
+        print('"{}{}-Z": "{{# {} {}}}",'.format(value1,value2,key1,key2))
+        # first letter uppercase
+        print('"{}{}*Z": "{{# shift({}) {}}}",'.format(value1,value2,key1,key2))
+        # second letter uppercase
+        print('"{}{}-DZ": "{{# {} shift({})}}",'.format(value1,value2,key1,key2))
+        # both letters uppercase
+        print('"{}{}*DZ": "{{# shift({}) shift({})}}",'.format(value1,value2,key1,key2))
+
+for key1, value1 in right_vowels.iteritems():
+    for key2, value2 in right_consonants.iteritems():
+        # both letters lowercase
+        print('"-{}{}Z": "{{# {} {}}}",'.format(value1,value2,key1,key2))
+        # first letter uppercase
+        print('"*{}{}Z": "{{# shift({}) {}}}",'.format(value1,value2,key1,key2))
+        # second letter uppercase
+        print('"-{}{}DZ": "{{# {} shift({})}}",'.format(value1,value2,key1,key2))
+        # both letters uppercase
+        print('"*{}{}DZ": "{{# shift({}) shift({})}}",'.format(value1,value2,key1,key2))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
