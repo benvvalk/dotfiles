@@ -618,18 +618,6 @@ Retroactively lowercase/uppercase.
 #+END_SRC
 ** spacing
 
-Override the default space key binding to insert a space, even when the space character is "". (The space character is "" whenever we are in the default mode, where automatic capitalization and automatic spacing are disabled. We return to the default mode whenever we press Escape.)
-
-#+BEGIN_SRC js
-"S-P": "{MODE:RESET}{^ ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-#+END_SRC
-
-Insert a space and switch to the default Plover mode at the same time.
-
-#+BEGIN_SRC js
-"S-PS": "{MODE:RESET}{^ ^}",
-#+END_SRC
-
 Retroactively insert a space before the last word.
 #+BEGIN_SRC js
 "-FPD": "{MODE:RESET}{*?}",
