@@ -183,10 +183,8 @@ r['z'] = "PBLGS"
 <<fingerspelling>>
 
 for char, chord in l.iteritems():
-        lower = "{MODE:LOWER}"
-        reset = "{MODE:RESET}"
-        print('"{}-{}": "{}-{}{}",'.format(chord, "RBG", reset, char, lower))
-        print('"{}-{}": "{}-{}{}",'.format(chord, "RPBG", reset, char.upper(), lower))
+        print('"{}-{}": "{}",'.format(chord, "RBG", char))
+        print('"{}-{}": "{}",'.format(chord, "RPBG", char.upper()))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
