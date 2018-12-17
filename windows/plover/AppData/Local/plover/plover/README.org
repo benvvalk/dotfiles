@@ -197,9 +197,36 @@ for char, chord in l.iteritems():
 "AO-E/PHO-EPBLG": "emoji",
 "SPHAO*EUL": ":-)",
 #+END_SRC
-* function keys
-To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
+* fingerspelling
+In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
+** symbol chars (e.g. !, @, #)
+Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
 #+BEGIN_SRC js
+"0*": "{^})",
+"1*": "{^}!",
+"2*": "{^}@",
+"3*": "{^}#",
+"4*": "{^}$",
+"5*": "{^}%",
+"*6": "{^}^",
+"*7": "{^}&",
+"*8": "{^}*",
+"*9": "{^}(",
+#+END_SRC
+* pass-through keys
+** Enter key
+#+BEGIN_SRC js
+"TR-Z": "{# return}",
+#+END_SRC
+** Escape key
+#+BEGIN_SRC js
+"#": "{#escape}",
+"SK-Z": "{#escape}",
+"SKP-Z": "{#escape}",
+#+END_SRC
+** function keys
+ To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
+ #+BEGIN_SRC js
 "178": "{#F1}",
 "278": "{#F2}",
 "378": "{#F3}",
@@ -211,10 +238,26 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "978": "{#F9}",
 "1078": "{#F10}",
 "1278": "{#F12}",
+ #+END_SRC
+
+** letters
+#+NAME: pass-through-letters
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+
+<<fingerspelling>>
+
+for char, chord in l.iteritems():
+        print('"{}-Z": "{{# {}}}",'.format(chord, char))
+        print('"{}*Z": "{{# shift({})}}",'.format(chord, char))
 #+END_SRC
-* modifier keys (alt/control/shift/win)
-** alt
-#+BEGIN_SRC js
+
+#+BEGIN_SRC js :noweb tangle
+<<pass-through-letters()>>
+#+END_SRC
+
+** modifier keys (alt/control/shift/win)
+*** alt
+ #+BEGIN_SRC js
 "KHR*FPB": "{#alt(shift(colon))}",
 "P*FP": "{#alt(period)}",
 "S*FP": "{#alt(space)}",
@@ -252,9 +295,9 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "KP*F": "{#alt(x)}",
 "KWR*F": "{#alt(y)}",
 "STKPW*F": "{#alt(z)}",
-#+END_SRC
-** control
-#+BEGIN_SRC js
+ #+END_SRC
+*** control
+ #+BEGIN_SRC js
 "0*R": "{#control(0)}",
 "1*R": "{#control(1)}",
 "2*R": "{#control(2)}",
@@ -311,9 +354,9 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "KP*R": "{#control(x)}",
 "KWR*R": "{#control(y)}",
 "STKPW*R": "{#control(z)}",
-#+END_SRC
-** shift
-#+BEGIN_SRC js
+ #+END_SRC
+*** shift
+ #+BEGIN_SRC js
 "SH*EUPBS": "{#shift(insert)}",
 "SH*P": "{#shift(up)}",
 "SH*B": "{#shift(down)}",
@@ -323,9 +366,39 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "SH*BG": "{#shift(control(right))}",
 "ST*B": "{#shift(tab)}",
 "T*BS": "{#shift(tab)}",
-#+END_SRC
-** win
-#+BEGIN_SRC js
+ #+END_SRC
+*** shift+win
+ Same as the Windows key chords, but with the S key appended at the end.
+ #+BEGIN_SRC js
+"A*PBS": "{#windows(shift(a))}",
+"PW*PBS": "{#windows(shift(b))}",
+"KR*PBS": "{#windows(shift(c))}",
+"TK*PBS": "{#windows(shift(d))}",
+"*EPBS": "{#windows(shift(e))}",
+"TP*PBS": "{#windows(shift(f))}",
+"TKPW*PBS": "{#windows(shift(g))}",
+"H*PBS": "{#windows(shift(h))}",
+"*EUPBS": "{#windows(shift(i))}",
+"SKWR*PBS": "{#windows(shift(j))}",
+"K*PBS": "{#windows(shift(k))}",
+"HR*PBS": "{#windows(shift(l))}",
+"PH*PBS": "{#windows(shift(m))}",
+"TPH*PBS": "{#windows(shift(n))}",
+"O*PBS": "{#windows(shift(o))}",
+"P*PBS": "{#windows(shift(p))}",
+"KW*PBS": "{#windows(shift(q))}",
+"R*PBS": "{#windows(shift(r))}",
+"S*PBS": "{#windows(shift(s))}",
+"T*PBS": "{#windows(shift(t))}",
+"*UPBS": "{#windows(shift(u))}",
+"SR*PBS": "{#windows(shift(v))}",
+"W*PBS": "{#windows(shift(w))}",
+"KP*PBS": "{#windows(shift(x))}",
+"KWR*PBS": "{#windows(shift(y))}",
+"STKPW*PBS": "{#windows(shift(z))}",
+ #+END_SRC
+*** win
+ #+BEGIN_SRC js
 "*PB": "{#windows}",
 "R*RPB": "{#windows(return)}",
 "PWR*R": "{#windows(return)}",
@@ -359,79 +432,7 @@ To type a function key (e.g. F1), hold down -PL and fingerspell the number with 
 "KP*PB": "{#windows(x)}",
 "KWR*PB": "{#windows(y)}",
 "STKPW*PB": "{#windows(z)}",
-#+END_SRC
-** win+shift
-Same as the Windows key chords, but with the S key appended at the end.
-#+BEGIN_SRC js
-"A*PBS": "{#windows(shift(a))}",
-"PW*PBS": "{#windows(shift(b))}",
-"KR*PBS": "{#windows(shift(c))}",
-"TK*PBS": "{#windows(shift(d))}",
-"*EPBS": "{#windows(shift(e))}",
-"TP*PBS": "{#windows(shift(f))}",
-"TKPW*PBS": "{#windows(shift(g))}",
-"H*PBS": "{#windows(shift(h))}",
-"*EUPBS": "{#windows(shift(i))}",
-"SKWR*PBS": "{#windows(shift(j))}",
-"K*PBS": "{#windows(shift(k))}",
-"HR*PBS": "{#windows(shift(l))}",
-"PH*PBS": "{#windows(shift(m))}",
-"TPH*PBS": "{#windows(shift(n))}",
-"O*PBS": "{#windows(shift(o))}",
-"P*PBS": "{#windows(shift(p))}",
-"KW*PBS": "{#windows(shift(q))}",
-"R*PBS": "{#windows(shift(r))}",
-"S*PBS": "{#windows(shift(s))}",
-"T*PBS": "{#windows(shift(t))}",
-"*UPBS": "{#windows(shift(u))}",
-"SR*PBS": "{#windows(shift(v))}",
-"W*PBS": "{#windows(shift(w))}",
-"KP*PBS": "{#windows(shift(x))}",
-"KWR*PBS": "{#windows(shift(y))}",
-"STKPW*PBS": "{#windows(shift(z))}",
-#+END_SRC
-
-* fingerspelling
-In this section, we override the default behavior of fingerspelling to attach all fingerspelled letters/symbols/numbers to the end of the current word. This prevents Plover's automatic spacing from interfering with the typing of normal mode commands in vim.
-** symbol chars (e.g. !, @, #)
-Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
-#+BEGIN_SRC js
-"0*": "{^})",
-"1*": "{^}!",
-"2*": "{^}@",
-"3*": "{^}#",
-"4*": "{^}$",
-"5*": "{^}%",
-"*6": "{^}^",
-"*7": "{^}&",
-"*8": "{^}*",
-"*9": "{^}(",
-#+END_SRC
-* pass-through keys
-** Enter key
-#+BEGIN_SRC js
-"TR-Z": "{# return}",
-#+END_SRC
-** Escape key
-#+BEGIN_SRC js
-"#": "{#escape}",
-"SK-Z": "{#escape}",
-"SKP-Z": "{#escape}",
-#+END_SRC
-** letters
-#+NAME: pass-through-letters
-#+BEGIN_SRC python :noweb yes :tangle no :results output silent
-
-<<fingerspelling>>
-
-for char, chord in l.iteritems():
-        print('"{}-Z": "{{# {}}}",'.format(chord, char))
-        print('"{}*Z": "{{# shift({})}}",'.format(chord, char))
-#+END_SRC
-
-#+BEGIN_SRC js :noweb tangle
-<<pass-through-letters()>>
-#+END_SRC
+ #+END_SRC
 ** numbers
 #+NAME: pass-through-numbers
 #+BEGIN_SRC python :tangle no :results output silent
@@ -457,6 +458,10 @@ for i in xrange(1, 99):
 #+BEGIN_SRC js :noweb tangle
 <<pass-through-numbers()>>
 #+END_SRC
+** Space
+#+BEGIN_SRC js
+"SP-Z": "{# space}",
+#+END_SRC
 ** symbol chars (e.g. !, @, #)
 Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
 #+BEGIN_SRC js
@@ -470,10 +475,6 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "*7Z": "{# ampersand}",
 "*8Z": "{# asterisk}",
 "*9Z": "{# parenleft}",
-#+END_SRC
-** Space
-#+BEGIN_SRC js
-"SP-Z": "{# space}",
 #+END_SRC
 ** digrams
 
