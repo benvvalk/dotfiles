@@ -269,9 +269,13 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 
 <<fingerspelling>>
 
-for char, chord in fingerspelling_chars.iteritems():
+for char, chord in left_chars.iteritems():
         print('"{}-Z": "{{# {}}}",'.format(chord, char))
         print('"{}*Z": "{{# shift({})}}",'.format(chord, char))
+
+for char, chord in right_vowels.iteritems():
+        print('"-{}Z": "{{# {}}}",'.format(chord, char))
+        print('"*{}Z": "{{# shift({})}}",'.format(chord, char))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
