@@ -246,6 +246,12 @@ just like the standard ;/, bindings (which still work).
 ;; make line numbers relative to current line
 (linum-relative-mode)
 #+END_SRC
+* Microsoft Windows
+#+BEGIN_SRC emacs-lisp
+;; override use of /bin/bash on Windows
+(if (eq system-type 'windows-nt)
+	(setq shell-file-name "cmdproxy.exe"))
+#+END_SRC
 * Org Mode
 ** Org Babel
 
