@@ -463,9 +463,11 @@ for char, chord in right_vowels.iteritems():
 ** numbers
 #+NAME: pass-through-numbers
 #+BEGIN_SRC python :tangle no :results output silent
-for i in xrange(1, 99):
-    if i <= 9:
-            print('"{}Z": "{{#{}}}",'.format(i,i))
+for i in xrange(0, 99):
+    if i <= 5:
+            print('"{}-Z": "{{#{}}}",'.format(i,i))
+    elif i <= 9:
+            print('"-{}Z": "{{#{}}}",'.format(i,i))
     else:
             digit1 = i // 10
             digit2 = i % 10
