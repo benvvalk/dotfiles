@@ -665,10 +665,17 @@ Attach the next word to the end of the current word.
 "*P": "{#home}",
 "STPH-F": "{#home}",
 "*L": "{#end}",
-"STPH-L": "{#end}"
+"STPH-L": "{#end}",
 #+END_SRC
 
-* end dictionary
+* vocabulary
 #+BEGIN_SRC js
+"TPO-PBT/H-EUL": "Fonthill",
+"O-BG/TRAO-E": "octree",
+#+END_SRC
+* end dictionary
+The last entry in a JSON dictionary is not allowed to have a trailing comma. I put an arbitrary last entry in this section so that I would never have to remember that!
+#+BEGIN_SRC js
+"THO-RLD": "Thorold"
 }
 #+END_SRC
