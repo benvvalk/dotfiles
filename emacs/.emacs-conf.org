@@ -164,6 +164,11 @@ just like the standard ;/, bindings (which still work).
 #+BEGIN_SRC emacs-lisp
 (setq flycheck-display-errors-function 'flycheck-display-error-messages)
 #+END_SRC
+* Fonts
+#+BEGIN_SRC emacs-lisp
+;; adjust default font size
+(set-face-attribute 'default nil :height 130)
+#+END_SRC
 * GDB
 #+BEGIN_SRC emacs-lisp
 ;; bring up one window with GDB REPL and one window with source code
