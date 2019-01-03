@@ -48,12 +48,12 @@ left_letters.update(left_vowels)
 
 left_symbols = {}
 left_symbols['comma'] = "KPHA"
-left_symbols['delete'] = "TKPW"
+left_symbols['delete'] = "TKHR"
 left_symbols['escape'] = "SKP"
 left_symbols['insert'] = "STPH"
 left_symbols['return'] = "TR"
 left_symbols['space'] = "SP"
-left_symbols['tab'] = "TPB"
+left_symbols['tab'] = "TPW"
 
 left_chars = left_letters.copy()
 left_chars.update(left_symbols)
