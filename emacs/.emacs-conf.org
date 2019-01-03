@@ -275,7 +275,7 @@ Some settings for source code blocks:
 (setq org-src-window-setup 'other-window)
 #+END_SRC
 
-Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blocks by default when first opening an org file.
+Set up a keybinding for hiding/showing all code blocks.
 
 #+BEGIN_SRC emacs-lisp
 (defvar org-blocks-hidden nil)
@@ -286,8 +286,6 @@ Set up a keybinding for hiding/showing all code blocks.  Also: hide all code blo
       (org-show-block-all)
     (org-hide-block-all))
   (setq-local org-blocks-hidden (not org-blocks-hidden)))
-
-(add-hook 'org-mode-hook 'org-toggle-blocks)
 
 (define-key org-mode-map (kbd "C-c t") 'org-toggle-blocks)
 #+END_SRC
