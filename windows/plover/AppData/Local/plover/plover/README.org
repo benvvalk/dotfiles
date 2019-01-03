@@ -256,18 +256,19 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "SKP-Z": "{#escape}",
 #+END_SRC
 ** function keys
- To type a function key (e.g. F1), hold down -PL and fingerspell the number with the left hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
+ To type a function key (e.g. F1), hold down "-PL" ("TP-") and fingerspell the number with the left (right) hand. The mnemonic for -PL is that it is the mirror image for fingerspelling "F" with the left hand.
  #+BEGIN_SRC js
 "178": "{#F1}",
 "278": "{#F2}",
 "378": "{#F3}",
 "478": "{#F4}",
 "578": "{#F5}",
-"678": "{#F6}",
-"778": "{#F7}",
-"878": "{#F8}",
-"978": "{#F9}",
+"236": "{#F6}",
+"237": "{#F7}",
+"238": "{#F8}",
+"239": "{#F9}",
 "1078": "{#F10}",
+"1*78": "{#F11}",
 "1278": "{#F12}",
  #+END_SRC
 
