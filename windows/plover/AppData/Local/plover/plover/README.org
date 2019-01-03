@@ -43,8 +43,20 @@ left_vowels = {}
 left_vowels['a'] = "A"
 left_vowels['o'] = "O"
 
-left_chars = left_consonants.copy()
-left_chars.update(left_vowels)
+left_letters = left_consonants.copy()
+left_letters.update(left_vowels)
+
+left_symbols = {}
+left_symbols['comma'] = "KPHA"
+left_symbols['delete'] = "TKPW"
+left_symbols['escape'] = "SKP"
+left_symbols['insert'] = "STPH"
+left_symbols['return'] = "TR"
+left_symbols['space'] = "SP"
+left_symbols['tab'] = "TPB"
+
+left_chars = left_letters.copy()
+left_chars.update(left_symbols)
 
 # fingerspelling chords for the right hand
 
@@ -76,13 +88,13 @@ right_vowels['e'] = "E"
 right_vowels['i'] = "EU"
 right_vowels['u'] = "U"
 
-right_chars = right_consonants.copy()
-right_chars.update(right_vowels)
+right_letters = right_consonants.copy()
+right_letters.update(right_vowels)
 
 # all standard fingerspelling chords
 # (left-hand consonants/vowels plus right-hand vowels)
 
-fingerspelling_chars = left_chars.copy()
+fingerspelling_chars = left_letters.copy()
 fingerspelling_chars.update(right_vowels)
 #+END_SRC
 
@@ -237,10 +249,6 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "*9": "{^}(",
 #+END_SRC
 * pass-through keys
-** Enter key
-#+BEGIN_SRC js
-"TR-Z": "{# return}",
-#+END_SRC
 ** Escape key
 #+BEGIN_SRC js
 "#": "{#escape}",
@@ -263,7 +271,7 @@ Assign these to the number keys, similar to a normal keyboard, using the star ke
 "1278": "{#F12}",
  #+END_SRC
 
-** letters
+** letters/symbols
 #+NAME: pass-through-letters
 #+BEGIN_SRC python :noweb yes :tangle no :results output silent
 
@@ -283,47 +291,33 @@ for char, chord in right_vowels.iteritems():
 #+END_SRC
 
 ** modifier keys (alt/control/shift/win)
-*** alt
- #+BEGIN_SRC js
-"KHR*FPB": "{#alt(shift(colon))}",
-"P*FP": "{#alt(period)}",
-"S*FP": "{#alt(space)}",
-"SH*P": "{#alt(space)}",
-"HO*EU": "{#alt(slash)}",
-"O*EUF": "{#alt(slash)}",
-"T*FB": "{#alt(tab)}",
-"TH*B": "{#alt(tab)}",
-"A*F": "{#alt(a)}",
-"PW*F": "{#alt(b)}",
-"KR*F": "{#alt(c)}",
-"TK*F": "{#alt(d)}",
-"*EF": "{#alt(e)}",
-"H*E": "{#alt(e)}",
-"TP*F": "{#alt(f)}",
-"TKPW*F": "{#alt(g)}",
-"H*F": "{#alt(h)}",
-"*EUF": "{#alt(i)}",
-"H*EU": "{#alt(i)}",
-"SKWR*F": "{#alt(j)}",
-"K*F": "{#alt(k)}",
-"HR*F": "{#alt(l)}",
-"PH*F": "{#alt(m)}",
-"TPH*F": "{#alt(n)}",
-"O*F": "{#alt(o)}",
-"P*F": "{#alt(p)}",
-"KW*F": "{#alt(q)}",
-"R*F": "{#alt(r)}",
-"S*F": "{#alt(s)}",
-"T*F": "{#alt(t)}",
-"*UF": "{#alt(u)}",
-"W*U": "{#alt(u)}",
-"SR*F": "{#alt(v)}",
-"W*F": "{#alt(w)}",
-"KP*F": "{#alt(x)}",
-"KWR*F": "{#alt(y)}",
-"STKPW*F": "{#alt(z)}",
- #+END_SRC
-*** control
+#+NAME: modifier-combos
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+<<fingerspelling>>
+
+# modifier chords for right hand
+modifiers = []
+modifiers.append(["*F", "alt(", ")"])
+modifiers.append(["*FR", "alt(control(", "))"])
+modifiers.append(["*FRS", "alt(control(shift(", ")))"])
+modifiers.append(["*FS", "alt(shift(", "))"])
+modifiers.append(["*R", "control(", ")"])
+modifiers.append(["*RS", "control(shift(", "))"])
+modifiers.append(["*PBS", "shift(windows(", "))"])
+modifiers.append(["*PB", "windows(", ")"])
+
+all_chars = left_chars.copy()
+all_chars.update(right_vowels)
+
+for char, chord1 in all_chars.iteritems():
+        for chord2, mod_start, mod_end in modifiers:
+                print('"{}{}": "{{#{}{}{}}}",'.format(chord1, chord2, mod_start, char, mod_end))
+#+END_SRC
+
+#+BEGIN_SRC js :noweb tangle
+<<modifier-combos()>>
+#+END_SRC
+*** control+numbers
  #+BEGIN_SRC js
 "0*R": "{#control(0)}",
 "1*R": "{#control(1)}",
@@ -335,130 +329,6 @@ for char, chord in right_vowels.iteritems():
 "R*7": "{#control(7)}",
 "R*8": "{#control(8)}",
 "R*9": "{#control(9)}",
-"HR*RPB": "{#control(parenleft)}",
-"PW*RPB": "{#control(bracketleft)}",
-"TK*RPB": "{#control(braceleft)}",
-"PWR*FR": "{#control(parenright)}",
-"PWR*PB": "{#control(bracketright)}",
-"PWR*LG": "{#control(braceright)}",
-"KHR-R": "{#control(left)}",
-"KHR-G": "{#control(right)}",
-"KHR-P": "{#control(up)}",
-"KHR-B": "{#control(down)}",
-"R*EUPBS": "{#control(insert)}",
-"R*T": "{#control(shift(plus))}",
-"R*S": "{#control(minus)}",
-"RO*EU": "{#control(slash)}",
-"O*EUR": "{#control(slash)}",
-"S*RP": "{#control(space)}",
-"T*RB": "{#control(tab)}",
-"TR*B": "{#control(tab)}",
-"A*R": "{#control(a)}",
-"PW*R": "{#control(b)}",
-"KR*R": "{#control(c)}",
-"TK*R": "{#control(d)}",
-"R*E": "{#control(e)}",
-"TP*R": "{#control(f)}",
-"TKPW*R": "{#control(g)}",
-"H*R": "{#control(h)}",
-"*EUR": "{#control(i)}",
-"R*EU": "{#control(i)}",
-"SKWR*R": "{#control(j)}",
-"K*R": "{#control(k)}",
-"HR*R": "{#control(l)}",
-"PH*R": "{#control(m)}",
-"TPH*R": "{#control(n)}",
-"O*R": "{#control(o)}",
-"P*R": "{#control(p)}",
-"KW*R": "{#control(q)}",
-"R*R": "{#control(r)}",
-"S*R": "{#control(s)}",
-"T*R": "{#control(t)}",
-"*UR": "{#control(u)}",
-"R*U": "{#control(u)}",
-"SR*R": "{#control(v)}",
-"W*R": "{#control(w)}",
-"KP*R": "{#control(x)}",
-"KWR*R": "{#control(y)}",
-"STKPW*R": "{#control(z)}",
- #+END_SRC
-*** shift
- #+BEGIN_SRC js
-"SH*EUPBS": "{#shift(insert)}",
-"SH*P": "{#shift(up)}",
-"SH*B": "{#shift(down)}",
-"SH*R": "{#shift(left)}",
-"SH*G": "{#shift(right)}",
-"SH*RB": "{#shift(control(left))}",
-"SH*BG": "{#shift(control(right))}",
-"ST*B": "{#shift(tab)}",
-"T*BS": "{#shift(tab)}",
- #+END_SRC
-*** shift+win
- Same as the Windows key chords, but with the S key appended at the end.
- #+BEGIN_SRC js
-"A*PBS": "{#windows(shift(a))}",
-"PW*PBS": "{#windows(shift(b))}",
-"KR*PBS": "{#windows(shift(c))}",
-"TK*PBS": "{#windows(shift(d))}",
-"*EPBS": "{#windows(shift(e))}",
-"TP*PBS": "{#windows(shift(f))}",
-"TKPW*PBS": "{#windows(shift(g))}",
-"H*PBS": "{#windows(shift(h))}",
-"*EUPBS": "{#windows(shift(i))}",
-"SKWR*PBS": "{#windows(shift(j))}",
-"K*PBS": "{#windows(shift(k))}",
-"HR*PBS": "{#windows(shift(l))}",
-"PH*PBS": "{#windows(shift(m))}",
-"TPH*PBS": "{#windows(shift(n))}",
-"O*PBS": "{#windows(shift(o))}",
-"P*PBS": "{#windows(shift(p))}",
-"KW*PBS": "{#windows(shift(q))}",
-"R*PBS": "{#windows(shift(r))}",
-"S*PBS": "{#windows(shift(s))}",
-"T*PBS": "{#windows(shift(t))}",
-"*UPBS": "{#windows(shift(u))}",
-"SR*PBS": "{#windows(shift(v))}",
-"W*PBS": "{#windows(shift(w))}",
-"KP*PBS": "{#windows(shift(x))}",
-"KWR*PBS": "{#windows(shift(y))}",
-"STKPW*PBS": "{#windows(shift(z))}",
- #+END_SRC
-*** win
- #+BEGIN_SRC js
-"*PB": "{#windows}",
-"R*RPB": "{#windows(return)}",
-"PWR*R": "{#windows(return)}",
-"P*LG": "{#windows(up)}",
-"K*LG": "{#windows(left)}",
-"W*LG": "{#windows(down)}",
-"R*LG": "{#windows(right)}",
-"A*PB": "{#windows(a)}",
-"PW*PB": "{#windows(b)}",
-"KR*PB": "{#windows(c)}",
-"TK*PB": "{#windows(d)}",
-"*EPB": "{#windows(e)}",
-"TP*PB": "{#windows(f)}",
-"TKPW*PB": "{#windows(g)}",
-"H*PB": "{#windows(h)}",
-"*EUPB": "{#windows(i)}",
-"SKWR*PB": "{#windows(j)}",
-"K*PB": "{#windows(k)}",
-"HR*PB": "{#windows(l)}",
-"PH*PB": "{#windows(m)}",
-"TPH*PB": "{#windows(n)}",
-"O*PB": "{#windows(o)}",
-"P*PB": "{#windows(p)}",
-"KW*PB": "{#windows(q)}",
-"R*PB": "{#windows(r)}",
-"S*PB": "{#windows(s)}",
-"T*PB": "{#windows(t)}",
-"*UPB": "{#windows(u)}",
-"SR*PB": "{#windows(v)}",
-"W*PB": "{#windows(w)}",
-"KP*PB": "{#windows(x)}",
-"KWR*PB": "{#windows(y)}",
-"STKPW*PB": "{#windows(z)}",
  #+END_SRC
 ** numbers
 #+NAME: pass-through-numbers
@@ -487,10 +357,6 @@ for i in xrange(0, 99):
 #+BEGIN_SRC js :noweb tangle
 <<pass-through-numbers()>>
 #+END_SRC
-** Space
-#+BEGIN_SRC js
-"SP-Z": "{# space}",
-#+END_SRC
 ** symbol chars (e.g. !, @, #)
 Assign these to the number keys, similar to a normal keyboard, using the star key ("*") as the modifier.
 #+BEGIN_SRC js
@@ -516,8 +382,8 @@ The idea behind these chords is to fingerspell the first letter with the left ha
 
 <<fingerspelling>>
 
-for key1, value1 in left_chars.iteritems():
-    for key2, value2 in right_chars.iteritems():
+for key1, value1 in left_letters.iteritems():
+    for key2, value2 in right_letters.iteritems():
         # both letters lowercase
         print('"{}-{}Z": "{{# {} {}}}",'.format(value1,value2,key1,key2))
         # first letter uppercase
