@@ -135,19 +135,35 @@ fingerspelling_chars.update(right_vowels)
 "AOUPB/TEUGS": "unitigs",
 #+END_SRC
 * brackets
-#+BEGIN_SRC js
-"HR-RPB": "{^}({^}",
-"PW-RPB": "{^}[{^}",
-"TK-RPB": "{^}\\{{^}",
-"S-RPB":  "{^}<",
-"S-RPBS":  "<<",
-"PWR-FR": "{^})",
-"PWR-PB": "{^}]",
-"PWR-LG": "{^}\\}",
-"PWR-TS": "{^}>",
-"PWR-S": "{^}>",
+#+BEGIN_SRC python :noweb yes :tangle no :results output silent
+bracket = {}
+bracket['('] = "F"
+bracket[')'] = "P"
+bracket['()'] = "FP"
+bracket['\\\\{'] = "R"
+bracket['\\\\}'] = "B"
+bracket['\\\\{\\\\}'] = "BR"
+bracket['['] = "L"
+bracket[']'] = "T"
+bracket['[]'] = "LT"
+bracket['<'] = "G"
+bracket['>'] = "S"
+bracket['<>'] = "GS"
+
+for char, chord in bracket.iteritems():
+    # no attach
+    print('"PWR-{}": "{}",'.format(chord, char))
+    # attach left
+    print('"PWR-E{}": "{{^}}{}",'.format(chord, char))
+    # attach right
+    print('"PWR-U{}": "{}{{^}}",'.format(chord, char))
+    # attach left and right
+    print('"PWR-EU{}": "{{^}}{}{{^}}",'.format(chord, char))
 #+END_SRC
-* coding
+
+#+BEGIN_SRC js :noweb tangle
+<<bracket-chords()>>
+#+END_SRC
 ** C/C++ keywords
 #+BEGIN_SRC js
 "KHR-PBS": "{^}::{^}",
