@@ -253,9 +253,9 @@ just like the standard ;/, bindings (which still work).
 #+END_SRC
 * Microsoft Windows
 #+BEGIN_SRC emacs-lisp
-;; override use of /bin/bash on Windows
 (if (eq system-type 'windows-nt)
-	(setq shell-file-name "cmdproxy.exe"))
+	(progn (setq shell-file-name "cmdproxy.exe")
+		   (setq browse-url-generic-program "firefox.exe")))
 #+END_SRC
 * Org Mode
 ** Org Babel
