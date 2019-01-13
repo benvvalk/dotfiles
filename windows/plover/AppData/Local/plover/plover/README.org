@@ -319,6 +319,14 @@ for char, chord1 in right_vowels.iteritems():
 #+BEGIN_SRC js :noweb tangle
 <<modifier-combos()>>
 #+END_SRC
+
+The *ER chord for Ctrl-E and the O*R chord for Ctrl-O override the commonly used chords for the smart "-er" and "-or" suffixes, respectively. Define some alternate chords for those suffixes.
+
+#+BEGIN_SRC js
+"STPER": "{^er}",
+"STPOR": "{^or}",
+#+END_SRC
+
 *** control+numbers
  #+BEGIN_SRC js
 "0*R": "{#control(0)}",
