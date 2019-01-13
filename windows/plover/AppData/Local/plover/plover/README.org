@@ -135,6 +135,7 @@ fingerspelling_chars.update(right_vowels)
 "AOUPB/TEUGS": "unitigs",
 #+END_SRC
 * brackets
+#+NAME: bracket-chords
 #+BEGIN_SRC python :noweb yes :tangle no :results output silent
 bracket = {}
 bracket['('] = "F"
