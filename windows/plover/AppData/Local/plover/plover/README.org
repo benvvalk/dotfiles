@@ -563,8 +563,18 @@ Attach the next word to the end of the current word.
 
 * vocabulary
 #+BEGIN_SRC js
+"KOEPBLG": "cogeco",
+"AOEU/TKPWEPB": "eigen",
+"AOEUPBG": "eigen",
 "TPO-PBT/H-EUL": "Fonthill",
+"KAO/TKO": "Koodo",
+"TKAO/TKOE": "Koodo",
+"TPHU/TKET": "nuget",
+"TPHU/TKPWET": "nuget",
 "O-BG/TRAO-E": "octree",
+"PEL/APL": "Pelham",
+"SOFRL": "solver",
+"SPOT/TPEU": "spotify",
 #+END_SRC
 * end dictionary
 The last entry in a JSON dictionary is not allowed to have a trailing comma. I put an arbitrary last entry in this section so that I would never have to remember that!
