@@ -298,21 +298,22 @@ for char, chord in right_vowels.iteritems():
 
 # modifier chords for right hand
 modifiers = []
-modifiers.append(["*F", "alt(", ")"])
-modifiers.append(["*FR", "alt(control(", "))"])
-modifiers.append(["*FRS", "alt(control(shift(", ")))"])
-modifiers.append(["*FS", "alt(shift(", "))"])
-modifiers.append(["*R", "control(", ")"])
-modifiers.append(["*RS", "control(shift(", "))"])
-modifiers.append(["*PBS", "shift(windows(", "))"])
-modifiers.append(["*PB", "windows(", ")"])
+modifiers.append(["F", "alt(", ")"])
+modifiers.append(["FR", "alt(control(", "))"])
+modifiers.append(["FRS", "alt(control(shift(", ")))"])
+modifiers.append(["FS", "alt(shift(", "))"])
+modifiers.append(["R", "control(", ")"])
+modifiers.append(["RS", "control(shift(", "))"])
+modifiers.append(["PBS", "shift(windows(", "))"])
+modifiers.append(["PB", "windows(", ")"])
 
-all_chars = left_chars.copy()
-all_chars.update(right_vowels)
-
-for char, chord1 in all_chars.iteritems():
+for char, chord1 in left_chars.iteritems():
         for chord2, mod_start, mod_end in modifiers:
-                print('"{}{}": "{{#{}{}{}}}",'.format(chord1, chord2, mod_start, char, mod_end))
+                print('"{}*{}": "{{#{}{}{}}}",'.format(chord1, chord2, mod_start, char, mod_end))
+
+for char, chord1 in right_vowels.iteritems():
+        for chord2, mod_start, mod_end in modifiers:
+                print('"*{}{}": "{{#{}{}{}}}",'.format(chord1, chord2, mod_start, char, mod_end))
 #+END_SRC
 
 #+BEGIN_SRC js :noweb tangle
