@@ -177,20 +177,17 @@ for char, chord in bracket.iteritems():
 "TAOEUP/TPHAEUPL": "typename",
 #+END_SRC
 ** expressions/assignment
-
 #+BEGIN_SRC js
-"KWA*L": "{MODE:RESET}{^=^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KWA*LS": "{MODE:RESET}{^ = ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KW*LT": "{MODE:RESET}{^ == ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"TPH*E": "{MODE:RESET}{^ != ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"K*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"KR*PL": "{MODE:RESET}{^, ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*T": "{MODE:RESET}{^ < ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*ET": "{MODE:RESET}{^ <= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"TKPW*T": "{MODE:RESET}{^ > ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"TKPW*ET": "{MODE:RESET}{^ >= ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HR*PBD": "{MODE:RESET}{^ && ^}{MODE:LOWER}{MODE:SET_SPACE:}",
-"HRO*R": "{MODE:RESET}{^ || ^}{MODE:LOWER}{MODE:SET_SPACE:}",
+"KWA*L": "{^=^}",
+"KWA*LS": "{^ = ^}",
+"KW*LT": "{^ == ^}",
+"TPH*E": "{^ != ^}",
+"HR*T": "{^ < ^}",
+"HR*ET": "{^ <= ^}",
+"TKPW*T": "{^ > ^}",
+"TKPW*ET": "{^ >= ^}",
+"HR*PBD": "{^ && ^}",
+"HRO*R": "{^ || ^}",
 #+END_SRC
 * command-line
 ** shell commands
