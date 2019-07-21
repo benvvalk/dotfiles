@@ -5,7 +5,7 @@ exec rpws init 9 -k
 exec wmname LG3D
 
 # swap CapsLock and Escape keys
-exec xmodmap ~/dotfiles/.Xmodmap
+exec xmodmap ~/.Xmodmap
 
 # font
 set font Mono-18
