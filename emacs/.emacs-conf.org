@@ -263,10 +263,11 @@ just like the standard ;/, bindings (which still work).
 Some settings for source code blocks:
 
 #+BEGIN_SRC emacs-lisp
+(require 'ob-shell)
 (require 'ob-js)
 (require 'ob-python)
 (org-babel-do-load-languages 'org-babel-load-languages
-'((dot . t) (asymptote . t) (js . t) (python . t)))
+'((dot . t) (asymptote . t) (js . t) (python . t) (shell . t)))
 (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
 (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
 ;; don't alter indentation (e.g. tabs vs. spaces) when embedding source code blocks
