@@ -29,3 +29,16 @@
   :load-path "packages/evil"
   :config
   (evil-mode 1))
+
+;;----------------------------------------
+;; ivy
+;;----------------------------------------
+
+;; Note: The GitHub repo `abo-abo/swiper`
+;; is `abo-abo/swiper` includes the
+;; `ivy`, `counsel`, and `swiper` packages.
+
+(use-package ivy
+  :load-path "packages/swiper"
+  :config
+  (ivy-mode 1))
