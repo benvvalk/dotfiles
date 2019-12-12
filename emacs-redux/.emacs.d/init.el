@@ -38,3 +38,18 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+
+;;----------------------------------------
+;; ivy/counsel/swiper
+;;
+;; Note: ivy, counsel, and swiper are
+;; all included in the `ivy` package.
+;;----------------------------------------
+
+(use-package ivy)
+
+(use-package counsel
+  :requires ivy)
+
+(use-package swiper
+  :requires ivy)
