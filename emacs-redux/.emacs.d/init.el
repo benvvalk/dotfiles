@@ -46,7 +46,8 @@
 ;; all included in the `ivy` package.
 ;;----------------------------------------
 
-(use-package ivy)
+(use-package ivy
+  :config (ivy-mode 1))
 
 (use-package counsel
   :requires ivy)
