@@ -31,14 +31,44 @@
   (evil-mode 1))
 
 ;;----------------------------------------
-;; ivy
+;; general.el
+;;----------------------------------------
+
+(use-package general
+  :load-path "packages/general")
+
+;;----------------------------------------
+;; ivy/counsel/swiper
 ;;----------------------------------------
 
 ;; Note: The GitHub repo `abo-abo/swiper`
-;; is `abo-abo/swiper` includes the
-;; `ivy`, `counsel`, and `swiper` packages.
+;; provides the `ivy`, `counsel`, and
+;; `swiper` packages.
 
 (use-package ivy
   :load-path "packages/swiper"
   :config
   (ivy-mode 1))
+
+(use-package counsel
+  :requires (ivy)
+  :general
+  ('normal
+   :prefix "SPC"
+   "f f" 'counsel-find-file)
+  :load-path "packages/swiper")
+
+(use-package swiper
+  :requires (ivy)
+  :load-path "packages/swiper")
+
+;;----------------------------------------
+;; basic keybindings
+;;----------------------------------------
+
+(general-def 'normal
+  :prefix "SPC"
+  "f s" 'save-buffer
+  "w v" 'split-window-right
+  "w s" 'split-window-below)
+
