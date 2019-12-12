@@ -40,6 +40,12 @@
 (require 'use-package)
 
 ;;----------------------------------------
+;; general.el
+;;----------------------------------------
+
+(use-package general)
+
+;;----------------------------------------
 ;; ivy/counsel/swiper
 ;;
 ;; Note: ivy, counsel, and swiper are
@@ -54,3 +60,10 @@
 
 (use-package swiper
   :requires ivy)
+
+;;----------------------------------------
+;; evil
+;;----------------------------------------
+
+(use-package evil
+  :config (evil-mode 1))
