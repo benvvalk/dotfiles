@@ -163,13 +163,14 @@
 ;; projectile
 ;;----------------------------------------
 
-(use-package projectile)
+(use-package projectile
+  :config (projectile-mode 1))
 
 (use-package counsel-projectile
   :general
   ('motion
    :prefix benv/evil-leader-key
-   "p p" 'counsel-projectile))
+   "p p" 'counsel-projectile-switch-project))
 
 ;;----------------------------------------
 ;; winum
