@@ -87,6 +87,7 @@
 ;;----------------------------------------
 
 (use-package ivy
+  :defer nil
   :config (ivy-mode 1)
   :general
   ('motion
@@ -95,7 +96,6 @@
    "b d" 'kill-this-buffer))
 
 (use-package counsel
-  :requires ivy
   :general
   ('motion
    "M-x" 'counsel-M-x)
@@ -104,7 +104,10 @@
    "f f" 'counsel-find-file))
 
 (use-package swiper
-  :requires ivy)
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "s s" 'swiper))
 
 ;;----------------------------------------
 ;; org-mode
