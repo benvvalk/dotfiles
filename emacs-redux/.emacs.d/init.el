@@ -190,6 +190,23 @@
    "4" 'winum-select-window-4))
 
 ;;----------------------------------------
+;; buffer switching
+;;----------------------------------------
+
+;; See https://www.emacswiki.org/emacs/SwitchingBuffers#toc5
+;; for further info.
+
+(defun benv/switch-to-previous-buffer ()
+  "Switch to most recent non-visible buffer."
+  (interactive)
+  (switch-to-buffer
+   (other-buffer (current-buffer))))
+
+(general-def 'motion
+  :prefix benv/evil-leader-key
+  "TAB" 'benv/switch-to-previous-buffer)
+
+;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
