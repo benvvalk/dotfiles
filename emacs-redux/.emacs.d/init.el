@@ -145,17 +145,22 @@
 
 (use-package magit
   :general
-  ;; Unset any bindings for my evil leader
-  ;; key (currently "SPC") in magit, so that
-  ;; my evil leader key behaves normally
-  ;; in magit windows.
-  (:keymaps '(magit-status-mode-map
-	      magit-log-mode-map
-	      magit-diff-mode-map)
-   "SPC" nil)
-  ('motion
-   :prefix benv/evil-leader-key
-   "g s" 'magit-status))
+    ;; Unset any bindings for my evil leader
+    ;; key (currently "SPC") in magit, so that
+    ;; my evil leader key behaves normally
+    ;; in magit windows.
+    (:keymaps '(magit-status-mode-map
+		magit-log-mode-map
+		magit-diff-mode-map)
+	      "SPC" nil)
+    ('motion
+    :prefix benv/evil-leader-key
+    "g s" 'magit-status)
+  :config
+    ;; display magit status buffer in currently
+    ;; selected window (not the "other" window)
+    (setq magit-display-buffer-function
+	  'magit-display-buffer-same-window-except-diff-v1))
 
 (use-package evil-magit
   :after (evil magit))
