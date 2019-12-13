@@ -40,10 +40,28 @@
 (require 'use-package)
 
 ;;----------------------------------------
+;; evil
+;;----------------------------------------
+
+(use-package evil
+  :config (evil-mode 1))
+
+;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
 
 (use-package general)
+
+(setq benv/evil-leader-key "SPC")
+
+;; Unbind "SPC" so I can use it as a prefix
+;; key, without getting "Key sequence starts
+;; with non-prefix key" error.
+
+(general-define-key
+ :states '(motion normal visual operator)
+ :prefix benv/evil-leader-key
+ "" nil)
 
 ;;----------------------------------------
 ;; ivy/counsel/swiper
@@ -56,20 +74,33 @@
   :config (ivy-mode 1))
 
 (use-package counsel
-  :requires ivy)
+  :requires ivy
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "f f" 'counsel-find-file))
 
 (use-package swiper
   :requires ivy)
 
 ;;----------------------------------------
-;; evil
-;;----------------------------------------
-
-(use-package evil
-  :config (evil-mode 1))
-
-;;----------------------------------------
 ;; magit
 ;;----------------------------------------
 
-(use-package magit)
+(use-package magit
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "g s" 'magit-status))
+
+;;----------------------------------------
+;; basic keybindings
+;;----------------------------------------
+
+(general-def 'motion
+  :prefix benv/evil-leader-key
+  "f s" 'save-buffer
+  "q q" 'save-buffers-kill-terminal
+  "w m" 'delete-other-windows
+  "w s" 'split-window-below
+  "w v" 'split-window-right)
