@@ -112,6 +112,18 @@
    "g s" 'magit-status))
 
 ;;----------------------------------------
+;; projectile
+;;----------------------------------------
+
+(use-package projectile)
+
+(use-package counsel-projectile
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "p p" 'counsel-projectile))
+
+;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
 
