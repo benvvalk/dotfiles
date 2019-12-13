@@ -93,6 +93,8 @@
   :requires ivy
   :general
   ('motion
+   "M-x" 'counsel-M-x)
+  ('motion
    :prefix benv/evil-leader-key
    "f f" 'counsel-find-file))
 
