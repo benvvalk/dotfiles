@@ -57,13 +57,13 @@
 (use-package evil
   :config (evil-mode 1))
 
+(setq benv/evil-leader-key "SPC")
+
 ;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
 
 (use-package general)
-
-(setq benv/evil-leader-key "SPC")
 
 ;; Unbind "SPC" so I can use it as a prefix
 ;; key, without getting "Key sequence starts
