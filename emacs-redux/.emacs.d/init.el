@@ -140,6 +140,7 @@
 ;;----------------------------------------
 
 (use-package winum
+  :defer nil
   :config
   (winum-mode)
   :general
