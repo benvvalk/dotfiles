@@ -7,7 +7,12 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
-;;----------------------------------------
+;; inhibit default Emacs startup message
+;; with Emacs tutorial, GNU project info, etc.
+
+(setq inhibit-startup-message t)
+
+;----------------------------------------
 ;; fonts
 ;;----------------------------------------
 
