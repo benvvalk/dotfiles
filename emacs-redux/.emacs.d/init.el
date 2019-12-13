@@ -64,9 +64,6 @@
 (use-package evil
   :config (evil-mode 1))
 
-(use-package evil-magit
-  :after evil)
-
 ;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
@@ -147,9 +144,19 @@
 
 (use-package magit
   :general
+  ;; Unset any bindings for my evil leader
+  ;; key (currently "SPC") in magit, so that
+  ;; my evil leader key behaves normally
+  ;; in magit windows.
+  (:keymaps '(magit-status-mode-map
+	      magit-log-mode-map)
+   "SPC" nil)
   ('motion
    :prefix benv/evil-leader-key
    "g s" 'magit-status))
+
+(use-package evil-magit
+  :after (evil magit))
 
 ;;----------------------------------------
 ;; projectile
