@@ -150,7 +150,8 @@
   ;; my evil leader key behaves normally
   ;; in magit windows.
   (:keymaps '(magit-status-mode-map
-	      magit-log-mode-map)
+	      magit-log-mode-map
+	      magit-diff-mode-map)
    "SPC" nil)
   ('motion
    :prefix benv/evil-leader-key
