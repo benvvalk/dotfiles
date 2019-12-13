@@ -71,7 +71,12 @@
 ;;----------------------------------------
 
 (use-package ivy
-  :config (ivy-mode 1))
+  :config (ivy-mode 1)
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "b b" 'ivy-switch-buffer
+   "b d" 'kill-this-buffer))
 
 (use-package counsel
   :requires ivy
