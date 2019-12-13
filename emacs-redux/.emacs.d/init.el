@@ -135,6 +135,21 @@
    "p p" 'counsel-projectile))
 
 ;;----------------------------------------
+;; winum
+;;----------------------------------------
+
+(use-package winum
+  :config
+  (winum-mode)
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "1" 'winum-select-window-1
+   "2" 'winum-select-window-2
+   "3" 'winum-select-window-3
+   "4" 'winum-select-window-4))
+
+;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
 
