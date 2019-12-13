@@ -123,7 +123,8 @@
    "M-x" 'counsel-M-x)
   ('motion
    :prefix benv/evil-leader-key
-   "f f" 'counsel-find-file))
+   "f f" 'counsel-find-file
+   "f r" 'counsel-recentf))
 
 (use-package swiper
   :general
