@@ -80,6 +80,28 @@
  "" nil)
 
 ;;----------------------------------------
+;; basic keybindings
+;;----------------------------------------
+
+(general-def 'motion
+  :prefix benv/evil-leader-key
+  "f s" 'save-buffer
+  "q q" 'save-buffers-kill-terminal
+  "u"   'universal-argument
+  "w m" 'delete-other-windows
+  "w s" 'split-window-below
+  "w v" 'split-window-right)
+
+;; Restore standard vim mapping
+;; for C-u -> PageUp. In emacs, C-u
+;; is normally mapped to `universal-argument`
+;; I use SPC-u for that instead (see above
+;; mapping).
+
+(general-def 'motion
+  "C-u" 'evil-scroll-up)
+
+;;----------------------------------------
 ;; ivy/counsel/swiper
 ;;
 ;; Note: ivy, counsel, and swiper are
@@ -153,18 +175,6 @@
    "2" 'winum-select-window-2
    "3" 'winum-select-window-3
    "4" 'winum-select-window-4))
-
-;;----------------------------------------
-;; basic keybindings
-;;----------------------------------------
-
-(general-def 'motion
-  :prefix benv/evil-leader-key
-  "f s" 'save-buffer
-  "q q" 'save-buffers-kill-terminal
-  "w m" 'delete-other-windows
-  "w s" 'split-window-below
-  "w v" 'split-window-right)
 
 ;;----------------------------------------
 ;; themes
