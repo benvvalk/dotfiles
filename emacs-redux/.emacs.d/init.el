@@ -29,10 +29,10 @@
 
 (require 'package)
 
-;; Don't auto-load installed packages
+;; Don't auto-load all locally-installed packages
 ;; after init.el finishes. Let `use-package`
-;; handle loading of packages instead (see
-;; below).
+;; perform on-demand loading of packages instead
+;; (i.e. "autoloading").
 (setq package-enable-at-startup nil)
 
 ;; Uncomment the following line to work around
