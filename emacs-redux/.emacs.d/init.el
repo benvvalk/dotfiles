@@ -23,6 +23,12 @@
 
 (set-face-attribute 'default nil :height 140)
 
+;----------------------------------------
+;; indentation
+;;----------------------------------------
+
+(setq indent-tabs-mode nil)
+
 ;;----------------------------------------
 ;; package.el
 ;;----------------------------------------
@@ -40,9 +46,10 @@
 
 ;;(setq package-check-signature nil)
 
-(setq package-archives '(("org"   . "https://orgmode.org/elpa/")
-                         ("gnu"   . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
+(setq package-archives
+      '(("org" . "https://orgmode.org/elpa/")
+        ("gnu" . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
 
@@ -150,9 +157,9 @@
     ;; my evil leader key behaves normally
     ;; in magit windows.
     (:keymaps '(magit-status-mode-map
-		magit-log-mode-map
-		magit-diff-mode-map)
-	      "SPC" nil)
+                magit-log-mode-map
+                magit-diff-mode-map)
+                "SPC" nil)
     ('motion
     :prefix benv/evil-leader-key
     "g s" 'magit-status)
@@ -160,7 +167,7 @@
     ;; display magit status buffer in currently
     ;; selected window (not the "other" window)
     (setq magit-display-buffer-function
-	  'magit-display-buffer-same-window-except-diff-v1))
+            'magit-display-buffer-same-window-except-diff-v1))
 
 (use-package evil-magit
   :after (evil magit))
