@@ -104,3 +104,9 @@
   "w m" 'delete-other-windows
   "w s" 'split-window-below
   "w v" 'split-window-right)
+
+;;----------------------------------------
+;; themes
+;;----------------------------------------
+
+(load-theme 'leuven)
