@@ -59,10 +59,13 @@
 ;; evil
 ;;----------------------------------------
 
+(setq benv/evil-leader-key "SPC")
+
 (use-package evil
   :config (evil-mode 1))
 
-(setq benv/evil-leader-key "SPC")
+(use-package evil-magit
+  :after evil)
 
 ;;----------------------------------------
 ;; general.el
