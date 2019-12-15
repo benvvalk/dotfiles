@@ -261,6 +261,19 @@ just like the standard ;/, bindings (which still work).
 ;; make line numbers relative to current line
 (linum-relative-mode)
 #+END_SRC
+* Magit
+#+BEGIN_SRC emacs-lisp
+;; Hide windows line endings ("^M") in Magit status buffer.
+
+(defun remove-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
+(add-hook 'magit-status-mode-hook 'remove-dos-eol)
+(add-hook 'magit-diff-mode-hook 'remove-dos-eol)
+#+END_SRC
 * Microsoft Windows
 #+BEGIN_SRC emacs-lisp
 (if (eq system-type 'windows-nt)
