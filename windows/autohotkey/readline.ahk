@@ -27,6 +27,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; ^h::
 ;   Send, {Backspace}
 ;   Return
+; ^w::
+;   Send, ^{Backspace}
+;   Return
 
 ^n::
   Send, {Down}
