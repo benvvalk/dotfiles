@@ -110,6 +110,15 @@ Display the time in the modeline.
 			  (define-key evil-normal-state-local-map (kbd "zo") 'direx:expand-item)
 			  (define-key evil-normal-state-local-map (kbd "zO") 'direx:expand-item-recursively))))
 #+END_SRC
+* emacs-winum
+
+When starting an emacsclient in a new text/GUI frame (e.g. =emacsclient -a'' -t -c <filename>=), we want the windows in the new frame to be labeled starting at "1".
+See this GitHub issue for background info: https://github.com/syl20bnr/spacemacs/issues/8740
+
+#+BEGIN_SRC emacs-lisp
+(setq winum-scope 'frame-local)
+#+END_SRC
+
 * ESS
 #+BEGIN_SRC emacs-lisp
 ;; fixes ESS error when projectile has not yet been used/loaded
