@@ -233,7 +233,8 @@ just like the standard ;/, bindings (which still work).
 
   (defun my-csharp-mode-hook()
 	(my-c++-mode-hook)
-	(setq company-idle-delay 0.1))
+	(setq company-idle-delay 0.1)
+	(setq indent-tabs-mode nil))
 
   (add-hook 'c-mode-common-hook 'my-c++-mode-hook)
   (add-hook 'csharp-mode-hook 'my-csharp-mode-hook)
