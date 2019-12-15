@@ -18,6 +18,10 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+	 vimscript
+	 yaml
+	 ruby
+	 autohotkey
      python
      javascript
      ;; ----------------------------------------------------------------
@@ -28,8 +32,10 @@ values."
      auto-completion
      ;; better-defaults
      emacs-lisp
+     scheme
      git
      html
+     ivy
      markdown
      org
      c-c++
@@ -50,7 +56,7 @@ values."
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages
-   '(multishell
+   '(direx
      evil-easymotion
      evil-snipe
      graphviz-dot-mode
