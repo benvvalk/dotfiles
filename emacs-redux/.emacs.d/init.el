@@ -150,7 +150,15 @@
 ;;----------------------------------------
 
 (use-package org
-  :mode ("\\.org\\'" . org-mode))
+  :mode ("\\.org\\'" . org-mode)
+  :general
+  ('motion
+   "TAB" 'org-cycle)
+  ('motion
+   :prefix benv/major-mode-leader-key
+   "h i" 'org-insert-heading-after-current
+   "I"   'org-clock-in
+   "O"   'org-clock-out))
 
 ;;----------------------------------------
 ;; magit
