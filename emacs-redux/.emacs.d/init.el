@@ -68,6 +68,7 @@
 ;;----------------------------------------
 
 (setq benv/evil-leader-key "SPC")
+(setq benv/major-mode-leader-key ",")
 
 (use-package evil
   :config
@@ -80,14 +81,14 @@
 
 (use-package general)
 
-;; Unbind "SPC" so I can use it as a prefix
-;; key, without getting "Key sequence starts
+;; Unbind "," and "SPC" so I can use them as prefix
+;; keys, without getting "Key sequence starts
 ;; with non-prefix key" error.
 
 (general-define-key
  :states '(motion normal visual operator)
- :prefix benv/evil-leader-key
- "" nil)
+ benv/evil-leader-key nil
+ benv/major-mode-leader-key nil)
 
 ;;----------------------------------------
 ;; basic keybindings
