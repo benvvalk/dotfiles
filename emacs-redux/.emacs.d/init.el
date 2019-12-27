@@ -197,7 +197,8 @@
   :general
   ('motion
    :prefix benv/evil-leader-key
-   "p p" 'counsel-projectile-switch-project))
+   "p p" 'counsel-projectile-switch-project
+   "p f" 'counsel-projectile-find-file))
 
 ;;----------------------------------------
 ;; winum
