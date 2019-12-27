@@ -70,7 +70,9 @@
 (setq benv/evil-leader-key "SPC")
 
 (use-package evil
-  :config (evil-mode 1))
+  :config
+  (evil-mode 1)
+  (setq evil-move-cursor-back nil))
 
 ;;----------------------------------------
 ;; general.el
