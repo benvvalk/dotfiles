@@ -234,6 +234,16 @@
   "TAB" 'benv/switch-to-previous-buffer)
 
 ;;----------------------------------------
+;; javascript
+;;----------------------------------------
+
+;; Unity-specific extensions for javascript
+;; source files
+
+(add-to-list 'auto-mode-alist '("\\.jspre\\'" . js-mode))
+(add-to-list 'auto-mode-alist '("\\.jslib\\'" . js-mode))
+
+;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
