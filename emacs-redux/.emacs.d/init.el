@@ -97,6 +97,8 @@
   :prefix benv/evil-leader-key
   "f s" 'save-buffer
   "q q" 'save-buffers-kill-terminal
+  "t l" 'visual-line-mode
+  "t w" 'whitespace-mode
   "u"   'universal-argument
   "w m" 'delete-other-windows
   "w s" 'split-window-below
