@@ -244,6 +244,31 @@
 (add-to-list 'auto-mode-alist '("\\.jslib\\'" . js-mode))
 
 ;;----------------------------------------
+;; elfeed
+;;----------------------------------------
+
+(use-package elfeed
+  :commands (elfeed)
+  :general
+  ('motion elfeed-search-mode-map
+   "RET" 'elfeed-search-show-entry
+   "C-l" 'elfeed-search-update--force
+   "b" 'elfeed-search-browse-url
+   "G" 'elfeed-search-fetch)
+  ('normal elfeed-search-mode-map
+   "q" 'elfeed-search-quit-window
+   "r" 'elfeed-search-untag-all-unread
+   "u" 'elfeed-search-tag-all-unread)
+  ('normal elfeed-show-mode-map
+   "q" 'elfeed-kill-buffer)
+  :config
+  (setq elfeed-feeds
+        '("http://www.reddit.com/r/emacs/.rss"
+          "https://forum.unity3d.com/forums/-/index.rss"
+          "https://news.ycombinator.com/rss"
+          "https://forum.unity3d.com/forums/10/index.rss")))
+
+;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
