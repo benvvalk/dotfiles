@@ -278,6 +278,16 @@
           "https://forum.unity3d.com/forums/10/index.rss")))
 
 ;;----------------------------------------
+;; web browser
+;;----------------------------------------
+
+(setq browse-url-generic-program
+    (or (executable-find "firefox.exe")
+        (executable-find "firefox")))
+
+(setq browse-url-browser-function 'browse-url-generic)
+
+;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
