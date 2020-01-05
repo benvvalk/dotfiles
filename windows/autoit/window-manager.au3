@@ -1,0 +1,382 @@
+#include <MsgBoxConstants.au3>
+#include <File.au3>
+
+#include-Once
+Global $__MonitorList[1][5]
+$__MonitorList[0][0] = 0
+
+;============================================================
+; Function Name:   _ShowMonitorInfo()
+; Description::    Show the info in $__MonitorList in a msgbox (line 0 is entire screen)
+; Parameter(s):    n/a
+; Return Value(s): n/a
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _ShowMonitorInfo()
+    If $__MonitorList[0][0] == 0 Then
+        _GetMonitors()
+    EndIf
+    Local $Msg = ""
+    Local $i = 0
+    For $i = 0 To $__MonitorList[0][0]
+        $Msg &= $i & " - L:" & $__MonitorList[$i][1] & ", T:" & $__MonitorList[$i][2]
+        $Msg &= ", R:" & $__MonitorList[$i][3] & ", B:" & $__MonitorList[$i][4]
+        If $i < $__MonitorList[0][0] Then $Msg &= @CRLF
+    Next
+    MsgBox(0, $__MonitorList[0][0] & " Monitors: ", $Msg)
+EndFunc   ;==>_ShowMonitorInfo
+
+;============================================================
+; Function Name:   _MaxOnMonitor($Title[, $Text = ''[, $Monitor = -1]])
+; Description::    Maximize a window on a specific monitor (or the monitor the mouse is on)
+; Parameter(s):    $Title   The title of the window to Move/Maximize
+;     optional:    $Text    The text of the window to Move/Maximize
+;     optional:    $Monitor The monitor to move to (1..NumMonitors) defaults to monitor mouse is on
+; Note:            Should probably have specified return/error codes but haven't put them in yet
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _MaxOnMonitor($hWnd, $Monitor = -1)
+    _CenterOnMonitor($hWnd, $Monitor)
+    ;WinSetState($Title, $Text, @SW_MAXIMIZE)
+    WinSetState($hWnd, "", @SW_MAXIMIZE)
+EndFunc   ;==>_MaxOnMonitor
+
+;============================================================
+; Function Name:   _CenterOnMonitor($Title[, $Text = ''[, $Monitor = -1]])
+; Description::    Center a window on a specific monitor (or the monitor the mouse is on)
+; Parameter(s):    $Title   The title of the window to Move/Maximize
+;     optional:    $Text    The text of the window to Move/Maximize
+;     optional:    $Monitor The monitor to move to (1..NumMonitors) defaults to monitor mouse is on
+; Note:            Should probably have specified return/error codes but haven't put them in yet
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _CenterOnMonitor($hWnd, $Monitor = -1)
+    If Not @error Then
+        If $Monitor == -1 Then
+            $Monitor = _GetMonitorFromPoint()
+        ElseIf $__MonitorList[0][0] == 0 Then
+            _GetMonitors()
+        EndIf
+        If ($Monitor > 0) And ($Monitor <= $__MonitorList[0][0]) Then
+            ; Restore the window if necessary
+            Local $WinState = WinGetState($hWnd)
+            If BitAND($WinState, 16) Or BitAND($WinState, 32) Then
+                WinSetState($hWnd, '', @SW_RESTORE)
+            EndIf
+            Local $WinSize = WinGetPos($hWnd)
+            Local $x = Int(($__MonitorList[$Monitor][3] - $__MonitorList[$Monitor][1] - $WinSize[2]) / 2) + $__MonitorList[$Monitor][1]
+            Local $y = Int(($__MonitorList[$Monitor][4] - $__MonitorList[$Monitor][2] - $WinSize[3]) / 2) + $__MonitorList[$Monitor][2]
+            WinMove($hWnd, '', $x, $y)
+        EndIf
+    EndIf
+EndFunc   ;==>_CenterOnMonitor
+
+;============================================================
+; Function Name:   _GetMonitorFromPoint([$XorPoint = -654321[, $Y = 0]])
+; Description::    Get a monitor number from an x/y pos or the current mouse position
+; Parameter(s):
+;     optional:    $XorPoint X Position or Array with X/Y as items 0,1 (ie from MouseGetPos())
+;     optional:    $Y        Y Position
+; Note:            Should probably have specified return/error codes but haven't put them in yet,
+;                  and better checking should be done on passed variables.
+;                  Used to use MonitorFromPoint DLL call, but it didn't seem to always work.
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _GetMonitorFromPoint($XorPoint = 0, $y = 0)
+    If @NumParams = 0 then
+        local $MousePos = MouseGetPos()
+        Local $myX = $MousePos[0]
+        Local $myY = $MousePos[1]
+    Elseif ( @NumParams = 1 ) and IsArray($XorPoint) Then
+        Local $myX = $XorPoint[0]
+        Local $myY = $XorPoint[1]
+    Else
+        Local $myX = $XorPoint
+        Local $myY = $y
+    EndIf
+    If $__MonitorList[0][0] == 0 Then
+        _GetMonitors()
+    EndIf
+    Local $i = 0
+    Local $Monitor = 0
+    For $i = 1 To $__MonitorList[0][0]
+        If ($myX >= $__MonitorList[$i][1]) _
+                And ($myX < $__MonitorList[$i][3]) _
+                And ($myY >= $__MonitorList[$i][2]) _
+                And ($myY < $__MonitorList[$i][4]) Then $Monitor = $i
+    Next
+    Return $Monitor
+EndFunc   ;==>_GetMonitorFromPoint
+
+;============================================================
+; Function Name:   _GetMonitors()
+; Description::    Load monitor positions
+; Parameter(s):    n/a
+; Return Value(s): 2D Array of Monitors
+;                       [0][0] = Number of Monitors
+;                       [i][0] = HMONITOR handle of this monitor.
+;                       [i][1] = Left Position of Monitor
+;                       [i][2] = Top Position of Monitor
+;                       [i][3] = Right Position of Monitor
+;                       [i][4] = Bottom Position of Monitor
+; Note:            [0][1..4] are set to Left,Top,Right,Bottom of entire screen
+;                  hMonitor is returned in [i][0], but no longer used by these routines.
+;                  Also sets $__MonitorList global variable (for other subs to use)
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _GetMonitors()
+    $__MonitorList[0][0] = 0  ;  Added so that the global array is reset if this is called multiple times
+    Local $handle = DllCallbackRegister("_MonitorEnumProc", "int", "hwnd;hwnd;ptr;lparam")
+    DllCall("user32.dll", "int", "EnumDisplayMonitors", "hwnd", 0, "ptr", 0, "ptr", DllCallbackGetPtr($handle), "lparam", 0)
+    DllCallbackFree($handle)
+    Local $i = 0
+    For $i = 1 To $__MonitorList[0][0]
+        If $__MonitorList[$i][1] < $__MonitorList[0][1] Then $__MonitorList[0][1] = $__MonitorList[$i][1]
+        If $__MonitorList[$i][2] < $__MonitorList[0][2] Then $__MonitorList[0][2] = $__MonitorList[$i][2]
+        If $__MonitorList[$i][3] > $__MonitorList[0][3] Then $__MonitorList[0][3] = $__MonitorList[$i][3]
+        If $__MonitorList[$i][4] > $__MonitorList[0][4] Then $__MonitorList[0][4] = $__MonitorList[$i][4]
+    Next
+    Return $__MonitorList
+EndFunc   ;==>_GetMonitors
+
+;============================================================
+; Function Name:   _MonitorEnumProc($hMonitor, $hDC, $lRect, $lParam)
+; Description::    Enum Callback Function for EnumDisplayMonitors in _GetMonitors
+; Author(s):       xrxca (autoit@forums.xrx.ca)
+; Source: https://www.autoitscript.com/forum/topic/82353-dual-monitor-resolution-detection
+;============================================================
+Func _MonitorEnumProc($hMonitor, $hDC, $lRect, $lParam)
+    Local $Rect = DllStructCreate("int left;int top;int right;int bottom", $lRect)
+    $__MonitorList[0][0] += 1
+    ReDim $__MonitorList[$__MonitorList[0][0] + 1][5]
+    $__MonitorList[$__MonitorList[0][0]][0] = $hMonitor
+    $__MonitorList[$__MonitorList[0][0]][1] = DllStructGetData($Rect, "left")
+    $__MonitorList[$__MonitorList[0][0]][2] = DllStructGetData($Rect, "top")
+    $__MonitorList[$__MonitorList[0][0]][3] = DllStructGetData($Rect, "right")
+    $__MonitorList[$__MonitorList[0][0]][4] = DllStructGetData($Rect, "bottom")
+    Return 1 ; Return 1 to continue enumeration
+EndFunc   ;==>_MonitorEnumProc
+
+;============================================================
+; Return the center point of window
+;============================================================
+Func _GetCenterPoint($hWnd)
+   Local $winPos = WinGetPos($hWnd)
+   Local $point[2]
+   $point[0] = $winPos[0] + $winPos[2] / 2
+   $point[1] = $winPos[1] + $winPos[3] / 2
+   Return $point
+EndFunc
+
+;============================================================
+; Swap topmost windows on monitors 1 and 2 and maximize them
+;============================================================
+Func _SwapWindowsOnMonitors()
+   Local $window1 = _TopWindowOnMonitor(1)
+   Local $window2 = _TopWindowOnMonitor(2)
+   _MaxOnMonitor($window1, 2)
+   _MaxOnMonitor($window2, 1)
+EndFunc
+
+;============================================================
+; Return handle to topmost window on monitor
+;============================================================
+Func _TopWindowOnMonitor($monitorIndex)
+
+   If $__MonitorList[0][0] == 0 Then
+      _GetMonitors()
+   EndIf
+
+   If $monitorIndex > $__MonitorList[0][0] Then
+      Return 0
+   EndIf
+
+   Local $monitorLeft = $__MonitorList[$monitorIndex][1]
+   Local $monitorTop = $__MonitorList[$monitorIndex][2]
+   Local $monitorRight = $__MonitorList[$monitorIndex][3]
+   Local $monitorBottom = $__MonitorList[$monitorIndex][4]
+
+   Local $winList = WinList()
+   For $i = 0 To $winList[0][0]
+       Local $winTitle = $winList[$i][0]
+       Local $hWnd = $winList[$i][1]
+
+       ; skip window if window title blank or window visible flag not set
+       If $winTitle == "" Or Not BitAND(WinGetState($hWnd), 2) Then
+           ContinueLoop
+       EndIf
+
+       Local $point = _GetCenterPoint($hWnd)
+       If $point[0] >= $monitorLeft And $point[0] <= $monitorRight And $point[1] >= $monitorTop And $point[1] <= $monitorBottom Then
+          Return $hWnd
+       EndIf
+   Next
+
+   Return 0
+EndFunc
+
+;============================================================
+; Return handle to topmost window on monitor
+;============================================================
+Func FocusMonitor($monitorIndex)
+     $hWnd = _TopWindowOnMonitor($monitorIndex)
+     WinActivate($hWnd)
+EndFunc
+
+;============================================================
+; Focus topmost window on monitor 1
+;============================================================
+Func FocusMonitor1()
+     FocusMonitor(1)
+EndFunc
+
+;============================================================
+; Focus topmost window on monitor 2
+;============================================================
+Func FocusMonitor2()
+     FocusMonitor(2)
+EndFunc
+
+;============================================================
+; Generic handler for hotkeys
+;============================================================
+Func OnHotkey()
+     _FileWriteLog($log, StringFormat("OnHotkey: '%s'", @HotKeyPressed))
+     Local $value = $keymap.Item(@HotKeyPressed)
+     If IsString($value) Then
+        ; case 1: hotkey maps to a function
+        Call($value)
+        Reset()
+     Else
+        ; case 2: hotkey maps to a nested keymap (dictionary)
+        AppendPrefixKey(@HotKeyPressed)
+        UnsetHotkeys($keymap)
+        $keymap = $value
+        SetHotkeys($keymap)
+     EndIf
+EndFunc
+
+;============================================================
+; Append key to sequence of keys pressed so far
+;============================================================
+Func AppendPrefixKey($key)
+     If $prefixKeys == "" Then
+        $prefixKeys = $key
+     Else
+        $prefixKeys = $prefixKeys & "|" & $key
+     EndIf
+EndFunc
+
+;============================================================
+; Install hotkey bindings for given keymap
+;============================================================
+Func SetHotkeys($keymap)
+     $timer = TimerInit()
+     For $key In $keymap
+        _FileWriteLog($log, StringFormat("HotKeySet('%s', 'OnHotkey')", $key))
+        HotKeySet($key, "OnHotkey")
+     Next
+EndFunc
+
+;============================================================
+; Uninstall hotkey bindings for the given keymap
+;============================================================
+Func UnsetHotkeys($keymap)
+     For $key In $keymap
+         _FileWriteLog($log, StringFormat("HotKeySet('%s')", $key))
+         HotKeySet($key)
+     Next
+EndFunc
+
+;============================================================
+; Change to a new keymap
+;============================================================
+Func SetKeymap($newKeymap)
+     UnsetHotkeys($keymap)
+     $keymap = $newKeymap
+     SetHotkeys($keymap)
+EndFunc
+
+;============================================================
+; Main entry function when the "root key" is pressed,
+; i.e. the hotkey that prefixes all window manager commands.
+; By default the root key is Ctrl+Space.
+;============================================================
+Func Root()
+     _FileWriteLog($log, "Root")
+     Reset()
+     SetKeymap($rootKeymap)
+EndFunc
+
+;============================================================
+; Clear all hotkeys bindings and reset all state variables.
+;============================================================
+Func Reset()
+     _FileWriteLog($log, "Reset")
+     $prefixKeys = ""
+     SetKeymap($emptyKeymap)
+EndFunc
+
+Func NestedKeymapTest()
+     MsgBox($MB_OK, "test", "nested keymap works!")
+EndFunc
+
+;============================================================
+; Timer that is used to cancel all hotkey bindings
+; if the user takes too long to complete a key sequence
+;============================================================
+
+Global $timer
+Global $timeout = 1000
+
+;============================================================
+; The "root key" is the main shortcut key that activates this
+; script.
+;============================================================
+
+Global $rootKey = "^{SPACE}"
+HotKeySet($rootKey, "Root")
+
+Global $emptyKeymap = ObjCreate("Scripting.Dictionary")
+
+;============================================================
+; Keymaps (hard-coded key bindings)
+;============================================================
+
+Global $windowKeymap = ObjCreate("Scripting.Dictionary")
+$windowKeymap.Add("t", "NestedKeymapTest")
+
+Global $rootKeymap = ObjCreate("Scripting.Dictionary")
+$rootKeymap.Add("1", "FocusMonitor1")
+$rootKeymap.Add("2", "FocusMonitor2")
+$rootKeymap.Add("w", $windowKeymap)
+
+; the active keymap
+Global $keymap = $emptyKeymap
+; represents sequence of keys pressed so far
+Global $prefixKeys = ""
+
+;============================================================
+; Logging
+;============================================================
+
+Global $log = FileOpen(@ScriptDir & "\wm.log", $FO_OVERWRITE)
+_FileWriteLog($log, "started window manager...")
+
+;============================================================
+; Main program loop
+;============================================================
+While 1
+     Sleep(100)
+     ; If the user takes too long to complete a key sequence,
+     ; reset the script to its inital state,  i.e. unbind all
+     ; active hotkeys and reset all state variables.
+     If TimerDiff($timer) > $timeout Then
+        Reset()
+     EndIf
+WEnd
