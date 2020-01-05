@@ -288,6 +288,16 @@
 (setq browse-url-browser-function 'browse-url-generic)
 
 ;;----------------------------------------
+;; autoit-mode
+;;
+;; https://www.autoitscript.com/forum/topic/10818-emacs-major-mode-for-autoit-v3/
+;;----------------------------------------
+
+(use-package autoit
+  :load-path "~/.emacs.d/local"
+  :mode ("\\.au3\\'" . autoit-mode))
+
+;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
