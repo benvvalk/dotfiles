@@ -164,6 +164,12 @@
 ;; magit
 ;;----------------------------------------
 
+(defun remove-dos-eol ()
+  "Do not show ^M in files containing mixed UNIX and DOS line endings."
+  (interactive)
+  (setq buffer-display-table (make-display-table))
+  (aset buffer-display-table ?\^M []))
+
 (use-package magit
   :general
     ;; Unset any bindings for my evil leader
@@ -181,7 +187,10 @@
     ;; display magit status buffer in currently
     ;; selected window (not the "other" window)
     (setq magit-display-buffer-function
-            'magit-display-buffer-same-window-except-diff-v1))
+          'magit-display-buffer-same-window-except-diff-v1)
+    ;; hide windows line endings ("^M") in magit status buffer
+    (add-hook 'magit-status-mode-hook 'remove-dos-eol)
+    (add-hook 'magit-diff-mode-hook 'remove-dos-eol))
 
 (use-package evil-magit
   :after (evil magit))
