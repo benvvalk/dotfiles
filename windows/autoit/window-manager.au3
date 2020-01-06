@@ -246,7 +246,7 @@ EndFunc
 ; Generic handler for hotkeys
 ;============================================================
 Func OnHotkey()
-     _FileWriteLog($log, StringFormat("OnHotkey: '%s'", @HotKeyPressed))
+     WriteLog(StringFormat("OnHotkey: '%s'", @HotKeyPressed))
      Local $value = $keymap.Item(@HotKeyPressed)
      If IsString($value) Then
         ; case 1: hotkey maps to a function
@@ -278,7 +278,7 @@ EndFunc
 Func SetHotkeys($keymap)
      $timer = TimerInit()
      For $key In $keymap
-        _FileWriteLog($log, StringFormat("HotKeySet('%s', 'OnHotkey')", $key))
+        WriteLog(StringFormat("HotKeySet('%s', 'OnHotkey')", $key))
         HotKeySet($key, "OnHotkey")
      Next
 EndFunc
@@ -308,16 +308,18 @@ EndFunc
 ; By default the root key is Ctrl+Space.
 ;============================================================
 Func Root()
-     _FileWriteLog($log, "Root")
+
+     WriteLog("Root")
      Reset()
      SetKeymap($rootKeymap)
+
 EndFunc
 
 ;============================================================
 ; Clear all hotkeys bindings and reset all state variables.
 ;============================================================
 Func Reset()
-     _FileWriteLog($log, "Reset")
+     WriteLog("Reset")
      $prefixKeys = ""
      SetKeymap($emptyKeymap)
 EndFunc
@@ -365,8 +367,15 @@ Global $prefixKeys = ""
 ; Logging
 ;============================================================
 
+Func WriteLog($string)
+     _FileWriteLog($log, $string)
+     FileFlush($log)
+EndFunc
+
 Global $log = FileOpen(@ScriptDir & "\wm.log", $FO_OVERWRITE)
-_FileWriteLog($log, "started window manager...")
+WriteLog("started window manager...")
+
+;MsgBox($MB_OK, "", StringFormat("'%s'", _WinAPI_GetClassName(WinGetHandle("[ACTIVE]"))))
 
 ;============================================================
 ; Main program loop
