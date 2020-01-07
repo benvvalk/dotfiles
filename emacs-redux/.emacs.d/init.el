@@ -75,6 +75,11 @@
   (evil-mode 1)
   (setq evil-move-cursor-back nil))
 
+(use-package evil-surround
+  :after evil
+  :config
+  (global-evil-surround-mode 1))
+
 ;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
