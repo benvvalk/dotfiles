@@ -228,6 +228,18 @@
    "p f" 'counsel-projectile-find-file))
 
 ;;----------------------------------------
+;; winner
+;;----------------------------------------
+
+(winner-mode)
+
+(general-def 'motion
+  :prefix benv/evil-leader-key
+  "w u" 'winner-undo
+  "w U" 'winner-redo
+  "w r" 'winner-redo)
+
+;;----------------------------------------
 ;; winum
 ;;----------------------------------------
 
