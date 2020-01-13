@@ -13,6 +13,19 @@
 (setq inhibit-startup-message t)
 
 ;----------------------------------------
+;; file backups / auto-revert
+;;----------------------------------------
+
+(setq
+    backup-directory-alist '(("." . "~/.emacs.d/backups"))
+    backup-by-copying t
+    kept-new-versions 50
+    kept-old-versions 5
+    version-control t)
+
+(global-auto-revert-mode)
+
+;----------------------------------------
 ;; fonts
 ;;----------------------------------------
 
