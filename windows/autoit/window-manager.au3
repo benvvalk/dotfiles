@@ -1,5 +1,8 @@
-#include <MsgBoxConstants.au3>
+#include <Array.au3>
 #include <File.au3>
+#include <MsgBoxConstants.au3>
+#include <WinAPI.au3>
+#include <WinAPISysWin.au3>
 
 #include-Once
 Global $__MonitorList[1][5]
@@ -242,6 +245,119 @@ Func FocusMonitor2()
      FocusMonitor(2)
 EndFunc
 
+Func LogWindowState($hWnd)
+
+     Local $state = WinGetState($hWnd)
+
+     If BitAND($state, $WIN_STATE_EXISTS) Then
+        WriteLog("WIN_STATE_EXISTS")
+     Else
+        WriteLog("!WIN_STATE_EXISTS")
+     EndIf
+
+     If BitAND($state, $WIN_STATE_VISIBLE) Then
+        WriteLog("WIN_STATE_VISIBLE")
+     Else
+        WriteLog("!WIN_STATE_VISIBLE")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_ENABLED) Then
+        WriteLog("WIN_STATE_ENABLED")
+     Else
+        WriteLog("!WIN_STATE_ENABLED")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_ACTIVE) Then
+        WriteLog("WIN_STATE_ACTIVE")
+     Else
+        WriteLog("!WIN_STATE_ACTIVE")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_MINIMIZED) Then
+        WriteLog("WIN_STATE_MINIMIZED")
+     Else
+        WriteLog("!WIN_STATE_MINIMIZED")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_MAXIMIZED) Then
+        WriteLog("WIN_STATE_MAXIMIZED")
+     Else
+        WriteLog("!WIN_STATE_MAXIMIZED")
+     EndIf
+     
+EndFunc
+
+Func FocusFirefox()
+
+     ;WriteLog("FocusFirefox")
+
+     Local $hWnd = WinGetHandle("[CLASS:MozillaWindowClass]")
+     ;Local $hWnd = WinGetHandle("Firefox")
+
+     WriteLog("--Before WinActivate--")
+     LogWindowState($hWnd)
+     
+     WinActivate($hWnd)
+
+     WriteLog("--After WinActivate--")
+     LogWindowState($hWnd)
+
+     ;_WinAPI_ShowWindow($hWnd, @SW_RESTORE)
+     _WinAPI_SetWindowPos($hWnd, $HWND_TOP, 0, 0, 0, 0, BitOR($SWP_FRAMECHANGED, $SWP_NOMOVE, $SWP_NOSIZE, $SWP_SHOWWINDOW))
+
+     WriteLog("--After SetWindowPos--")
+     LogWindowState($hWnd)
+
+EndFunc
+
+Func FocusMinTTY()
+     ;WriteLog("FocusMinTTY()")
+     Local $hWnd = WinGetHandle("[CLASS:mintty]")
+     Local $state = WinGetState($hWnd)
+
+     If BitAND($state, $WIN_STATE_EXISTS) Then
+        WriteLog("WIN_STATE_EXISTS")
+     Else
+        WriteLog("!WIN_STATE_EXISTS")
+     EndIf
+
+     If BitAND($state, $WIN_STATE_VISIBLE) Then
+        WriteLog("WIN_STATE_VISIBLE")
+     Else
+        WriteLog("!WIN_STATE_VISIBLE")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_ENABLED) Then
+        WriteLog("WIN_STATE_ENABLED")
+     Else
+        WriteLog("!WIN_STATE_ENABLED")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_ACTIVE) Then
+        WriteLog("WIN_STATE_ACTIVE")
+     Else
+        WriteLog("!WIN_STATE_ACTIVE")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_MINIMIZED) Then
+        WriteLog("WIN_STATE_MINIMIZED")
+     Else
+        WriteLog("!WIN_STATE_MINIMIZED")
+     EndIf
+     
+     If BitAND($state, $WIN_STATE_MAXIMIZED) Then
+        WriteLog("WIN_STATE_MAXIMIZED")
+     Else
+        WriteLog("!WIN_STATE_MAXIMIZED")
+     EndIf
+     
+     WinActivate($hWnd)
+EndFunc
+
+;Func Null($var)
+;     Return IsInt($var) And $var == 0
+;EndFunc
+
 ;============================================================
 ; Generic handler for hotkeys
 ;============================================================
@@ -250,14 +366,11 @@ Func OnHotkey()
      Local $value = $keymap.Item(@HotKeyPressed)
      If IsString($value) Then
         ; case 1: hotkey maps to a function
-        Call($value)
         Reset()
+        Call($value)
      Else
         ; case 2: hotkey maps to a nested keymap (dictionary)
-        AppendPrefixKey(@HotKeyPressed)
-        UnsetHotkeys($keymap)
-        $keymap = $value
-        SetHotkeys($keymap)
+        SetKeymap($value)
      EndIf
 EndFunc
 
@@ -275,9 +388,9 @@ EndFunc
 ;============================================================
 ; Install hotkey bindings for given keymap
 ;============================================================
-Func SetHotkeys($keymap)
+Func SetHotkeys($newKeymap)
      $timer = TimerInit()
-     For $key In $keymap
+     For $key In $newKeymap
         WriteLog(StringFormat("HotKeySet('%s', 'OnHotkey')", $key))
         HotKeySet($key, "OnHotkey")
      Next
@@ -288,7 +401,7 @@ EndFunc
 ;============================================================
 Func UnsetHotkeys($keymap)
      For $key In $keymap
-         _FileWriteLog($log, StringFormat("HotKeySet('%s')", $key))
+         WriteLog(StringFormat("HotKeySet('%s')", $key))
          HotKeySet($key)
      Next
 EndFunc
@@ -300,6 +413,40 @@ Func SetKeymap($newKeymap)
      UnsetHotkeys($keymap)
      $keymap = $newKeymap
      SetHotkeys($keymap)
+     ;ShowPromptWindow($keymap)
+EndFunc
+
+Func CreatePromptWindow($newKeymap)
+
+     Local $keys = $newKeymap.Keys
+     _ArraySort($keys)
+
+     Local $hGUI = GUICreate("Press a Key...", 400, 300)
+
+     Local $padding = 15
+     Local $rowHeight = 25
+     Local $i
+     For $i  = 0 To UBound($keys) - 1
+        Local $key = $keys[$i]
+        Local $label = $newKeymap.Item($key)
+        If Not IsString($label) Then
+           $label = $label.Item("[name]")
+        EndIf
+        GUICtrlCreateLabel(StringFormat("%s: %s", $key, $label), $padding, $padding + $i * $rowHeight)
+     Next
+
+     Return $hGUI
+
+EndFunc
+
+Func ShowPromptWindow($newKeymap)
+
+     GUIDelete($gui)
+     
+     Local $gui = CreatePromptWindow($newKeymap)
+     WriteLog("GUI show")
+     GUISetState(@SW_SHOW, $gui)
+
 EndFunc
 
 ;============================================================
@@ -319,14 +466,20 @@ EndFunc
 ; Clear all hotkeys bindings and reset all state variables.
 ;============================================================
 Func Reset()
+
      WriteLog("Reset")
      $prefixKeys = ""
      SetKeymap($emptyKeymap)
+
+;     GUIDelete($gui)
+
 EndFunc
 
 Func NestedKeymapTest()
      MsgBox($MB_OK, "test", "nested keymap works!")
 EndFunc
+
+Global $gui = Null 
 
 ;============================================================
 ; Timer that is used to cancel all hotkey bindings
@@ -350,13 +503,20 @@ Global $emptyKeymap = ObjCreate("Scripting.Dictionary")
 ; Keymaps (hard-coded key bindings)
 ;============================================================
 
+Global $appKeymap = ObjCreate("Scripting.Dictionary")
+$appKeymap.Add("[name]", "<app-menu>")
+$appKeymap.Add("f", "FocusFirefox")
+$appKeymap.Add("m", "FocusMinTTY")
+
 Global $windowKeymap = ObjCreate("Scripting.Dictionary")
+$windowKeymap.Add("[name]", "<window-menu>")
 $windowKeymap.Add("t", "NestedKeymapTest")
 
 Global $rootKeymap = ObjCreate("Scripting.Dictionary")
 $rootKeymap.Add("1", "FocusMonitor1")
 $rootKeymap.Add("2", "FocusMonitor2")
 $rootKeymap.Add("w", $windowKeymap)
+$rootKeymap.Add("a", $appKeymap)
 
 ; the active keymap
 Global $keymap = $emptyKeymap
@@ -385,7 +545,7 @@ While 1
      ; If the user takes too long to complete a key sequence,
      ; reset the script to its inital state,  i.e. unbind all
      ; active hotkeys and reset all state variables.
-     If TimerDiff($timer) > $timeout Then
-        Reset()
-     EndIf
+     ;If TimerDiff($timer) > $timeout Then
+     ;   Reset()
+     ;EndIf
 WEnd
