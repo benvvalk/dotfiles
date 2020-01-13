@@ -123,13 +123,10 @@
   "w s" 'split-window-below
   "w v" 'split-window-right)
 
-;; Restore standard vim mapping
-;; for C-u -> PageUp. In emacs, C-u
-;; is normally mapped to `universal-argument`
-;; I use SPC-u for that instead (see above
-;; mapping).
+;; restore standard vim mappings
 
 (general-def 'motion
+  "C-i" 'evil-jump-forward
   "C-u" 'evil-scroll-up)
 
 ;;----------------------------------------
