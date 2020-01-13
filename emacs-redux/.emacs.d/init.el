@@ -283,17 +283,6 @@
 ;; C#
 ;;----------------------------------------
 
-(defun benv/omnisharp-go-to-definition ()
-  "A wrapper function around omnisharp-go-to-definition
-that pushes a new entry onto evil's jump list before and after
-jumping to the target function/variable/class definition.
-This makes the C-o/C-i key bindings (evil-jump-backward/
-evil-jump-forward) work as expected."
-  (interactive)
-  (evil--jumps-push)
-  (omnisharp-go-to-definition)
-  (evil--jumps-push))
-
 (use-package csharp-mode
   :mode ("\\.cs\\'" . csharp-mode))
 
