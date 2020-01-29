@@ -297,6 +297,11 @@
    "G" 'omnisharp-go-to-definition-other-window
    "u" 'omnisharp-find-usages))
 
+(use-package company
+  :hook (csharp-mode . company-mode)
+  :config
+  (add-to-list 'company-backends 'company-omnisharp))
+
 ;;----------------------------------------
 ;; elfeed
 ;;----------------------------------------
