@@ -166,6 +166,8 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
+  :config
+  (setq org-startup-indented t)
   :general
   ('motion
    "TAB" 'org-cycle)
