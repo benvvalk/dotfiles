@@ -178,6 +178,23 @@
    "O"   'org-clock-out))
 
 ;;----------------------------------------
+;; org-roam
+;;----------------------------------------
+
+(use-package org-roam
+  :load-path "~/.emacs.d/site-lisp/org-roam"
+  :general
+  ('motion
+   :prefix benv/major-mode-leader-key
+   "r b" 'org-roam
+   "r i" 'org-roam-insert
+   "r f" 'org-roam-find-file)
+  :config
+  (setq org-roam-directory "~/Dropbox/org")
+  (org-roam--build-cache-async)
+  (org-roam-mode))
+
+;;----------------------------------------
 ;; magit
 ;;----------------------------------------
 
