@@ -1,2 +1,5 @@
 /emacs-redux/.emacs.d/elpa/gnupg/
 /emacs-redux/.gnupg/
+
+# Emacs compiled elisp files
+/emacs-redux/.emacs.d/elpa/**/*.elc
