@@ -193,7 +193,7 @@
   ('insert
    "C-c r i" 'org-roam-insert)
   :config
-  (setq org-roam-directory "~/Dropbox/org")
+  (setq org-roam-directory "~/Sync/notes")
   (org-roam--build-cache-async)
   (org-roam-mode))
 
