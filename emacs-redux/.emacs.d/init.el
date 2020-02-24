@@ -190,6 +190,8 @@
    "r b" 'org-roam
    "r i" 'org-roam-insert
    "r f" 'org-roam-find-file)
+  ('insert
+   "C-c r i" 'org-roam-insert)
   :config
   (setq org-roam-directory "~/Dropbox/org")
   (org-roam--build-cache-async)
