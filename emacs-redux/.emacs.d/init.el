@@ -172,10 +172,13 @@
   ;; when following links (org-open-at-point), open the
   ;; link in the same window (not the "other window")
   (setq org-link-frame-setup '((file . find-file)))
+  ;; pressing Return key on a hyperlink will open it
+  (setq org-return-follows-link t)
   :general
-  ('motion
-   "TAB" 'org-cycle)
-  ('motion
+  ('motion org-mode-map
+   "TAB" 'org-cycle
+   "RET" 'org-open-at-point)
+  ('motion org-mode-map
    :prefix benv/major-mode-leader-key
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
