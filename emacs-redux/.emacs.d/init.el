@@ -166,6 +166,7 @@
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
+  :hook (org-mode . visual-line-mode)
   :config
   ;; align body text with parent org heading/bullet
   (setq org-startup-indented t)
