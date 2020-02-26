@@ -175,6 +175,8 @@
   (setq org-link-frame-setup '((file . find-file)))
   ;; pressing Return key on a hyperlink will open it
   (setq org-return-follows-link t)
+  ;; auto-expand all bullets when opening a file
+  (setq org-startup-folded nil)
   :general
   ('motion org-mode-map
    "TAB" 'org-cycle
