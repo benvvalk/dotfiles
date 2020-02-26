@@ -167,6 +167,7 @@
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :config
+  ;; align body text with parent org heading/bullet
   (setq org-startup-indented t)
   ;; when following links (org-open-at-point), open the
   ;; new file in the current window (not the "other window")
