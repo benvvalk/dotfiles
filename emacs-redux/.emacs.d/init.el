@@ -208,6 +208,16 @@
   (org-roam-mode))
 
 ;;----------------------------------------
+;; ace-link
+;;----------------------------------------
+
+(use-package ace-link
+  :general
+  ('motion org-mode-map
+   :prefix benv/major-mode-leader-key
+   "l" 'ace-link-org))
+
+;;----------------------------------------
 ;; magit
 ;;----------------------------------------
 
