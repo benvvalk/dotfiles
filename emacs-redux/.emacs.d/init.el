@@ -177,6 +177,7 @@
   (setq org-return-follows-link t)
   ;; auto-expand all bullets when opening a file
   (setq org-startup-folded nil)
+  (setq org-startup-with-inline-images t)
   :general
   ('motion org-mode-map
    "TAB" 'org-cycle
