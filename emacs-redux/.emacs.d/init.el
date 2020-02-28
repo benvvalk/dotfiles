@@ -94,6 +94,17 @@
   (global-evil-surround-mode 1))
 
 ;;----------------------------------------
+;; get file path for current buffer
+;;----------------------------------------
+
+(defun benv/yank-filename ()
+  "Yank absolute file path for current buffer
+and echo it in the minibuffer."
+  (interactive)
+  (kill-new (buffer-file-name))
+  (message (buffer-file-name)))
+
+;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
 
@@ -121,7 +132,8 @@
   "u"   'universal-argument
   "w m" 'delete-other-windows
   "w s" 'split-window-below
-  "w v" 'split-window-right)
+  "w v" 'split-window-right
+  "y f" 'benv/yank-filename)
 
 ;; restore standard vim mappings
 
