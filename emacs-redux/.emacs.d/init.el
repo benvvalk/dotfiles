@@ -34,7 +34,7 @@
 ;; Height units are 1/10 pt. For example,
 ;; using `:height 140` sets font size to 14 pt.
 
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 140)
 
 ;----------------------------------------
 ;; indentation
