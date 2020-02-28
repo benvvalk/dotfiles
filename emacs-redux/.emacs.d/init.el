@@ -186,6 +186,7 @@
    "C-c p" 'org-cliplink)
   ('motion org-mode-map
    :prefix benv/major-mode-leader-key
+   "t i" 'org-toggle-inline-images
    "t l" 'org-toggle-link-display
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
