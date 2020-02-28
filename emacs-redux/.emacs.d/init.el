@@ -181,12 +181,15 @@
   ('motion org-mode-map
    "TAB" 'org-cycle
    "RET" 'org-open-at-point)
+  ('insert org-mode-map
+   "C-c p" 'org-cliplink)
   ('motion org-mode-map
    :prefix benv/major-mode-leader-key
    "t l" 'org-toggle-link-display
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
-   "O"   'org-clock-out))
+   "O"   'org-clock-out
+   "p"   'org-cliplink))
 
 ;;----------------------------------------
 ;; org-roam
