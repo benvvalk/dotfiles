@@ -415,6 +415,30 @@ and echo it in the minibuffer."
   :mode ("\\.au3\\'" . autoit-mode))
 
 ;;----------------------------------------
+;; org-attach-screenshot
+;;----------------------------------------
+
+(defun benv/org-attach-screenshot ()
+  "Call org-attach-screenshot with a prefix argument,
+so that the emacs doesn't get hidden prior
+to running the screenshot command."
+  (interactive)
+  (let ((current-prefix-arg '(4)))
+    (call-interactively 'org-attach-screenshot)))
+
+(use-package org-attach-screenshot
+  :load-path "~/.emacs.d/site-lisp/org-screenshot"
+  :general
+  ('motion org-mode-map
+    :prefix benv/major-mode-leader-key
+    "s" 'benv/org-attach-screenshot)
+  ('insert org-mode-map
+    "C-c s" 'benv/org-attach-screenshot)
+  :config
+  (setq org-attach-screenshot-command-line
+        "cliprect-wsl %f"))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
