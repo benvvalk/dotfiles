@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eu -o pipefail
+
+# Convert a WSL path to a Windows path,
+# e.g. /mnt/c/foo/bar -> C:\foo\bar
+
+if [ $# -ne 1 ]; then
+    echo "Usage: winpath <WSL_PATH>" >&2
+    echo "Example: winpath /mnt/c/foo" >&2
+    exit 1
+fi
+
+abs_path=$(realpath -m "$1")
+echo "$abs_path" \
+     | perl -ple 's|/mnt/([a-z])/|uc($1) . ":\\"|e' \
+     | perl -ple 's|/|\\|g'
