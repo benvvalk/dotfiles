@@ -250,6 +250,8 @@ and echo it in the minibuffer."
            "h" 'dired-up-directory
            "l" 'dired-find-file))
 
+;; Use hl-line-mode to highlight the current
+;; file/directory line in dired
 (use-package hl-line-mode
   :hook (dired-mode . hl-line-mode)
   :init
