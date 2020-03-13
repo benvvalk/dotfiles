@@ -245,7 +245,10 @@ and echo it in the minibuffer."
   ;; Unset default "SPC" binding
   ;; so that my evil leader key
   ;; behaves normally in dired
-  (:keymaps 'dired-mode-map "SPC" nil))
+  (:keymaps 'dired-mode-map "SPC" nil)
+  ('normal 'dired-mode-map
+           "h" 'dired-up-directory
+           "l" 'dired-find-file))
 
 (use-package hl-line-mode
   :hook (dired-mode . hl-line-mode)
