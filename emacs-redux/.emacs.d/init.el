@@ -19,6 +19,7 @@
 (setq
     backup-directory-alist '(("." . "~/.emacs.d/backups"))
     backup-by-copying t
+    delete-old-versions t
     kept-new-versions 50
     kept-old-versions 5
     version-control t)
