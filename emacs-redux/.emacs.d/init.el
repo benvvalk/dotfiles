@@ -237,6 +237,25 @@ and echo it in the minibuffer."
    "l" 'ace-link-org))
 
 ;;----------------------------------------
+;; dired
+;;----------------------------------------
+
+(use-package dired
+  :general
+  ;; Unset default "SPC" binding
+  ;; so that my evil leader key
+  ;; behaves normally in dired
+  (:keymaps 'dired-mode-map "SPC" nil))
+
+(use-package hl-line-mode
+  :hook (dired-mode . hl-line-mode)
+  :init
+  ;; We use advice here because the `hl-line` face
+  ;; is not defined until hl-line-mode is loaded
+  (defadvice hl-line-mode (after benv/advise-hl-line-mode)
+    (set-face-background 'hl-line "green")))
+
+;;----------------------------------------
 ;; magit
 ;;----------------------------------------
 
