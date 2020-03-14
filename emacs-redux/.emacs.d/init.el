@@ -247,8 +247,17 @@ and echo it in the minibuffer."
   ;; behaves normally in dired
   (:keymaps 'dired-mode-map "SPC" nil)
   ('normal 'dired-mode-map
-           "h" 'dired-up-directory
-           "l" 'dired-find-file))
+        "f" 'dired-narrow)
+  :config
+  ;; general.el has a bug where it clobbers
+  ;; the user's custom hjkl bindings
+  ;; for a mode by running `evil-add-hjkl-bindings`.
+  ;; The workaround is make the bindings
+  ;; after dired-mode is loaded, as I am doing here.
+  ;; See https://github.com/noctuid/general.el/issues/89.
+  (general-def 'normal 'dired-mode-map
+    "h" 'dired-up-directory
+    "l" 'dired-find-file))
 
 ;; Use hl-line-mode to highlight the current
 ;; file/directory line in dired
