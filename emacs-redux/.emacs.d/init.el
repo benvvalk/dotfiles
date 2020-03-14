@@ -246,8 +246,6 @@ and echo it in the minibuffer."
   ;; so that my evil leader key
   ;; behaves normally in dired
   (:keymaps 'dired-mode-map "SPC" nil)
-  ('normal 'dired-mode-map
-        "f" 'dired-narrow)
   :config
   ;; general.el has a bug where it clobbers
   ;; the user's custom hjkl bindings
