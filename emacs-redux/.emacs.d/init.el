@@ -45,6 +45,14 @@
 (setq-default tab-width 4)
 
 ;;----------------------------------------
+;; long lines
+;;----------------------------------------
+
+(setq-default
+ truncate-lines t
+ truncate-partial-width-windows t)
+
+;;----------------------------------------
 ;; package.el
 ;;----------------------------------------
 
