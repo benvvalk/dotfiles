@@ -199,6 +199,7 @@ and echo it in the minibuffer."
   ;; auto-expand all bullets when opening a file
   (setq org-startup-folded nil)
   (setq org-startup-with-inline-images t)
+  (use-package orgit)
   :general
   ('motion org-mode-map
    "TAB" 'org-cycle
@@ -305,7 +306,8 @@ and echo it in the minibuffer."
           'magit-display-buffer-same-window-except-diff-v1)
     ;; hide windows line endings ("^M") in magit status buffer
     (add-hook 'magit-status-mode-hook 'remove-dos-eol)
-    (add-hook 'magit-diff-mode-hook 'remove-dos-eol))
+    (add-hook 'magit-diff-mode-hook 'remove-dos-eol)
+    (use-package orgit))
 
 (use-package evil-magit
   :after (evil magit))
