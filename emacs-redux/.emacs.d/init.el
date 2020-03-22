@@ -159,7 +159,11 @@ and echo it in the minibuffer."
 
 (use-package ivy
   :defer nil
-  :config (ivy-mode 1)
+  :config
+  (ivy-mode 1)
+  ;; remove annoying "^" that is inserted at
+  ;; the beginning of ivy input by default
+  (setq ivy-initial-inputs-alist nil)
   :general
   ('motion
    :prefix benv/evil-leader-key
