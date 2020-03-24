@@ -109,6 +109,24 @@ MaximizeActiveWindowOnMonitor(monitorIndex)
   WinMaximize, A
 }
 
+RaiseWindowByTitle(title)
+{
+  WinGetPos, x, y, width, height, A
+  WinActivate, %title%
+  WinRestore, A
+  WinMove, A, , x, y, width, height
+}
+
+RaiseWindowByTitleOtherMonitor(title)
+{
+  monitorIndex := GetOtherMonitorIndex()
+  hWnd := GetTopWindowOnMonitor(monitorIndex)
+  WinGetPos, x, y, width, height, ahk_id %hWnd%
+  WinActivate, %title%
+  WinRestore, A
+  WinMove, A, , x, y, width, height
+}
+
 RaiseWindowByClass(className)
 {
   WinGetPos, x, y, width, height, A
@@ -127,9 +145,30 @@ RaiseWindowByClassOtherMonitor(className)
   WinMove, A, , x, y, width, height
 }
 
+RaiseWindowByExe(exeName)
+{
+  WinGetPos, x, y, width, height, A
+  WinActivate, ahk_exe %exeName%
+  WinRestore, A
+  WinMove, A, , x, y, width, height
+}
+
+RaiseWindowByExeOtherMonitor(exeName)
+{
+  monitorIndex := GetOtherMonitorIndex()
+  hWnd := GetTopWindowOnMonitor(monitorIndex)
+  WinGetPos, x, y, width, height, ahk_id %hWnd%
+  WinActivate, ahk_exe %exeName%
+  WinRestore, A
+  WinMove, A, , x, y, width, height
+}
+
 ReadKeys()
 {
-  Input, keys, T1 C, {Tab}, 1,2,!,@,wf,of
+  ; Note: Case-insensitive option ("C") does not seem to work
+  ; as intended (as of AutoHotkey version 1.1.30.01).
+
+  Input, keys, C T1, {Tab}, 1,2,!,@,wf,of,wt,ot,we,oe,wx,ox,wu,ou,wc,oc,wr,or
   
   ; Note: AutoHotkey is supposed to support
   ; `switch` statements, but at the time of
@@ -148,6 +187,30 @@ ReadKeys()
     RaiseWindowByClass("MozillaWindowClass")
   } else if (keys = "of") {
     RaiseWindowByClassOtherMonitor("MozillaWindowClass")
+  } else if (keys = "wt") {
+    RaiseWindowByClass("mintty")
+  } else if (keys = "ot") {
+    RaiseWindowByClassOtherMonitor("mintty")
+  } else if (keys = "we") {
+    RaiseWindowByTitle("emacs")
+  } else if (keys = "oe") {
+    RaiseWindowByTitleOtherMonitor("emacs")
+  } else if (keys = "wx") {
+    RaiseWindowByClass("CabinetWClass")
+  } else if (keys = "ox") {
+    RaiseWindowByClassOtherMonitor("CabinetWClass")
+  } else if (keys = "wu") {
+    RaiseWindowByExe("unity.exe")
+  } else if (keys = "ou") {
+    RaiseWindowByExeOtherMonitor("unity.exe")
+  } else if (keys = "wc") {
+    RaiseWindowByExe("chrome.exe")
+  } else if (keys = "oc") {
+    RaiseWindowByExeOtherMonitor("chrome.exe")
+  } else if (keys = "wr") {
+    RaiseWindowByExe("rider64.exe")
+  } else if (keys = "or") {
+    RaiseWindowByExeOtherMonitor("rider64.exe")
   }
 }
 
