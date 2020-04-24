@@ -151,6 +151,21 @@ and echo it in the minibuffer."
   "C-u" 'evil-scroll-up)
 
 ;;----------------------------------------
+;; compilation mode
+;;----------------------------------------
+
+(use-package compilation-mode
+  :general
+  ;; Unset default "SPC" binding
+  ;; so that my evil leader key
+  ;; behaves normally in dired
+  (:keymaps 'compilation-mode-map "SPC" nil)
+  ('motion
+   :prefix benv/evil-leader-key
+   "c c" 'compile
+   "c r" 'recompile))
+
+;;----------------------------------------
 ;; ivy/counsel/swiper
 ;;
 ;; Note: ivy, counsel, and swiper are
