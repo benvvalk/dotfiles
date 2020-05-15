@@ -166,6 +166,17 @@ and echo it in the minibuffer."
    "c r" 'recompile))
 
 ;;----------------------------------------
+;; ediff
+;;----------------------------------------
+
+(use-package ediff
+  :config
+  ;; Override default behaviour of opening ediff control window
+  ;; in a new frame. (Show it in a new window along the bottom
+  ;; of the current frame instead.)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+
+;;----------------------------------------
 ;; ivy/counsel/swiper
 ;;
 ;; Note: ivy, counsel, and swiper are
