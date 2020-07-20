@@ -296,6 +296,7 @@ and echo it in the minibuffer."
   ;; behaves normally in dired
   (:keymaps 'dired-mode-map "SPC" nil)
   :config
+  (setq dired-listing-switches "-al --group-directories-first")
   ;; general.el has a bug where it clobbers
   ;; the user's custom hjkl bindings
   ;; for a mode by running `evil-add-hjkl-bindings`.
