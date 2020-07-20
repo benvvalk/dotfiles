@@ -7,6 +7,11 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+;; disable annoying "ding" sound on Windows
+;; when hitting top/bottom of buffer
+
+(setq ring-bell-function 'ignore)
+
 ;; inhibit default Emacs startup message
 ;; with Emacs tutorial, GNU project info, etc.
 
