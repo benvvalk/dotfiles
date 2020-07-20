@@ -199,7 +199,11 @@ and echo it in the minibuffer."
   ('motion
    :prefix benv/evil-leader-key
    "b b" 'ivy-switch-buffer
-   "b d" 'kill-this-buffer))
+   "b d" 'kill-this-buffer
+   "i r" 'ivy-resume)
+  (:keymaps 'ivy-minibuffer-map
+            "C-o" 'ivy-call
+            "C-RET" 'ivy-call))
 
 (use-package counsel
   :general
@@ -208,7 +212,8 @@ and echo it in the minibuffer."
   ('motion
    :prefix benv/evil-leader-key
    "f f" 'counsel-find-file
-   "f r" 'counsel-recentf))
+   "f r" 'counsel-recentf
+   "c r" 'counsel-rg))
 
 (use-package swiper
   :general
