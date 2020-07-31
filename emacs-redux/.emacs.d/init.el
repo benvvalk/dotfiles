@@ -453,6 +453,18 @@ and echo it in the minibuffer."
   (add-to-list 'company-backends 'company-omnisharp))
 
 ;;----------------------------------------
+;; calfw
+;;----------------------------------------
+
+(use-package calfw)
+
+(use-package calfw-org
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "o c" 'cfw:open-org-calendar))
+
+;;----------------------------------------
 ;; elfeed
 ;;----------------------------------------
 
