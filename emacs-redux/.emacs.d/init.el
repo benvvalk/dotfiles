@@ -539,6 +539,16 @@ to running the screenshot command."
         "cliprect-wsl %f"))
 
 ;;----------------------------------------
+;; shell mode
+;;----------------------------------------
+
+(use-package shell
+  :general
+  ;; make C-d do PageDown (like vim) instead of delete character
+  ('normal shell-mode-map
+    "C-d" 'evil-scroll-down))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
