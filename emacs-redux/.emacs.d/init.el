@@ -239,7 +239,8 @@ and echo it in the minibuffer."
   ;; auto-expand all bullets when opening a file
   (setq org-startup-folded nil)
   (setq org-startup-with-inline-images t)
-  (setq org-agenda-files '("~/Sync/notes/personal-todo.org"))
+  (setq org-agenda-files '("~/Sync/notes/personal-todo.org"
+                           "~/Sync/notes/20200711223732_work_todo.org"))
   (use-package orgit)
   :general
   ('motion
