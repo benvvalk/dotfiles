@@ -241,6 +241,11 @@ and echo it in the minibuffer."
   (setq org-startup-with-inline-images t)
   (setq org-agenda-files '("~/Sync/notes/personal-todo.org"
                            "~/Sync/notes/20200711223732_work_todo.org"))
+  ;; increase size of images used to preview LaTeX fragments
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :scale 1.75))
+  ;; preview all latex fragments in an .org file by default
+  (setq org-startup-with-latex-preview t)
   (use-package orgit)
   :general
   ('motion
@@ -255,6 +260,7 @@ and echo it in the minibuffer."
    :prefix benv/major-mode-leader-key
    "t i" 'org-toggle-inline-images
    "t l" 'org-toggle-link-display
+   "t L" 'org-latex-preview
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
    "O"   'org-clock-out
