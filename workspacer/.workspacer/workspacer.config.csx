@@ -28,12 +28,26 @@ ActionMenuItemBuilder BuildWindowMenu(ActionMenuPlugin actionMenu, IConfigContex
     return builder;
 }
 
+/// <summary>
+/// The method that performs Workspacer configuration.
+/// </summary>
 Action<IConfigContext> doConfig = (context) =>
 {
     context.AddBar();
     context.AddFocusIndicator();
     var actionMenu = context.AddActionMenu();
 
-    context.WorkspaceContainer.CreateWorkspaces("one", "two", "three", "four", "five");
+    var mod = KeyModifiers.Control | KeyModifiers.Alt;
+
+    context.Keybinds.Subscribe(mod, Keys.J,
+        () => context.Workspaces.FocusedWorkspace.FocusNextWindow(), "focus next window");
+
+    context.Keybinds.Subscribe(mod, Keys.K,
+        () => context.Workspaces.FocusedWorkspace.FocusPreviousWindow(), "focus previous window");
+
+    context.Keybinds.Subscribe(mod, Keys.B,
+        () => actionMenu.ShowMenu(BuildWindowMenu(actionMenu, context)), "switch window");
+
+    context.WorkspaceContainer.CreateWorkspaces("1", "2", "3", "4", "5", "6", "7", "8", "9");
 };
 return doConfig;
