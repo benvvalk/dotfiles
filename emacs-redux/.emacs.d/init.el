@@ -211,9 +211,10 @@ and echo it in the minibuffer."
    "M-x" 'counsel-M-x)
   ('motion
    :prefix benv/evil-leader-key
+   "c r" 'counsel-rg
    "f f" 'counsel-find-file
    "f r" 'counsel-recentf
-   "c r" 'counsel-rg))
+   "p r" 'counsel-projectile-rg))
 
 (use-package swiper
   :general
