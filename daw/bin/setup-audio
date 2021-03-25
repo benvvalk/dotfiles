@@ -1,0 +1,12 @@
+#!/bin/bash
+set -eux -o pipefail
+
+jack_control start
+pulseaudio --start
+pacmd set-default-sink jack_out
+
+logdir="$HOME/var/log"
+mkdir -p "$logdir"
+a2jmidid -e > "$logdir/a2jmidid.log" 2>&1 &
+
+linuxsampler > "$logdir/linuxsampler.log" 2>&1 &
