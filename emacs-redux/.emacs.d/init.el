@@ -585,3 +585,13 @@ to running the screenshot command."
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+;;----------------------------------------
+;; Print emacs startup time.
+;;
+;; (Overrides default minibuffer message
+;; immediately after emacs startup.)
+;;----------------------------------------
+
+(defun display-startup-echo-area-message ()
+  (message "emacs startup time: %s" (emacs-init-time)))
