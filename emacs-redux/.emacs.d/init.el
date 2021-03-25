@@ -138,12 +138,30 @@ and echo it in the minibuffer."
  benv/major-mode-leader-key nil)
 
 ;;----------------------------------------
+;; file management
+;;----------------------------------------
+
+;; based on http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
+(defun benv/delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if filename
+        (if (y-or-n-p (concat "Do you really want to delete file " filename " ?"))
+            (progn
+              (delete-file filename)
+              (message "deleted file %s" filename)
+              (kill-buffer)))
+      (message "Not a file visiting buffer!"))))
+
+;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
 
 (general-def 'motion
   :prefix benv/evil-leader-key
   "f s" 'save-buffer
+  "f D" 'benv/delete-file-and-buffer
   "q q" 'save-buffers-kill-terminal
   "t l" 'visual-line-mode
   "t w" 'whitespace-mode
