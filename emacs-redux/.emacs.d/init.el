@@ -256,6 +256,7 @@ and echo it in the minibuffer."
            "* TODO %?\n%i" :prepend t)
           ("w" "workflow" entry (file "~/Sync/notes/20210325103700_workflow_todo.org")
            "* TODO %?\n%i" :prepend t)))
+  (add-hook 'org-capture-mode-hook 'evil-insert-state)
   (use-package orgit)
   :general
   ('motion
