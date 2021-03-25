@@ -273,7 +273,7 @@ and echo it in the minibuffer."
 
 (use-package org-roam
   :load-path "~/.emacs.d/site-lisp/org-roam"
-  :hook (org-mode . org-roam-mode)
+  :hook (after-init . org-roam-mode)
   :general
   ('motion
    :prefix benv/major-mode-leader-key
