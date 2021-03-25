@@ -160,6 +160,7 @@ and echo it in the minibuffer."
 
 (general-def 'motion
   :prefix benv/evil-leader-key
+  "d d" 'dired-jump
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
   "q q" 'save-buffers-kill-terminal
