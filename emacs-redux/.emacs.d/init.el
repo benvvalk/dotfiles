@@ -584,7 +584,13 @@ to running the screenshot command."
   :general
   ;; make C-d do PageDown (like vim) instead of delete character
   ('normal shell-mode-map
-    "C-d" 'evil-scroll-down))
+    "C-d" 'evil-scroll-down)
+  :config
+  ;; Open shell-mode in the currently selected window.
+  ;; (By default emacs uses `pop-to-buffer` to select
+  ;; the buffer for shell-mode.)
+  (add-to-list 'display-buffer-alist
+        `(,(rx bos "*shell*") display-buffer-same-window)))
 
 ;;----------------------------------------
 ;; Windows clipboard integration
