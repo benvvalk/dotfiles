@@ -251,11 +251,18 @@ and echo it in the minibuffer."
         (plist-put org-format-latex-options :scale 1.75))
   ;; preview all latex fragments in an .org file by default
   (setq org-startup-with-latex-preview t)
+  (setq org-capture-templates
+        '(("i" "inbox" entry (file "~/Sync/notes/20210325174000_inbox.org")
+           "* TODO %?\n%i" :prepend t)
+          ("w" "workflow" entry (file "~/Sync/notes/20210325103700_workflow_todo.org")
+           "* TODO %?\n%i" :prepend t)))
   (use-package orgit)
   :general
   ('motion
    :prefix benv/evil-leader-key
    "o a" 'org-agenda-list)
+  ('motion
+   "C-c c" 'org-capture)
   ('motion org-mode-map
    "TAB" 'org-cycle
    "RET" 'org-open-at-point)
