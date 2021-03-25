@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eux -o pipefail
+
+# Select a screen rectangle with the mouse and copy it to the X11
+# clipboard in PNG format.
+
+temp_file=$(mktemp --tmpdir scrot.XXXXXX.png)
+scrot -s $temp_file
+xclip -selection clipboard -t image/png < $temp_file
+
+
