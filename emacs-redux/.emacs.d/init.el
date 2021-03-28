@@ -29,9 +29,10 @@
     kept-old-versions 5
     version-control t)
 
-;; "Auto-revert" means that when a file changes
-;; "behind emacs back", emacs should automatically
-;; update any buffers backed by that file.
+;; "Auto-revert" means that whenever a file is changed
+;; outside of emacs, any buffers visiting that file
+;; should be updated (reverted) to match the file on
+;; disk.
 
 (global-auto-revert-mode)
 
