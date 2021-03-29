@@ -1,11 +1,14 @@
+/emacs-redux/.emacs.d/.cache/
+/emacs-redux/.emacs.d/url/
 /emacs-redux/.emacs.d/elpa/gnupg/
 /emacs-redux/.gnupg/
 
 # emacs: compiled elisp files
 /emacs-redux/.emacs.d/elpa/**/*.elc
 
-# emacs: package descriptions downloaded while browing `list-packages` 
+# emacs: package manager files
 /emacs-redux/.emacs.d/elpa/*.txt
+/emacs-redux/.emacs.d/elpa/*/archive-contents
 
 # emacs: history files
 /emacs-redux/.emacs.d/.org-id-locations
