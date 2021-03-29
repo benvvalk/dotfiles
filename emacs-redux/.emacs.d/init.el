@@ -291,6 +291,7 @@ and echo it in the minibuffer."
    "C-c p" 'org-cliplink)
   ('motion org-mode-map
    :prefix benv/major-mode-leader-key
+   "o r" 'org-attach-reveal-in-emacs
    "t i" 'org-toggle-inline-images
    "t l" 'org-toggle-link-display
    "t L" 'org-latex-preview
