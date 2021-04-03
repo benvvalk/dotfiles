@@ -623,7 +623,9 @@ to running the screenshot command."
   :general
   ('motion
    :prefix benv/evil-leader-key
-   "$" 'vterm))
+   "$" 'vterm)
+  :config
+  (evil-collection-init 'vterm))
 
 ;;----------------------------------------
 ;; Windows clipboard integration
