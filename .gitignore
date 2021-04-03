@@ -6,9 +6,8 @@
 # emacs: compiled elisp files
 /emacs-redux/.emacs.d/elpa/**/*.elc
 
-# emacs: package manager files
-/emacs-redux/.emacs.d/elpa/*.txt
-/emacs-redux/.emacs.d/elpa/*/archive-contents
+# emacs: package lists downloaded from elpa/melpa/org
+/emacs-redux/.emacs.d/elpa/archives/
 
 # emacs: history files
 /emacs-redux/.emacs.d/.org-id-locations
