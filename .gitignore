@@ -21,3 +21,6 @@
 /emacs-redux/.emacs.d/tramp
 /emacs-redux/.emacs.d/transient/
 
+# emacs: vterm build artifacts
+/emacs-redux/.emacs.d/elpa/vterm-20210326.1458/build/
+/emacs-redux/.emacs.d/elpa/vterm-20210326.1458/vterm-module.so
