@@ -160,7 +160,6 @@ and echo it in the minibuffer."
 
 (general-def 'motion
   :prefix benv/evil-leader-key
-  "$"   'shell
   "d d" 'dired-jump
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
@@ -606,6 +605,16 @@ to running the screenshot command."
   ;; the buffer for shell-mode.)
   (add-to-list 'display-buffer-alist
         `(,(rx bos "*shell*") display-buffer-same-window)))
+
+;;----------------------------------------
+;; vterm
+;;----------------------------------------
+
+(use-package vterm
+  :general
+  ('motion
+   :prefix benv/evil-leader-key
+   "$" 'vterm))
 
 ;;----------------------------------------
 ;; Windows clipboard integration
