@@ -102,6 +102,12 @@
 (setq benv/major-mode-leader-key ",")
 
 (use-package evil
+  :init
+  ;; evil-collection requires the following settings before
+  ;; loading evil and evil-collection. (See evil-collection
+  ;; README for further details.)
+  (setq evil-want-keybinding nil
+        evil-want-integration t)
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil))
@@ -110,6 +116,9 @@
   :after evil
   :config
   (global-evil-surround-mode 1))
+
+(use-package evil-collection
+  :after evil)
 
 ;;----------------------------------------
 ;; get file path for current buffer
