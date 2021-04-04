@@ -120,6 +120,9 @@
 (use-package evil-collection
   :after evil
   :config
+  (setq evil-collection-key-blacklist
+        (list benv/evil-leader-key
+              benv/major-mode-leader-key))
   (evil-collection-init))
 
 ;;----------------------------------------
