@@ -118,7 +118,9 @@
   (global-evil-surround-mode 1))
 
 (use-package evil-collection
-  :after evil)
+  :after evil
+  :config
+  (evil-collection-init))
 
 ;;----------------------------------------
 ;; get file path for current buffer
@@ -623,9 +625,7 @@ to running the screenshot command."
   :general
   ('motion
    :prefix benv/evil-leader-key
-   "$" 'vterm)
-  :config
-  (evil-collection-init 'vterm))
+   "$" 'vterm))
 
 ;;----------------------------------------
 ;; Windows clipboard integration
