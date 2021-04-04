@@ -100,6 +100,7 @@
 
 (setq benv/evil-leader-key "SPC")
 (setq benv/major-mode-leader-key ",")
+(setq benv/evil-insert-mode-leader-key "S-SPC")
 
 (use-package evil
   :init
@@ -122,7 +123,8 @@
   :config
   (setq evil-collection-key-blacklist
         (list benv/evil-leader-key
-              benv/major-mode-leader-key))
+              benv/major-mode-leader-key
+              benv/evil-insert-mode-leader-key))
   (evil-collection-init))
 
 ;;----------------------------------------
@@ -172,8 +174,10 @@ and echo it in the minibuffer."
 ;; basic keybindings
 ;;----------------------------------------
 
-(general-def 'motion
+(general-def
+  :states '(motion insert emacs)
   :prefix benv/evil-leader-key
+  :non-normal-prefix benv/evil-insert-mode-leader-key
   "d d" 'dired-jump
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
@@ -202,8 +206,9 @@ and echo it in the minibuffer."
   ;; so that my evil leader key
   ;; behaves normally in dired
   (:keymaps 'compilation-mode-map "SPC" nil)
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "c c" 'compile
    "c r" 'recompile))
 
@@ -233,8 +238,9 @@ and echo it in the minibuffer."
   ;; the beginning of ivy input by default
   (setq ivy-initial-inputs-alist nil)
   :general
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "b b" 'ivy-switch-buffer
    "b d" 'kill-this-buffer
    "i r" 'ivy-resume)
@@ -246,8 +252,9 @@ and echo it in the minibuffer."
   :general
   ('motion
    "M-x" 'counsel-M-x)
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "c r" 'counsel-rg
    "f f" 'counsel-find-file
    "f r" 'counsel-recentf
@@ -357,9 +364,11 @@ and echo it in the minibuffer."
 (use-package dired
   :general
   ;; Unset default "SPC" binding
-  ;; so that my evil leader key
+  ;; so that my evil leader keys
   ;; behaves normally in dired
-  (:keymaps 'dired-mode-map "SPC" nil)
+  (:keymaps 'dired-mode-map
+        benv/evil-leader-key nil
+        benv/evil-insert-mode-leader-key nil)
   :config
   ;; Confirm/cancel by pressing single 'y'/'n' key.
   ;; (The default is to spell out "yes" or "no").
@@ -407,9 +416,10 @@ and echo it in the minibuffer."
                 magit-log-mode-map
                 magit-diff-mode-map)
                 "SPC" nil)
-    ('motion
-    :prefix benv/evil-leader-key
-    "g s" 'magit-status)
+    (:states '(motion insert emacs)
+     :prefix benv/evil-leader-key
+     :non-normal-prefix benv/evil-insert-mode-leader-key
+     "g s" 'magit-status)
   :config
     ;; display magit status buffer in currently
     ;; selected window (not the "other" window)
@@ -433,8 +443,9 @@ and echo it in the minibuffer."
 
 (use-package counsel-projectile
   :general
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "p p" 'counsel-projectile-switch-project
    "p f" 'counsel-projectile-find-file))
 
@@ -444,8 +455,10 @@ and echo it in the minibuffer."
 
 (winner-mode)
 
-(general-def 'motion
+(general-def
+  :states '(motion insert emacs)
   :prefix benv/evil-leader-key
+  :non-normal-prefix benv/evil-insert-mode-leader-key
   "w u" 'winner-undo
   "w U" 'winner-redo
   "w r" 'winner-redo)
@@ -468,8 +481,9 @@ and echo it in the minibuffer."
   :config
   (winum-mode)
   :general
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "1" 'winum-select-window-1
    "2" 'winum-select-window-2
    "3" 'winum-select-window-3
@@ -488,8 +502,10 @@ and echo it in the minibuffer."
   (switch-to-buffer
    (other-buffer (current-buffer))))
 
-(general-def 'motion
+(general-def
+  :states '(motion insert emacs)
   :prefix benv/evil-leader-key
+  :non-normal-prefix benv/evil-insert-mode-leader-key
   "TAB" 'benv/switch-to-previous-buffer)
 
 ;;----------------------------------------
@@ -531,8 +547,9 @@ and echo it in the minibuffer."
 
 (use-package calfw-org
   :general
-  ('motion
+  (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "o c" 'cfw:open-org-calendar))
 
 ;;----------------------------------------
