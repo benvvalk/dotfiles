@@ -179,6 +179,7 @@ and echo it in the minibuffer."
   :prefix benv/evil-leader-key
   :non-normal-prefix benv/evil-insert-mode-leader-key
   "d d" 'dired-jump
+  "e b" 'eval-buffer
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
   "q q" 'save-buffers-kill-terminal
