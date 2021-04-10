@@ -198,6 +198,12 @@ and echo it in the minibuffer."
   "C-u" 'evil-scroll-up)
 
 ;;----------------------------------------
+;; piglet.el
+;;----------------------------------------
+
+(load-file "~/.emacs.d/site-lisp/piglet/piglet.el")
+
+;;----------------------------------------
 ;; compilation mode
 ;;----------------------------------------
 
