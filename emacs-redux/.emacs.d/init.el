@@ -179,7 +179,6 @@ and echo it in the minibuffer."
   :states '(motion insert emacs)
   :prefix benv/evil-leader-key
   :non-normal-prefix benv/evil-insert-mode-leader-key
-  "d d" 'dired-jump
   "e b" 'eval-buffer
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
@@ -377,6 +376,16 @@ and echo it in the minibuffer."
   (:keymaps 'dired-mode-map
         benv/evil-leader-key nil
         benv/evil-insert-mode-leader-key nil)
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "d d" 'dired-jump
+   "d h" '(lambda () (interactive) (dired "~"))
+   "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
+   "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
+   "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
+   "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp"))
+   "c r" 'recompile)
   :config
   ;; Confirm/cancel by pressing single 'y'/'n' key.
   ;; (The default is to spell out "yes" or "no").
