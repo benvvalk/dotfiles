@@ -388,6 +388,7 @@ and echo it in the minibuffer."
    "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp"))
    "c r" 'recompile)
   :config
+  (setq dired-dwim-target t)
   ;; Confirm/cancel by pressing single 'y'/'n' key.
   ;; (The default is to spell out "yes" or "no").
   (setq dired-deletion-confirmer #'y-or-n-p)
