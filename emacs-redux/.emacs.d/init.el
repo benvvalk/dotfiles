@@ -667,6 +667,16 @@ to running the screenshot command."
    "$" 'vterm))
 
 ;;----------------------------------------
+;; emacs-lisp-mode
+;;----------------------------------------
+
+(use-package lispy
+  :hook (emacs-lisp-mode . lispy-mode))
+
+(use-package show-paren-mode
+  :hook (emacs-lisp-mode . show-paren-mode))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
