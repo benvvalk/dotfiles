@@ -183,6 +183,7 @@ and echo it in the minibuffer."
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
   "q q" 'save-buffers-kill-terminal
+  "h m" 'woman
   "t l" 'visual-line-mode
   "t w" 'whitespace-mode
   "u"   'universal-argument
