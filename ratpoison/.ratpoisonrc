@@ -1,11 +1,21 @@
-# create 9 workspaces on each monitor
-exec rpws init 9 -k
+# set desktop background color to black
+exec xsetroot -solid black
+
+# switch to dvorak keyboard map
+exec setxkbmap dvorak
+
+# swap CapsLock and Escape keys
+exec xmodmap ~/.Xmodmap
 
 # improve behaviour of java programs
 exec wmname LG3D
 
-# swap CapsLock and Escape keys
-exec xmodmap ~/.Xmodmap
+# adjust monitor color/brightness based on time of day
+exec redshift -l geoclue2
+
+# start frequently-used apps
+exec emacs
+exec firefox
 
 # font
 set font Mono-18
