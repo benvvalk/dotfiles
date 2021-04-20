@@ -250,6 +250,8 @@ and echo it in the minibuffer."
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "b b" 'ivy-switch-buffer
    "b d" 'kill-this-buffer
+   "b r" 'rename-buffer
+   "b R" 'rename-buffer
    "i r" 'ivy-resume)
   (:keymaps 'ivy-minibuffer-map
             "C-o" 'ivy-call
