@@ -217,8 +217,7 @@ and echo it in the minibuffer."
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "c c" 'compile
-   "c r" 'recompile))
+   "c c" 'compile))
 
 ;;----------------------------------------
 ;; ediff
