@@ -283,6 +283,23 @@ and echo it in the minibuffer."
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . visual-line-mode)
   :config
+  ;; Set foreground/background colors for all headings to black/gray.
+  ;; By default, the "leuven" theme sets each heading level to very
+  ;; different colors, resulting in an ugly rainbow effect that I find
+  ;; very distracting.
+  (dolist (face '(org-level-1 org-level-2 org-level-3
+                  org-level-4 org-level-5 org-level-6
+                  org-level-7 org-level-8))
+    (set-face-attribute face nil
+                        :foreground "#3C3C3C" :background "#F0F0F0"
+                        :underline nil :overline nil))
+  ;; Change "TODO" foreground/background colors to green/gray,
+  ;; which I find more soothing than the "leuven" theme's default
+  ;; red/pink colors.
+  (set-face-attribute 'org-todo nil
+                        :background "#F0F0F0" ;"SeaGreen1"
+                        :foreground "SeaGreen4"
+                        :box '(:line-width 1 :color "SeaGreen4"))
   ;; align body text with parent org heading/bullet
   (setq org-startup-indented t)
   ;; when following links (org-open-at-point), open the
