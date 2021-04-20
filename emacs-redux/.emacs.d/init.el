@@ -450,9 +450,6 @@ and echo it in the minibuffer."
     (add-hook 'magit-diff-mode-hook 'remove-dos-eol)
     (use-package orgit))
 
-(use-package evil-magit
-  :after (evil magit))
-
 ;;----------------------------------------
 ;; projectile
 ;;----------------------------------------
