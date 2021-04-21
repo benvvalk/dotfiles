@@ -2,10 +2,7 @@
 exec xsetroot -solid black
 
 # switch to dvorak keyboard map
-exec setxkbmap dvorak
-
-# swap CapsLock and Escape keys
-exec xmodmap ~/.Xmodmap
+exec bash -c 'setxkbmap dvorak && xmodmap ~/.Xmodmap'
 
 # improve behaviour of java programs
 exec wmname LG3D
