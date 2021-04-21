@@ -17,15 +17,6 @@
 
 (setq inhibit-startup-message t)
 
-;;----------------------------------------
-;; savehist-mode
-;;----------------------------------------
-
-;; save minibuffer command history between sessions
-(use-package savehist
-  :config
-  (savehist-mode))
-
 ;----------------------------------------
 ;; file backups / auto-revert
 ;;----------------------------------------
@@ -103,6 +94,15 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+
+;;----------------------------------------
+;; savehist-mode
+;;----------------------------------------
+
+;; save minibuffer command history between sessions
+(use-package savehist
+  :config
+  (savehist-mode))
 
 ;;----------------------------------------
 ;; evil
