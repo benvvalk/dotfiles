@@ -715,7 +715,20 @@ to running the screenshot command."
 ;;----------------------------------------
 
 (use-package lispy
-  :hook (emacs-lisp-mode . lispy-mode))
+  :hook (emacs-lisp-mode . lispy-mode)
+  :general
+  (:keymaps 'lispy-mode-map
+   :states '(motion insert emacs)
+   :prefix "C-c"
+   "f" 'lispy-ace-paren
+   "h" 'lispy-left
+   "l" 'lispy-right)
+  :config
+  ;; Add some custom lispy key bindings, beyond the
+  ;; ones provided by evil-collection in
+  ;; ~/.emacs.d/elpa/evil-collection-20210401.1012/modes/lispy/evil-collection-lispy.el
+  (let ((map evil-collection-lispy-mode-map-special))
+    (lispy-define-key map "M-(" 'lispy-wrap-round)))
 
 (use-package show-paren-mode
   :hook (emacs-lisp-mode . show-paren-mode))
