@@ -138,17 +138,6 @@
   (evil-collection-init))
 
 ;;----------------------------------------
-;; get file path for current buffer
-;;----------------------------------------
-
-(defun benv/yank-filename ()
-  "Yank absolute file path for current buffer
-and echo it in the minibuffer."
-  (interactive)
-  (kill-new (buffer-file-name))
-  (message (buffer-file-name)))
-
-;;----------------------------------------
 ;; general.el
 ;;----------------------------------------
 
@@ -192,6 +181,13 @@ and echo it in the minibuffer."
         (progn
           (rename-file filename new-filename 1)
           (set-visited-file-name new-filename t t))))))
+
+(defun benv/yank-filename ()
+  "Yank absolute file path for current buffer
+and echo it in the minibuffer."
+  (interactive)
+  (kill-new (buffer-file-name))
+  (message (buffer-file-name)))
 
 ;;----------------------------------------
 ;; basic keybindings
