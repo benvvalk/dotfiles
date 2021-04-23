@@ -110,7 +110,7 @@
 
 (setq benv/evil-leader-key "SPC")
 (setq benv/major-mode-leader-key ",")
-(setq benv/evil-insert-mode-leader-key "S-SPC")
+(setq benv/evil-insert-mode-leader-key "C-SPC")
 
 (use-package evil
   :init
