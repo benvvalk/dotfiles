@@ -379,7 +379,6 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 
 (use-package org-roam
-  :load-path "~/.emacs.d/site-lisp/org-roam"
   :hook (after-init . org-roam-mode)
   :general
   ('motion
@@ -391,7 +390,6 @@ and echo it in the minibuffer."
    "C-c r i" 'org-roam-insert)
   :config
   (setq org-roam-directory "~/Sync/notes")
-  (org-roam--build-cache-async)
   (org-roam-mode))
 
 ;;----------------------------------------
