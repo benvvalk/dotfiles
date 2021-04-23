@@ -698,7 +698,7 @@ to running the screenshot command."
   ;; (By default emacs uses `pop-to-buffer` to select
   ;; the buffer for shell-mode.)
   (add-to-list 'display-buffer-alist
-        `(,(rx bos "*shell*") display-buffer-same-window)))
+               `(,(rx bos "*shell*") display-buffer-same-window)))
 
 ;;----------------------------------------
 ;; vterm
