@@ -180,6 +180,19 @@ and echo it in the minibuffer."
               (kill-buffer)))
       (message "Not a file visiting buffer!"))))
 
+;; based on https://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
+(defun benv/rename-file-and-buffer ()
+  "Renames the current buffer and underlying file."
+  (interactive)
+  (let ((name (buffer-name))
+        (filename (buffer-file-name)))
+    (if (not filename)
+        (message "Buffer '%s' is not visiting a file!" name)
+      (let ((new-filename (read-file-name default-directory)))
+        (progn
+          (rename-file filename new-filename 1)
+          (set-visited-file-name new-filename t t))))))
+
 ;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
@@ -191,6 +204,7 @@ and echo it in the minibuffer."
   "e b" 'eval-buffer
   "f s" 'save-buffer
   "f D" 'benv/delete-file-and-buffer
+  "f R" 'benv/rename-file-and-buffer
   "q q" 'save-buffers-kill-terminal
   "h m" 'woman
   "t l" 'visual-line-mode
