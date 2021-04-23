@@ -17,6 +17,14 @@
 
 (setq inhibit-startup-message t)
 
+;; Change all confirmation prompts to require
+;; only a single character ('y' or 'n'), rather
+;; than typing out the entire word ("yes" or "no").
+;; I find the full-word prompts quite annoying,
+;; even if they are a bit safer.
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;----------------------------------------
 ;; file backups / auto-revert
 ;;----------------------------------------
