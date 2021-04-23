@@ -318,6 +318,7 @@ and echo it in the minibuffer."
                   org-level-4 org-level-5 org-level-6
                   org-level-7 org-level-8))
     (set-face-attribute face nil
+                        :height 1.0
                         :foreground "#3C3C3C" :background "#F0F0F0"
                         :underline nil :overline nil))
   ;; Change "TODO" foreground/background colors to green/gray,
