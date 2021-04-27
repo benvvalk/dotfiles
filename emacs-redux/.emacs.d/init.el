@@ -282,7 +282,7 @@ and echo it in the minibuffer."
    "i r" 'ivy-resume)
   (:keymaps 'ivy-minibuffer-map
             "C-o" 'ivy-call
-            "C-RET" 'ivy-call))
+            "<C-return>" 'ivy-immediate-done))
 
 (use-package counsel
   :general
