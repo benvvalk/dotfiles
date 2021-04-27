@@ -430,8 +430,7 @@ and echo it in the minibuffer."
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
    "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
-   "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp"))
-   "c r" 'recompile)
+   "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp")))
   :config
   (setq dired-dwim-target t)
   ;; Confirm/cancel by pressing single 'y'/'n' key.
