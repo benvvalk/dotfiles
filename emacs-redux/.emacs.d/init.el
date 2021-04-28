@@ -731,6 +731,13 @@ to running the screenshot command."
   :hook (emacs-lisp-mode . show-paren-mode))
 
 ;;----------------------------------------
+;; ledger-mode
+;;----------------------------------------
+
+(use-package ledger-mode
+  :mode ("\\.ledger'" . ledger-mode))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
