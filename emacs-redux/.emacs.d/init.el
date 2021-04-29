@@ -381,10 +381,12 @@ and echo it in the minibuffer."
 (use-package org-roam
   :hook (after-init . org-roam-mode)
   :general
-  ('motion
+  ('motion org-mode-map
    :prefix benv/major-mode-leader-key
    "r b" 'org-roam
-   "r i" 'org-roam-insert
+   "r i" 'org-roam-insert)
+  ('motion
+   :prefix benv/evil-leader-key
    "r f" 'org-roam-find-file)
   ('insert
    "C-c r i" 'org-roam-insert)
