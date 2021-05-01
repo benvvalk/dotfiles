@@ -299,8 +299,9 @@ and echo it in the minibuffer."
    "b R" 'rename-buffer
    "i r" 'ivy-resume)
   (:keymaps 'ivy-minibuffer-map
-            "C-o" 'ivy-call
-            "<C-return>" 'ivy-immediate-done))
+   :states '(motion insert emacs)
+   "C-o" 'ivy-call
+   "<C-return>" 'ivy-immediate-done))
 
 (use-package counsel
   :general
