@@ -113,6 +113,12 @@
   (savehist-mode))
 
 ;;----------------------------------------
+;; general.el
+;;----------------------------------------
+
+(use-package general)
+
+;;----------------------------------------
 ;; evil
 ;;----------------------------------------
 
@@ -127,6 +133,13 @@
   ;; README for further details.)
   (setq evil-want-keybinding nil
         evil-want-integration t)
+  :general
+  ;; Unbind "," and "SPC" so I can use them as prefix
+  ;; keys, without getting "Key sequence starts
+  ;; with non-prefix key" error.
+  (:states '(motion normal visual operator)
+   benv/evil-leader-key nil
+   benv/major-mode-leader-key nil)
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil))
@@ -144,21 +157,6 @@
               benv/major-mode-leader-key
               benv/evil-insert-mode-leader-key))
   (evil-collection-init))
-
-;;----------------------------------------
-;; general.el
-;;----------------------------------------
-
-(use-package general)
-
-;; Unbind "," and "SPC" so I can use them as prefix
-;; keys, without getting "Key sequence starts
-;; with non-prefix key" error.
-
-(general-define-key
- :states '(motion normal visual operator)
- benv/evil-leader-key nil
- benv/major-mode-leader-key nil)
 
 ;;----------------------------------------
 ;; file management
