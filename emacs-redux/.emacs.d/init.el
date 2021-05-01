@@ -25,6 +25,17 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;;----------------------------------------
+;; minibuffer settings
+;;----------------------------------------
+
+;; Enable recursive minibuffers. Among other uses
+;; cases, this allows you to run a command with M-x
+;; while you are editing text in the minibuffer.
+
+(setq enable-recursive-minibuffers t)
+(minibuffer-depth-indicate-mode)
+
 ;----------------------------------------
 ;; file backups / auto-revert
 ;;----------------------------------------
