@@ -150,7 +150,16 @@
   (global-evil-surround-mode 1))
 
 (use-package evil-collection
+  :defer nil
   :after evil
+  :general
+  (:keymaps 'minibuffer-local-shell-command-map
+   :states '(motion insert emacs)
+   "C-n" 'next-history-element
+   "C-p" 'previous-history-element
+   "C-r" 'isearch-backward)
+  :init
+  (setq evil-collection-setup-minibuffer t)
   :config
   (setq evil-collection-key-blacklist
         (list benv/evil-leader-key
