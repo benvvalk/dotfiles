@@ -163,12 +163,6 @@
 (use-package evil-collection
   :defer nil
   :after evil
-  :general
-  (:keymaps 'minibuffer-local-shell-command-map
-   :states '(motion insert emacs)
-   "C-n" 'next-history-element
-   "C-p" 'previous-history-element
-   "C-r" 'isearch-backward)
   :init
   (setq evil-collection-setup-minibuffer t)
   :config
@@ -717,6 +711,31 @@ to running the screenshot command."
   ;; the buffer for shell-mode.)
   (add-to-list 'display-buffer-alist
                `(,(rx bos "*shell*") display-buffer-same-window)))
+
+;;----------------------------------------
+;; shell-command / async-shell-command
+;;----------------------------------------
+
+(use-package simple
+  :commands (shell-command async-shell-command)
+  :init
+  ;; Use ivy for reverse search through shell-command
+  ;; history (Ctrl-R).
+  ;; Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000
+  (defun counsel-shell-command-history ()
+    (interactive)
+    (ivy-read "cmd: " shell-command-history
+              :action 'insert
+              :caller 'counsel-shell-command-history))
+  :general
+  (:keymaps 'minibuffer-local-shell-command-map
+   :states '(motion insert emacs)
+   "C-a" 'move-beginning-of-line
+   "C-e" 'move-end-of-line
+   "C-k" 'kill-line
+   "C-n" 'next-history-element
+   "C-p" 'previous-history-element
+   "C-r" 'counsel-shell-command-history))
 
 ;;----------------------------------------
 ;; vterm
