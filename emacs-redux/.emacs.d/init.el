@@ -309,6 +309,16 @@ and echo it in the minibuffer."
    "f r" 'counsel-recentf
    "p r" 'counsel-projectile-rg))
 
+(use-package counsel-web
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "g g" 'counsel-web-search)
+  :config
+  (setq counsel-web-search-action #'browse-url)
+  (setq counsel-web-engine 'google))
+
 (use-package swiper
   :general
   ('motion
