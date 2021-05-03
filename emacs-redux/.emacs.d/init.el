@@ -735,10 +735,26 @@ to running the screenshot command."
 (use-package simple
   :commands (shell-command async-shell-command)
   :init
-  ;; Use ivy for reverse search through shell-command
-  ;; history (Ctrl-R).
-  ;; Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000
+  (defun set-exec-path-from-shell-path ()
+    "Set up Emacs' `exec-path' and PATH environment variable to match
+that used by the user's shell.
+
+This is particularly useful under Mac OS X and macOS, where GUI
+apps are not started from a shell.
+
+Source: https://www.emacswiki.org/emacs/ExecPath"
+    (interactive)
+    (let ((path-from-shell (replace-regexp-in-string
+                            "[ \t\n]*$" ""
+                            (shell-command-to-string
+                             "$SHELL --login -c 'echo $PATH' 2>/dev/null"))))
+      (setenv "PATH" path-from-shell)
+      (setq exec-path (split-string path-from-shell path-separator))))
   (defun counsel-shell-command-history ()
+    "Search shell-command-history with ivy and insert
+result into current buffer (e.g. minibuffer).
+
+Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
     (interactive)
     (ivy-read "cmd: " shell-command-history
               :action 'insert
@@ -751,7 +767,9 @@ to running the screenshot command."
    "C-k" 'kill-line
    "C-n" 'next-history-element
    "C-p" 'previous-history-element
-   "C-r" 'counsel-shell-command-history))
+   "C-r" 'counsel-shell-command-history)
+  :config
+  (set-exec-path-from-shell-path))
 
 ;;----------------------------------------
 ;; vterm
