@@ -401,6 +401,11 @@ and echo it in the minibuffer."
 ;; org-roam
 ;;----------------------------------------
 
+(defun benv/grep-notes ()
+  "Run ripgrep on my notes using counsel-rg."
+  (interactive)
+  (counsel-rg nil "~/Sync/notes" nil "grep notes: "))
+
 (use-package org-roam
   :hook (after-init . org-roam-mode)
   :general
@@ -410,7 +415,8 @@ and echo it in the minibuffer."
    "r i" 'org-roam-insert)
   ('motion
    :prefix benv/evil-leader-key
-   "r f" 'org-roam-find-file)
+   "r f" 'org-roam-find-file
+   "r g" 'benv/grep-notes)
   ('insert
    "C-c r i" 'org-roam-insert)
   :config
