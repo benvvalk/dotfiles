@@ -96,10 +96,6 @@ definekey top s-S exec ratpoison -c 'source .ratpoisonrc'
 definekey top C-M-p exec run-program
 definekey top s-p exec run-program
 
-# google search
-definekey top C-M-g exec dmenu-google || true
-definekey top s-g exec dmenu-google || true
-
 # bring window to current frame
 definekey top C-M-b exec bring-window
 definekey top s-b exec bring-window
