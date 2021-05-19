@@ -772,6 +772,14 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (set-exec-path-from-shell-path))
 
 ;;----------------------------------------
+;; shelldon
+;; https://github.com/Overdr0ne/shelldon
+;;----------------------------------------
+
+(use-package shelldon
+  :load-path "~/.emacs.d/site-lisp/shelldon")
+
+;;----------------------------------------
 ;; vterm
 ;;----------------------------------------
 
