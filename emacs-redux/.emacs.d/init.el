@@ -782,7 +782,11 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "x" 'shelldon))
+   "x" nil
+   "x x" 'shelldon
+   "x h" 'shelldon-output-history)
+  :init
+  (evil-set-initial-state 'shell-mode 'normal))
 
 ;;----------------------------------------
 ;; vterm
