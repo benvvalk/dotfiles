@@ -101,11 +101,7 @@ the change and re-execute in the new context."
 
 (add-to-list 'display-buffer-alist
 	     `("*\\(shelldon.*\\)"
-	       (display-buffer-reuse-window display-buffer-in-previous-window display-buffer-in-side-window)
-	       (side . right)
-	       (slot . 0)
-	       (window-width . 80)
-	       (reusable-frames . visible)))
+	       (display-buffer-same-window)))
 
 (provide 'shelldon)
 
