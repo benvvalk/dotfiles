@@ -777,7 +777,12 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 ;;----------------------------------------
 
 (use-package shelldon
-  :load-path "~/.emacs.d/site-lisp/shelldon")
+  :load-path "~/.emacs.d/site-lisp/shelldon"
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "x" 'shelldon))
 
 ;;----------------------------------------
 ;; vterm
