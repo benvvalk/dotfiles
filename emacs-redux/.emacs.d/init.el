@@ -480,6 +480,52 @@ and echo it in the minibuffer."
     "h" 'dired-up-directory
     "l" 'dired-find-file))
 
+;; Press "f" in a dired buffer to trigger fast directory
+;; filtering/navigation using `dired-narrow`. Currently I
+;; am using my own patched copy of `dired-narrow.el` which
+;; contains a couple of minor bug fixes (see
+;; ~/.emacs.d/site-lisp/dired-narrow/README.md).
+(use-package dired-narrow
+  :load-path "~/.emacs.d/site-lisp/dired-narrow"
+  :init
+  (defun benv/dired-narrow-recurse ()
+    (let ((filename (dired-utils-get-filename)))
+      (revert-buffer)
+      (dired-find-file)
+      (when (file-directory-p filename)
+        (dired-narrow))))
+  (defun benv/dired-narrow-up-directory ()
+    (interactive)
+    (ivy-quit-and-run
+      (revert-buffer)
+      (dired-up-directory)
+      (dired-narrow)))
+  (defun benv/dired-narrow-goto-first-file ()
+    (interactive)
+    (with-current-buffer
+        dired-narrow-buffer
+        (while (dired-hacks-previous-file))))
+  (defun benv/dired-narrow-goto-last-file ()
+    (interactive)
+    (with-current-buffer dired-narrow-buffer
+      (forward-line -1)
+      (while (dired-hacks-next-file))
+      (dired-hacks-previous-file)))
+  :general
+  (:keymaps 'dired-mode-map
+   :states 'normal
+   "f" 'dired-narrow)
+  (:keymaps 'dired-narrow-map
+   :states '(motion insert emacs)
+   "<C-backspace>" 'benv/dired-narrow-up-directory
+   "M-<" 'benv/dired-narrow-goto-first-file
+   "M->" 'benv/dired-narrow-goto-last-file
+   "C-n" 'dired-narrow-next-file
+   "C-p" 'dired-narrow-previous-file)
+  :config
+  (setq dired-narrow-exit-action 'benv/dired-narrow-recurse)
+  (setq dired-narrow-exit-when-one-left nil))
+
 ;; Use hl-line-mode to highlight the current
 ;; file/directory line in dired
 (use-package hl-line-mode
