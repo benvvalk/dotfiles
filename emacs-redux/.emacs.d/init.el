@@ -469,7 +469,7 @@ and echo it in the minibuffer."
   (setq dired-deletion-confirmer #'y-or-n-p)
   ;; Don't prompt when recursively deleting directories. (Just do it.)
   (setq dired-recursive-deletes 'always)
-  (setq dired-listing-switches "-hal --group-directories-first")
+  (setq dired-listing-switches "-hAl --group-directories-first")
   ;; general.el has a bug where it clobbers
   ;; the user's custom hjkl bindings
   ;; for a mode by running `evil-add-hjkl-bindings`.
