@@ -1,2 +1,4 @@
  bind J tabnext
  bind K tabprev
+ bind j scrollline 2
+ bind k scrollline -2
