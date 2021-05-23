@@ -456,6 +456,7 @@ and echo it in the minibuffer."
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "d d" 'dired-jump
+   "d /" '(lambda () (interactive) (dired "/"))
    "d e" '(lambda () (interactive) (dired "~/.emacs.d/"))
    "d h" '(lambda () (interactive) (dired "~"))
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
