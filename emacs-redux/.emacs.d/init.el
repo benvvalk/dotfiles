@@ -567,6 +567,7 @@ and echo it in the minibuffer."
     (setq magit-display-buffer-function
           'magit-display-buffer-same-window-except-diff-v1)
     (setq magit-log-margin '(nil age magit-log-margin-width t 18))
+    (setq magit-diff-refine-hunk t)
     ;; hide windows line endings ("^M") in magit status buffer
     (add-hook 'magit-status-mode-hook 'remove-dos-eol)
     (add-hook 'magit-diff-mode-hook 'remove-dos-eol)
