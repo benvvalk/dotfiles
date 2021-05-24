@@ -285,6 +285,9 @@ and echo it in the minibuffer."
   ;; the beginning of ivy input by default
   (setq ivy-initial-inputs-alist nil)
   :general
+  ;; Unbind "SPC" so that evil leader key works in ivy-occur buffers
+  (:keymaps '(ivy-occur-mode-map ivy-occur-grep-mode-map)
+   "SPC" nil)
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
