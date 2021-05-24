@@ -219,6 +219,7 @@ and echo it in the minibuffer."
   :non-normal-prefix benv/evil-insert-mode-leader-key
   "e b" 'eval-buffer
   "f s" 'save-buffer
+  "f C" 'write-file ; behaves like "File -> Save As"
   "f D" 'benv/delete-file-and-buffer
   "f R" 'benv/rename-file-and-buffer
   "q q" 'save-buffers-kill-terminal
