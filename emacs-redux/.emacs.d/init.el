@@ -683,6 +683,16 @@ and echo it in the minibuffer."
   (add-to-list 'company-backends 'company-omnisharp))
 
 ;;----------------------------------------
+;; lsp-mode
+;;----------------------------------------
+
+(use-package lsp
+  :hook (c-mode . lsp-mode)
+  :config
+  (setq lsp-enable-snippet nil)
+  (setq lsp-completion-provider :none))
+
+;;----------------------------------------
 ;; calfw
 ;;----------------------------------------
 
