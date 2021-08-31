@@ -1,0 +1,22 @@
+set incsearch
+set ignorecase
+
+set clipboard+=unnamedplus
+
+nnoremap <Space>pf :action GotoFile<CR>
+
+nnoremap <Space>fs :action SaveAll<CR>
+
+nnoremap <Space>tb :action ToggleLineBreakpoint<CR>
+nnoremap <Space>tw :action EditorToggleShowWhitespaces<CR>
+
+nnoremap <C-T> :action SearchEverywhere<CR>
+
+nnoremap <Space>wm :action Unsplit<CR>
+nnoremap <Space>wv :action SplitVertically<CR>
+nnoremap <Space>ws :action SplitHorizontally<CR>
+nnoremap <Space>wo :action NextSplitter<CR>
+nnoremap <Space>wO :action MoveEditorToOppositeTabGroup<CR>
+
+nnoremap gq :action com.andrewbrookins.idea.wrap.WrapAction<CR>
+vnoremap gq :action com.andrewbrookins.idea.wrap.WrapAction<CR>
