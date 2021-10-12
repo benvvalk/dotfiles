@@ -893,6 +893,13 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   :mode ("\\.ledger'" . ledger-mode))
 
 ;;----------------------------------------
+;; ztree
+;;----------------------------------------
+
+(use-package ztree
+  :commands (ztree-diff ztree-dir))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
