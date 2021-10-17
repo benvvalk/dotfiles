@@ -918,6 +918,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 
 (use-package mu4e
   :load-path "~/share/emacs/site-lisp/mu4e"
+  :commands (mu4e)
   :config
   ;; select package for composing and sending emails
   (setq mail-user-agent 'mu4e-user-agent)
@@ -926,6 +927,8 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (setq mu4e-get-mail-command "mbsync -V awesomesaucelabs")
   ;; automatically run `mu4e-get-mail-command` every 10 minutes
   (setq mu4e-update-interval 600)
+  ;; hack to avoid UID errors when using `mbsync`
+  (setq mu4e-change-filenames-when-moving t)
   ;; reply-to address
   (setq mu4e-reply-to-address "awesomesaucelabs@gmail.com"
     user-mail-address "awesomesaucelabs@gmail.com"
