@@ -1,0 +1,41 @@
+IMAPStore ben.vvalk-remote
+Host imap.gmail.com
+SSLType IMAPS
+AuthMechs *
+User ben.vvalk@gmail.com
+PassCmd "pass email/ben.vvalk@gmail.com"
+
+MaildirStore ben.vvalk-local
+Path ~/Maildir/ben.vvalk/
+Inbox ~/Maildir/ben.vvalk/INBOX
+Subfolders Verbatim
+
+Channel ben.vvalk
+Master :ben.vvalk-remote:
+Slave :ben.vvalk-local:
+Create Both
+Expunge Both
+Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
+SyncState *
+
+#-------------------------------------------------------------
+
+IMAPStore awesomesaucelabs-remote
+Host imap.gmail.com
+SSLType IMAPS
+AuthMechs *
+User awesomesaucelabs@gmail.com
+PassCmd "pass email/awesomesaucelabs@gmail.com"
+
+MaildirStore awesomesaucelabs-local
+Path ~/Maildir/awesomesaucelabs/
+Inbox ~/Maildir/awesomesaucelabs/INBOX
+Subfolders Verbatim
+
+Channel awesomesaucelabs
+Master :awesomesaucelabs-remote:
+Slave :awesomesaucelabs-local:
+Create Both
+Expunge Both
+Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
+SyncState *
