@@ -939,6 +939,14 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
         mu4e-trash-folder "/[Gmail]/Trash")
   ;; don't save sent messages to Sent folder, Gmail/IMAP does this for us
   (setq mu4e-sent-messages-behaviour 'delete)
+  ;; bookmarks (saved queries)
+  (setq mu4e-bookmarks
+        '((:name "inbox (1 month)"
+           :query "maildir:/INBOX date:1m..now"
+           :key ?i)
+          (:name "inbox unread (1 month)"
+           :query "maildir:/INBOX flag:unread date:1m..now"
+           :key ?u)))
   ;; folder shortcuts
   (setq mu4e-maildir-shortcuts
       '( (:maildir "/INBOX"      :key ?i)
