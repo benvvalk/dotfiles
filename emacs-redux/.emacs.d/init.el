@@ -900,6 +900,48 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   :commands (ztree-diff ztree-dir))
 
 ;;----------------------------------------
+;; email (mu4e)
+;;
+;; Setup in this section is based on:
+;; https://www.djcbsoftware.nl/code/mu/mu4e/Gmail-configuration.html
+;;----------------------------------------
+
+(use-package smtpmail
+  :config
+  (setq message-send-mail-function 'smtpmail-send-it
+        smtpmail-starttls-credentials
+        '(("smtp.gmail.com" 587 "awesomesaucelabs@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587
+        smtpmail-debug-info t))
+
+(use-package mu4e
+  :load-path "~/share/emacs/site-lisp/mu4e"
+  :config
+  ;; select package for composing and sending emails
+  (setq mail-user-agent 'mu4e-user-agent)
+  (setq mu4e-maildir "~/Maildir/awesomesaucelabs")
+  ;; reply-to address
+  (setq mu4e-reply-to-address "awesomesaucelabs@gmail.com"
+    user-mail-address "awesomesaucelabs@gmail.com"
+    user-full-name  "Ben Vandervalk")
+  ;; special folder names
+  (setq mu4e-drafts-folder "/[Gmail]/Drafts"
+        mu4e-sent-folder "/[Gmail]/Sent Mail"
+        mu4e-trash-folder "/[Gmail]/Trash")
+  ;; don't save sent messages to Sent folder, Gmail/IMAP does this for us
+  (setq mu4e-sent-messages-behaviour 'delete)
+  ;; folder shortcuts
+  (setq mu4e-maildir-shortcuts
+      '( (:maildir "/INBOX"      :key ?i)
+         (:maildir "/[Gmail]/Sent Mail"  :key ?s)
+         (:maildir "/[Gmail]/Trash"      :key ?t)
+         (:maildir "/[Gmail]/Drafts"     :key ?d)))
+  ;; don't show confirmation prompt when quitting mu4e
+  (setq mu4e-confirm-quit nil))
+
+;;----------------------------------------
 ;; Windows clipboard integration
 ;;----------------------------------------
 
