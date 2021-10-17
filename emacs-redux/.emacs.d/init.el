@@ -922,6 +922,10 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   ;; select package for composing and sending emails
   (setq mail-user-agent 'mu4e-user-agent)
   (setq mu4e-maildir "~/Maildir/awesomesaucelabs")
+  ;; shell command to retrieve new mail
+  (setq mu4e-get-mail-command "mbsync -V awesomesaucelabs")
+  ;; automatically run `mu4e-get-mail-command` every 10 minutes
+  (setq mu4e-update-interval 600)
   ;; reply-to address
   (setq mu4e-reply-to-address "awesomesaucelabs@gmail.com"
     user-mail-address "awesomesaucelabs@gmail.com"
