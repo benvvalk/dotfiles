@@ -470,6 +470,30 @@ and echo it in the minibuffer."
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
    "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp")))
   :config
+  ;; I copied this code from:
+  ;; https://emacs.stackexchange.com/questions/64588/how-do-i-get-all-marked-files-from-all-dired-buffers
+  (defun benv/dired-get-marked-files-all-buffers ()
+    "Return a list of marked files from all Dired buffers."
+    (let ((files  ())
+          (here   ()))
+      (dolist (buf  (mapcar #'cdr dired-buffers))
+        (when (buffer-live-p buf)
+          (with-current-buffer buf
+            (setq here  (dired-get-marked-files nil nil nil t)))
+          (when (or (null (cdr here))  (eq t (car here)))
+            (setq here  (cdr here)))
+          (setq files  (nconc here files))))
+      (setq files  (delete-dups files))))
+  ;; Do a recursive diff on two directories.
+  (defun benv/dired-ztree-diff-marked-files ()
+    (interactive)
+    (let* ((marked-files (benv/dired-get-marked-files-all-buffers))
+           (dir1 (pop marked-files))
+           (dir2 (pop marked-files)))
+      (when (and dir1 dir2)
+        (ztree-diff dir1 dir2))))
+  ;; When two dired buffers are visible, use the "other" dired buffer
+  ;; as the default target for file operations (copy, move, etc.)
   (setq dired-dwim-target t)
   ;; Confirm/cancel by pressing single 'y'/'n' key.
   ;; (The default is to spell out "yes" or "no").
