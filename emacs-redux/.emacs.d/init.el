@@ -944,6 +944,10 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 
 (use-package mu4e
   :load-path "~/share/emacs/site-lisp/mu4e"
+  :general
+  ('motion mu4e-view-mode-map
+   :prefix benv/major-mode-leader-key
+   "a" 'mu4e-view-mime-part-action)
   :commands (mu4e)
   :config
   ;; select package for composing and sending emails
