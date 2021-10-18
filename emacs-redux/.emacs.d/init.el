@@ -268,7 +268,9 @@ and echo it in the minibuffer."
   ;; Override default behaviour of opening ediff control window
   ;; in a new frame. (Show it in a new window along the bottom
   ;; of the current frame instead.)
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  ;; open diffs in a vertical split by default
+  (setq ediff-split-window-function 'split-window-horizontally))
 
 ;;----------------------------------------
 ;; ivy/counsel/swiper
