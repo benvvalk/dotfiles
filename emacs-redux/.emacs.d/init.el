@@ -301,6 +301,8 @@ and echo it in the minibuffer."
   (:keymaps 'ivy-minibuffer-map
    :states '(motion insert emacs)
    "C-o" 'ivy-call
+   "S-C-n" 'ivy-next-line-and-call
+   "S-C-p" 'ivy-previous-line-and-call
    "<C-return>" 'ivy-immediate-done))
 
 (use-package counsel
