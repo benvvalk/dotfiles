@@ -974,17 +974,10 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   :config
   ;; select package for composing and sending emails
   (setq mail-user-agent 'mu4e-user-agent)
-  (setq mu4e-maildir "~/Maildir/awesomesaucelabs")
-  ;; shell command to retrieve new mail
-  (setq mu4e-get-mail-command "mbsync -V awesomesaucelabs")
   ;; automatically run `mu4e-get-mail-command` every 10 minutes
   (setq mu4e-update-interval 600)
   ;; hack to avoid UID errors when using `mbsync`
   (setq mu4e-change-filenames-when-moving t)
-  ;; reply-to address
-  (setq mu4e-reply-to-address "awesomesaucelabs@gmail.com"
-    user-mail-address "awesomesaucelabs@gmail.com"
-    user-full-name  "Ben Vandervalk")
   ;; special folder names
   (setq mu4e-drafts-folder "/[Gmail]/Drafts"
         mu4e-sent-folder "/[Gmail]/Sent Mail"
@@ -1006,7 +999,38 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
          (:maildir "/[Gmail]/Trash"      :key ?t)
          (:maildir "/[Gmail]/Drafts"     :key ?d)))
   ;; don't show confirmation prompt when quitting mu4e
-  (setq mu4e-confirm-quit nil))
+  (setq mu4e-confirm-quit nil)
+  (setq mu4e-contexts
+        `(,(make-mu4e-context
+            :name "awesomesaucelabs@gmail.com"
+            :vars '((smtpmail-starttls-credentials
+                     . '(("smtp.gmail.com" 587 "awesomesaucelabs@gmail.com" nil)))
+                    ;; Note: I override the default mu database location here
+                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; Maildirs, and `mu` requires a separate database for each.
+                    (mu4e-mu-home . "~/.mu/awesomesaucelabs")
+                    (mu4e-maildir . "~/Maildir/awesomesaucelabs")
+                    ;; shell command to retrieve new mail
+                    (mu4e-get-mail-command . "mbsync -V awesomesaucelabs")
+                    ;; reply-to address
+                    (mu4e-reply-to-address . "awesomesaucelabs@gmail.com")
+                    (user-mail-address . "awesomesaucelabs@gmail.com")
+                    (user-full-name . "Ben Vandervalk")))
+          ,(make-mu4e-context
+            :name "ben.vvalk@gmail.com"
+            :vars '((smtpmail-starttls-credentials
+                     . '(("smtp.gmail.com" 587 "ben.vvalk@gmail.com" nil)))
+                    ;; Note: I override the default mu database location here
+                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; Maildirs, and `mu` requires a separate database for each.
+                    (mu4e-mu-home . "~/.mu/ben.vvalk")
+                    (mu4e-maildir . "~/Maildir/ben.vvalk")
+                    ;; shell command to retrieve new mail
+                    (mu4e-get-mail-command . "mbsync -V ben.vvalk")
+                    ;; reply-to address
+                    (mu4e-reply-to-address . "ben.vvalk@gmail.com")
+                    (user-mail-address . "ben.vvalk@gmail.com")
+                    (user-full-name . "Ben Vandervalk"))))))
 
 ;;----------------------------------------
 ;; Windows clipboard integration
