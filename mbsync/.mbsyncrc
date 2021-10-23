@@ -4,6 +4,7 @@ SSLType IMAPS
 AuthMechs *
 User ben.vvalk@gmail.com
 PassCmd "pass email/ben.vvalk@gmail.com"
+Timeout 60
 
 MaildirStore ben.vvalk-local
 Path ~/Maildir/ben.vvalk/
@@ -26,6 +27,7 @@ SSLType IMAPS
 AuthMechs *
 User awesomesaucelabs@gmail.com
 PassCmd "pass email/awesomesaucelabs@gmail.com"
+Timeout 60
 
 MaildirStore awesomesaucelabs-local
 Path ~/Maildir/awesomesaucelabs/
