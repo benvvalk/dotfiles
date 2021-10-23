@@ -381,6 +381,10 @@ and echo it in the minibuffer."
            "* TODO %?\n%i" :prepend t)
           ("w" "workflow" entry (file "~/Sync/notes/20210325103700_workflow_todo.org")
            "* TODO %?\n%i" :prepend t)))
+  ;; Prevents org-mode from inserting unwanted indentation every time
+  ;; I insert a line with 'o' or 'O' in evil-mode.
+  ;; See: https://github.com/syl20bnr/spacemacs/issues/13255
+  (setq org-src-preserve-indentation t)
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
   (use-package orgit)
   :general
