@@ -471,11 +471,27 @@ and echo it in the minibuffer."
    "d /" '(lambda () (interactive) (dired "/"))
    "d e" '(lambda () (interactive) (dired "~/.emacs.d/"))
    "d h" '(lambda () (interactive) (dired "~"))
+   "d r" 'benv/ivy-dired-recent-dirs
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
    "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
    "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp")))
   :config
+  ;; copied from https://stackoverflow.com/a/35394459
+  (defun benv/ivy-dired-recent-dirs ()
+    "Present a list of recently used directories and open the selected one in dired"
+    (interactive)
+    (let ((recent-dirs
+           (delete-dups
+            (mapcar (lambda (file)
+                      (if (file-directory-p file) file (file-name-directory file)))
+                    recentf-list))))
+      (let ((dir (ivy-read "Directory: "
+                           recent-dirs
+                           :re-builder #'ivy--regex
+                           :sort nil
+                           :initial-input nil)))
+        (dired dir))))
   ;; I copied this code from:
   ;; https://emacs.stackexchange.com/questions/64588/how-do-i-get-all-marked-files-from-all-dired-buffers
   (defun benv/dired-get-marked-files-all-buffers ()
