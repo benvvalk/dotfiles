@@ -334,6 +334,15 @@ and echo it in the minibuffer."
    "s s" 'swiper))
 
 ;;----------------------------------------
+;; info-mode
+;;----------------------------------------
+
+(use-package info
+  :general
+  ;; Unbind "SPC" so that evil leader key works in *info* buffers
+  (:keymaps 'Info-mode-map "SPC" nil))
+
+;;----------------------------------------
 ;; org-mode
 ;;----------------------------------------
 
