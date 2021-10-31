@@ -1,9 +1,9 @@
-;;; evil-ex.el --- Ex-mode
+;;; evil-ex.el --- Ex-mode -*- lexical-binding: nil -*-
 
 ;; Author: Frank Fischer <frank fischer at mathematik.tu-chemnitz.de>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.3.0-snapshot
+;; Version: 1.14.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -42,6 +42,7 @@
 
 (require 'evil-common)
 (require 'evil-states)
+(require 'evil-types)
 (require 'shell)
 
 ;;; Code:
@@ -65,6 +66,7 @@
      ((\? space) (\? "\\(?:.\\|\n\\)+") #'$2))
     (range
      ("%" #'(evil-ex-full-range))
+     ("*" #'(evil-ex-last-visual-range))
      (line ";" line #'(let ((tmp1 $1))
                         (save-excursion
                           (goto-line tmp1)
@@ -222,6 +224,13 @@ Otherwise behaves like `delete-backward-char'."
   (unless (minibufferp)
     (abort-recursive-edit)))
 
+(defun evil-ex-command-window-execute (config result)
+  (select-window (active-minibuffer-window) t)
+  (set-window-configuration config)
+  (delete-minibuffer-contents)
+  (insert result)
+  (exit-minibuffer))
+
 (defun evil-ex-setup ()
   "Initialize Ex minibuffer.
 This function registers several hooks that are used for the
@@ -256,19 +265,6 @@ Clean up everything set up by `evil-ex-setup'."
       (when runner
         (funcall runner 'stop)))))
 (put 'evil-ex-teardown 'permanent-local-hook t)
-
-(defun evil-ex-remove-default ()
-  "Remove the default text shown in the ex minibuffer.
-When ex starts, the previous command is shown enclosed in
-parenthesis. This function removes this text when the first key
-is pressed."
-  (when (and (not (eq this-command 'exit-minibuffer))
-             (/= (minibuffer-prompt-end) (point-max)))
-    (if (eq this-command 'evil-ex-delete-backward-char)
-        (setq this-command 'ignore))
-    (delete-minibuffer-contents))
-  (remove-hook 'pre-command-hook #'evil-ex-remove-default))
-(put 'evil-ex-remove-default 'permanent-local-hook t)
 
 (defun evil-ex-update (&optional beg end len string)
   "Update Ex variables when the minibuffer changes.
@@ -492,9 +488,9 @@ in case of incomplete or unknown commands."
     (if (string-match "^[^][]*\\(\\[\\(.*\\)\\]\\)[^][]*$" cmd)
         (let ((abbrev (replace-match "" nil t cmd 1))
               (full (replace-match "\\2" nil nil cmd 1)))
-          (evil-add-to-alist 'evil-ex-commands full function)
-          (evil-add-to-alist 'evil-ex-commands abbrev full))
-      (evil-add-to-alist 'evil-ex-commands cmd function))))
+          (evil--add-to-alist 'evil-ex-commands full function)
+          (evil--add-to-alist 'evil-ex-commands abbrev full))
+      (evil--add-to-alist 'evil-ex-commands cmd function))))
 
 (defun evil-ex-make-argument-handler (runner completer)
   (list runner completer))
@@ -553,7 +549,7 @@ keywords and function:
          ((eq key :completion-at-point)
           (setq completer (cons 'completion-at-point func))))))
     `(eval-and-compile
-       (evil-add-to-alist
+       (evil--add-to-alist
         'evil-ex-argument-types
         ',arg-type
         '(,runner ,completer)))))
@@ -588,7 +584,7 @@ argument handler that requires shell completion."
 
 (define-obsolete-function-alias
   'evil-ex-shell-command-completion-at-point
-  'comint-completion-at-point)
+  'comint-completion-at-point "1.2.13")
 
 (evil-ex-define-argument-type shell
   "Shell argument type, supports completion."
@@ -769,6 +765,10 @@ This function interprets special file names like # and %."
   "Return a range encompassing the whole buffer."
   (evil-range (point-min) (point-max) 'line))
 
+(defun evil-ex-last-visual-range ()
+  "Return a linewise range of the last visual selection."
+  (evil-line-expand evil-visual-mark evil-visual-point))
+
 (defun evil-ex-marker (marker)
   "Return MARKER's line number in the current buffer.
 Signal an error if MARKER is in a different buffer."
@@ -800,8 +800,11 @@ Returns the line number of the match."
         (save-excursion
           (set-text-properties 0 (length pattern) nil pattern)
           (evil-move-end-of-line)
-          (and (re-search-forward pattern nil t)
-               (line-number-at-pos (1- (match-end 0))))))
+          (if (re-search-forward pattern nil t)
+              (line-number-at-pos (1- (match-end 0)))
+            (goto-char (point-min))
+            (and (re-search-forward pattern nil t)
+                 (line-number-at-pos (1- (match-end 0)))))))
     (invalid-regexp
      (evil-ex-echo (cadr err))
      nil)))
@@ -814,8 +817,11 @@ Returns the line number of the match."
         (save-excursion
           (set-text-properties 0 (length pattern) nil pattern)
           (evil-move-beginning-of-line)
-          (and (re-search-backward pattern nil t)
-               (line-number-at-pos (match-beginning 0)))))
+          (if (re-search-backward pattern nil t)
+              (line-number-at-pos (match-beginning 0))
+            (goto-char (point-max))
+            (and (re-search-backward pattern nil t)
+                 (line-number-at-pos (match-beginning 0))))))
     (invalid-regexp
      (evil-ex-echo (cadr err))
      nil)))
@@ -904,6 +910,33 @@ POS defaults to the current position of point."
       (setq pos 0))
     (when contexts
       (nth pos contexts))))
+
+(defun evil-parser--dexp (obj)
+  "Parse a numerical dollar-sign symbol.
+Given e.g. $4, return 4."
+  (when (symbolp obj)
+    (let ((str (symbol-name obj)))
+      (save-match-data
+        (when (string-match "\\$\\([0-9]+\\)" str)
+          (string-to-number (match-string 1 str)))))))
+
+(defun evil-parser--dval (obj result)
+  "Substitute all dollar-sign symbols in OBJ.
+Each dollar-sign symbol is replaced with the corresponding
+element in RESULT, so that $1 becomes the first element, etc.
+The special value $0 is substituted with the whole list RESULT.
+If RESULT is not a list, all dollar-sign symbols are substituted with
+RESULT."
+  (if (listp obj)
+      (mapcar (lambda (obj) (evil-parser--dval obj result)) obj)
+    (let ((num (evil-parser--dexp obj)))
+      (if num
+          (if (not (listp result))
+              result
+            (if (eq num 0)
+                `(list ,@result)
+              (nth (1- num) result)))
+        obj))))
 
 (defun evil-parser (string symbol grammar &optional greedy syntax)
   "Parse STRING as a SYMBOL in GRAMMAR.
@@ -1102,54 +1135,33 @@ The following symbols have reserved meanings within a grammar:
       ;; semantic action
       (when (and pair func (not syntax))
         (setq result (car pair))
-        (let* ((dexp
-                #'(lambda (obj)
-                    (when (symbolp obj)
-                      (let ((str (symbol-name obj)))
-                        (save-match-data
-                          (when (string-match "\\$\\([0-9]+\\)" str)
-                            (string-to-number (match-string 1 str))))))))
-               ;; traverse a tree for dollar expressions
-               (dval nil)
-               (dval
-                #'(lambda (obj)
-                    (if (listp obj)
-                        (mapcar dval obj)
-                      (let ((num (funcall dexp obj)))
-                        (if num
-                            (if (not (listp result))
-                                result
-                              (if (eq num 0)
-                                  `(list ,@result)
-                                (nth (1- num) result)))
-                          obj))))))
-          (cond
-           ((null func)
-            (setq result nil))
-           ;; lambda function
-           ((eq (car-safe func) 'lambda)
-            (if (memq symbol '(+ seq))
-                (setq result `(funcall ,func ,@result))
-              (setq result `(funcall ,func ,result))))
-           ;; string replacement
-           ((or (stringp func) (stringp (car-safe func)))
-            (let* ((symbol (or (car-safe (cdr-safe func))
-                               (and (boundp 'context) context)
-                               (car-safe (car-safe grammar))))
-                   (string (if (stringp func) func (car-safe func))))
-              (setq result (car-safe (evil-parser string symbol grammar
-                                                  greedy syntax)))))
-           ;; dollar expression
-           ((funcall dexp func)
-            (setq result (funcall dval func)))
-           ;; function call
-           ((listp func)
-            (setq result (funcall dval func)))
-           ;; symbol
-           (t
-            (if (memq symbol '(+ seq))
-                (setq result `(,func ,@result))
-              (setq result `(,func ,result))))))
+        (cond
+         ((null func)
+          (setq result nil))
+         ;; lambda function
+         ((eq (car-safe func) 'lambda)
+          (if (memq symbol '(+ seq))
+              (setq result `(funcall ,func ,@result))
+            (setq result `(funcall ,func ,result))))
+         ;; string replacement
+         ((or (stringp func) (stringp (car-safe func)))
+          (let* ((symbol (or (car-safe (cdr-safe func))
+                             (and (boundp 'context) context)
+                             (car-safe (car-safe grammar))))
+                 (string (if (stringp func) func (car-safe func))))
+            (setq result (car-safe (evil-parser string symbol grammar
+                                                greedy syntax)))))
+         ;; dollar expression
+         ((evil-parser--dexp func)
+          (setq result (evil-parser--dval func result)))
+         ;; function call
+         ((listp func)
+          (setq result (evil-parser--dval func result)))
+         ;; symbol
+         (t
+          (if (memq symbol '(+ seq))
+              (setq result `(,func ,@result))
+            (setq result `(,func ,result)))))
         (setcar pair result))))
     ;; weed out incomplete matches
     (when pair
