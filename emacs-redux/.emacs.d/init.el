@@ -907,7 +907,14 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
    "x x" 'shelldon
    "x h" 'shelldon-output-history)
   :init
-  (evil-set-initial-state 'shell-mode 'normal))
+  (evil-set-initial-state 'shell-mode 'normal)
+  :config
+  ;; Make sure command-line tools like `git log`
+  ;; don't try to use a pager (e.g. `less`), since
+  ;; emacs shell buffers can't handle interactive
+  ;; terminal programs and the resulting output gets
+  ;; garbled.
+  (setenv "PAGER" "cat"))
 
 ;;----------------------------------------
 ;; vterm
