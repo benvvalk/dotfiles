@@ -484,7 +484,8 @@ and echo it in the minibuffer."
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
    "O"   'org-clock-out
-   "p"   'org-cliplink))
+   "p"   'org-cliplink
+   "w"   'webkit-browse-url-other-window))
 
 ;;----------------------------------------
 ;; org-roam
@@ -1288,6 +1289,50 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 (general-def 'motion
   :prefix benv/evil-leader-key
   "y w" 'yank-region-to-windows-clipboard)
+
+;;----------------------------------------
+;; emacs-webkit
+;;
+;; Note:
+;;
+;; emacs-webkit will not work until
+;; you build the webkit-module.so module,
+;; by running `make` in
+;; ~/.emacs.d/site-lisp/emacs-webkit.
+;;
+;; Compiling the module requires a recent
+;; version of the webkitgtk library and headers.
+;; I found that the easiest way to set up
+;; such an environment was to run
+;; `guix environment emacs-next-pgtk`.
+;; (This works because the `emacs-next-pgtk`
+;; package also has a build dependency
+;; on webkitgtk.)
+;;----------------------------------------
+
+(use-package webkit
+  :commands (webkit)
+  :general
+  (:keymaps 'webkit-mode-map
+   :states '(motion normal emacs)
+           "f" 'webkit-ace
+           "H" 'webkit-back
+           "L" 'webkit-forward
+           "j" 'webkit-scroll-up-line
+           "k" 'webkit-scroll-down-line
+           "o" 'webkit
+           "C-=" 'webkit-zoom-in
+           "C--" 'webkit-zoom-out
+           "C-d" 'webkit-scroll-up
+           "C-u" 'webkit-scroll-down)
+  :load-path "~/.emacs.d/site-lisp/emacs-webkit"
+  :config
+  (defun webkit-browse-url-other-window ()
+    (interactive)
+    (let ((url (thing-at-point-url-at-point)))
+      (when url (other-window 1)
+            (webkit-browse-url url))))
+    (use-package webkit-ace))
 
 ;;----------------------------------------
 ;; themes
