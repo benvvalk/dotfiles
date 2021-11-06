@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;;----------------------------------------
 ;; basic UI settings
 ;;----------------------------------------
@@ -741,8 +743,93 @@ and echo it in the minibuffer."
 
 (use-package winum
   :defer nil
+  :init
+
+  (defun benv/call-function-same-window (func)
+    "Call function FUNC and display the resulting buffer
+(if any) in the current window."
+    (let ((display-buffer-alist '((".*" display-buffer-same-window))))
+      (call-interactively func)))
+
+  (defun benv/select-window-n-and-call-function (func n)
+    "Change focus to window N (as numbered by winum-mode),
+d invoke the given function FUNC."
+    (interactive)
+    (let ((calling-buffer (buffer-name))
+          (calling-point (point)))
+      (winum-select-window-by-number n)
+      ;; force function to show buffers in the currently selected window
+      (let ((display-buffer-alist '((".*" display-buffer-same-window))))
+        ;; Switch to the same buffer and cursor position ("point")
+        ;; as the calling window, so that the function behaves
+        ;; exactly as if it was invoked from the calling window.
+        ;;
+        ;; Many commands behave differently based on
+        ;; the current value of `default-directory`
+        ;; (e.g. `dired`), `buffer-file-name` (e.g. `dired-jump`),
+        ;; `point` (e.g. `find-function-at-point`).
+        (switch-to-buffer calling-buffer)
+        (goto-char calling-point)
+        (call-interactively func))))
+
+  (defun benv/call-function-in-window-n (func n focus)
+    "Invoke the given function FUNC in target window N, as numbered by winum-mode.
+If FOCUS is not nil, change input focus to target window N. Otherwise, keep
+the focus in the current window."
+    (interactive)
+    (if focus (benv/select-window-n-and-call-function func n)
+      (save-selected-window
+        (benv/select-window-n-and-call-function func n))))
+
+  (defun benv/create-winum-keybinds (prefix-keys func)
+    "Create key bindings that call function FUNC in windows 1-9, as
+identified by winum-mode.  The generated keybindings consist of the
+evil leader key (SPC), followed by PREFIX-KEYS, followed by a single
+digit (1-9) or number key symbol (!,@,#,$,^,&,*,().
+
+For example, if PREFIX-KEYS is \"b\" and FUNC is switch-to-buffer, the
+functions will generate bindings for \"SPC b 1\" and \"SPC b !\" that
+call switch-to-buffer in window 1.
+
+The difference between the number and symbol key bindings is
+the focused window after the FUNC has completed. The number bindings
+keep the focus in the current window, whereas the symbol key bindings
+will change the focus to the target window."
+    (dolist (tuple '((1 . "!")
+                     (2 . "@")
+                     (3 . "#")
+                     (4 . "$")
+                     (5 . "%")
+                     (6 . "^")
+                     (7 . "&")
+                     (8 . "*")
+                     (9 . "(")))
+      (general-def
+        :states '(motion insert emacs)
+        :prefix benv/evil-leader-key
+        :non-normal-prefix benv/evil-insert-mode-leader-key
+        (format "%s ." prefix-keys) (lambda () (interactive) (benv/call-function-same-window func)))
+      (let ((n (car tuple))
+            (sym (cdr tuple)))
+        (general-def
+          :states '(motion insert emacs)
+          :prefix benv/evil-leader-key
+          :non-normal-prefix benv/evil-insert-mode-leader-key
+          (format "%s %s" prefix-keys n) (lambda () (interactive) (benv/call-function-in-window-n func n nil))
+          (format "%s %s" prefix-keys sym) (lambda () (interactive) (benv/call-function-in-window-n func n t))))))
+
+  (benv/create-winum-keybinds "b" #'switch-to-buffer)
+  (benv/create-winum-keybinds "d" #'dired-jump)
+  (benv/create-winum-keybinds "h f" #'describe-function)
+  (benv/create-winum-keybinds "h v" #'describe-variable)
+  (benv/create-winum-keybinds "m" #'woman)
+  (benv/create-winum-keybinds "w d" #'delete-window)
+  (benv/create-winum-keybinds "x" #'shelldon)
+
   :config
+  ;; enable winum-mode globally
   (winum-mode)
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
