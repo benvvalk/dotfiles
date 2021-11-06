@@ -241,17 +241,47 @@ and echo it in the minibuffer."
   "h m" 'woman
   "t l" 'visual-line-mode
   "t w" 'whitespace-mode
-  "u"   'universal-argument
-  "w m" 'delete-other-windows
-  "w s" 'split-window-below
-  "w v" 'split-window-right
-  "y f" 'benv/yank-filename)
+  "u"   'universal-argument)
 
 ;; restore standard vim mappings
 
 (general-def 'motion
   "C-i" 'evil-jump-forward
   "C-u" 'evil-scroll-up)
+
+;;----------------------------------------
+;; window (built-in emacs package)
+;;----------------------------------------
+
+(use-package window
+  :init
+  (setq benv/window-resize-step-horizontal 4)
+  (setq benv/window-resize-step-vertical 2)
+  (defun benv/shrink-window ()
+    (interactive)
+    (shrink-window benv/window-resize-step-vertical))
+  (defun benv/enlarge-window ()
+    (interactive)
+    (enlarge-window benv/window-resize-step-vertical))
+  (defun benv/shrink-window-horizontally ()
+    (interactive)
+    (shrink-window-horizontally benv/window-resize-step-horizontal))
+  (defun benv/enlarge-window-horizontally ()
+    (interactive)
+    (enlarge-window-horizontally benv/window-resize-step-horizontal))
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "w m" 'delete-other-windows
+   "w s" 'split-window-below
+   "w v" 'split-window-right
+   "y f" 'benv/yank-filename)
+  (:states '(motion normal insert emacs)
+   "M-J" 'benv/enlarge-window
+   "M-K" 'benv/shrink-window
+   "M-H" 'benv/shrink-window-horizontally
+   "M-L" 'benv/enlarge-window-horizontally))
 
 ;;----------------------------------------
 ;; piglet.el
@@ -955,6 +985,13 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
    "h" 'lispy-left
    "l" 'lispy-right)
   :config
+  ;; Disable lispy default keybind M-J -> lispy-join,
+  ;; because conflicts with my window-resizing keybinds
+  ;; (M-H,M-J,M-K,M-L).
+  (general-def
+   :keymaps 'lispy-mode-map
+   :states '(motion normal emacs)
+   "M-J" nil)
   ;; Add some custom lispy key bindings, beyond the
   ;; ones provided by evil-collection in
   ;; ~/.emacs.d/elpa/evil-collection-20210401.1012/modes/lispy/evil-collection-lispy.el
