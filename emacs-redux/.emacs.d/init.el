@@ -173,6 +173,21 @@
   (evil-collection-init))
 
 ;;----------------------------------------
+;; face-remap (built-in package)
+;;----------------------------------------
+
+(use-package face-remap
+  :config
+  ;; adjusts text-scaling increment for each keypress
+  (setq text-scale-mode-step 1.1)
+  :general
+  ;; use the keybinds for zoom in/out as web browsers
+  (:states '(motion insert emacs)
+   "C-=" 'text-scale-adjust
+   "C-+" 'text-scale-adjust
+   "C--" 'text-scale-adjust))
+
+;;----------------------------------------
 ;; file management
 ;;----------------------------------------
 
