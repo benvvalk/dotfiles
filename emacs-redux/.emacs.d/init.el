@@ -691,8 +691,16 @@ and echo it in the minibuffer."
     (:states '(motion insert emacs)
      :prefix benv/evil-leader-key
      :non-normal-prefix benv/evil-insert-mode-leader-key
-     "g s" 'magit-status)
+     "g s" 'magit-status
+     "p g s" 'benv/projectile-magit-status)
   :config
+    (defun benv/projectile-magit-status ()
+      "Jump to magit status buffer for a projectile project."
+      (interactive)
+      (let ((project-dir (completing-read
+                          "magit status: "
+                          projectile-known-projects)))
+        (magit-status project-dir)))
     ;; display magit status buffer in currently
     ;; selected window (not the "other" window)
     (setq magit-display-buffer-function
