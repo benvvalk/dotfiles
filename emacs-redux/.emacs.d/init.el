@@ -1147,8 +1147,19 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   ('motion mu4e-view-mode-map
    :prefix benv/major-mode-leader-key
    "a" 'mu4e-view-mime-part-action)
+  ('normal mu4e-main-mode-map
+   ";" 'benv/mu4e-switch-context)
   :commands (mu4e)
   :config
+  ;; Workaround: For some reason, the mu4e status buffer doesn't get
+  ;; updated after I switch mu4e contexts (i.e. switch the active email
+  ;; account). To workaround this problem, I just quit mu4e and
+  ;; restart it after switching contexts.
+  (defun benv/mu4e-switch-context ()
+    (interactive)
+    (mu4e-context-switch)
+    (mu4e-quit)
+    (mu4e))
   ;; select package for composing and sending emails
   (setq mail-user-agent 'mu4e-user-agent)
   ;; automatically run `mu4e-get-mail-command` every 10 minutes
