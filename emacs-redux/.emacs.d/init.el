@@ -1058,10 +1058,19 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 
 (use-package shelldon
   :load-path "~/.emacs.d/site-lisp/shelldon"
+  :config
+  ;; Quick-and-dirty function to check if the command (process)
+  ;; for the current buffer is still running.
+  (defun benv/print-buffer-process-state ()
+    (interactive)
+    (if (get-buffer-process (buffer-name))
+        (message "buffer process is RUNNING")
+      (message "buffer process is nil")))
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "b p" 'benv/print-buffer-process-state
    "x" nil
    "x x" 'shelldon
    "x h" 'shelldon-output-history)
