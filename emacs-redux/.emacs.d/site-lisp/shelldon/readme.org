@@ -1,7 +1,11 @@
-#+TITLE: Shelldon
+#+TITLE: Shelldon: an enhanced shell interface
+
+[[https://melpa.org/#/shelldon][file:https://melpa.org/packages/shelldon-badge.svg]]
+
+[[./shell.jpg]]
 
 * Introduction
-This is what I use for my main shell/terminal. It is basically just a simple wrapper around async-shell-command that primarily allows you to store and navigate separate command outputs among other things.
+This is what I use for my main shell/terminal. It is largely just an enhancement of async-shell-command that provides a more minibuffer-centric workflow, allowing you to store and navigate command outputs in separate buffers among other things.
 
 [[./example.gif]]
 (I have lots of windowing and minibuffer enhancements from other packages, so yours probably won’t look exactly like this. See usage below for ideas...)
@@ -13,18 +17,38 @@ I just use straight+use-package like so:
     :straight (shelldon :type git
                         :host github
                         :repo "Overdr0ne/shelldon"
-                        :branch "master"))
+                        :branch "master"
+                        :files ("shelldon.el")))
 #+end_src
 * Usage
-- So it’s not like a typical terminal where all command inputs and outputs are mashed together into one buffer. Instead, you input each command into the minibuffer individually with the *shelldon* command, and output is sent to a buffer derived from the command name.
+In a standard terminal, all command inputs and outputs are tangled together in one buffer. In Shelldon, each command is entered into the minibuffer individually with the *shelldon* command, much like an internal M-x command, and output is sent to a buffer derived from each command name. Here are the core commands.
 
-- To search this history, use the *shelldon-hist* command, and select the command whose output you’d like to open.
+| command              | description                           |
+|----------------------+---------------------------------------|
+| shelldon             | enter shell command in the minibuffer |
+| shelldon-loop        | enter a sequence of shell commands    |
+| shelldon-output-hist | go too shelldon output buffer         |
 
-- If you’d like to then use it like an actual REPL, well, we’re just missing the loop part, so I’ve also provided a *shelldon-loop* command.
+Since Shelldon is largely just an enhancement of built-in shell interaction facilities, much of this is already documented within Emacs, but I've tried to present a unified workflow here.
 
-- By popular demand, you may also change the workdir without leaving shelldon-loop with the *shelldon-cd* command, bound to "C-x C-f" in *minibuffer-local-shell-command-map* by default.
+** minibuffer
+- You may of course search the minibuffer history for *shelldon* commands, as with any comint command, with *comint-history-isearch-backward* (M-r) and the like.
+
+- If you’d like to then use shelldon like an actual REPL, well, we’re just missing the loop part, so I’ve also provided a *shelldon-loop* command.
 
 - Customize the prompt by modifying the *shelldon-prompt-str* variable. You may also toggle the display of the current working directory with the shell-command-prompt-show-cwd, just like other shell commands.
+
+- By popular demand, you may also change the workdir without leaving shelldon-loop with the *shelldon-cd* command, bound to "C-x C-f" in *minibuffer-local-shelldon-command-map* by default. This requires:
+  #+begin_src elisp
+  (setf enable-recursive-minibuffers t)
+  #+end_src
+  Personally, I just use dired when I want to navigate.
+- You may of course add any other local minibuffer keybindings you like to *minibuffer-local-shelldon-command-map*.
+
+** shelldon-mode
+This is analogous to, and derived from Shell-mode -- basically the mode for displaying shelldon output.
+
+- To search the output history, use the *shelldon-output-hist* command, and select the command whose output you’d like to open.
 
 - Output buffer names begin with "*shelldon" such that you may configure display-buffer-alist to change how output windows are displayed. I’m a big fan of side windows, so I have configured things to display output buffers in the right side window by default. You can change this of course, by simply modifying the display-buffer-alist. For example, you could display the output buffer in the bottom side window like so:
 
@@ -38,6 +62,38 @@ I just use straight+use-package like so:
 
   The buffer names also contain the executed command, so that may be used as well to configure windows on a per-command basis.
 
-  - I would also highly recommend installing the [[https://github.com/szermatt/emacs-bash-completion][bash-completion]] package, and probably some sort of completion enhancement package like [[https://github.com/raxod502/selectrum][selectrum]].
+- You may need to emulate terminal keypresses in some situations, like for interactive menus. I use the *term-send-* set of functions for this purpose. So I map <up> to *term-send-up* and <down> to *term-send-down*.
 
-  And that’s it. Enjoy...
+** sh-mode (shell script mode)
+- You may also send commands to Shelldon from a bash script buffer with the *shelldon-send-region* and *shelldon-send-current-line* commands. This is actually my preferred way of using shelldon- it is particularly useful when writing full-fledged shell scripts, allowing you to test as you go. Have a look:
+  
+[[./mode-demo.gif]]
+
+** autocompletion
+- I would also highly recommend installing the [[https://github.com/szermatt/emacs-bash-completion][bash-completion]] package, and probably some sort of completion enhancement package like [[https://github.com/raxod502/selectrum][selectrum]].
+
+- If you do use some kind of autocompletion extension, you may wish to disable sorting. There’s no universal way to do that unfortunately, but here’s what I do for selectrum, to give you an idea:
+  #+begin_src elisp
+    (advice-add #'shelldon-output-history :around
+		(lambda (old-fn)
+		    (let ((selectrum-should-sort nil))
+		    (funcall old-fn))))
+  #+end_src
+
+** miscellaneous
+- If you would like shelldon to inherit your startup shell configurations, just pass the "-ic" flags to the shell(credit: http://www.nextpoint.se/?p=864):
+  #+begin_src elisp
+    (setq shell-command-switch “-ic”)
+  #+end_src
+
+- To enable ANSI colors, these must be set:
+  #+begin_src elisp
+    (add-hook 'shelldon-mode-hook 'ansi-color-for-comint-mode-on)
+    (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+    (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+  #+end_src
+
+And that’s about it. Enjoy...
+
+* Todos
+** It might be possible to generalize this for other shells like the python shell.

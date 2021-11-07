@@ -1073,7 +1073,9 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
    "b p" 'benv/print-buffer-process-state
    "x" nil
    "x x" 'shelldon
-   "x h" 'shelldon-output-history)
+   "x h" 'shelldon-output-history
+   "x l" 'shelldon-send-line-at-point
+   "x r" 'shelldon-send-region)
   :init
   (evil-set-initial-state 'shell-mode 'normal)
   :config
