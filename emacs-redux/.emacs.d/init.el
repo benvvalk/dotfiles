@@ -1061,7 +1061,6 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "b p" 'benv/print-buffer-process-state
-   "x" nil
    "x x" 'shelldon
    "x h" 'shelldon-output-history
    "x l" 'shelldon-send-line-at-point
