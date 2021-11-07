@@ -459,6 +459,11 @@ and echo it in the minibuffer."
   (setq org-src-preserve-indentation t)
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
   (use-package orgit)
+  ;; org-babel stuff
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)))
   :general
   ('motion
    :prefix benv/evil-leader-key
