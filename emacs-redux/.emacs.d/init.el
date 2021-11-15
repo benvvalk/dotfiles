@@ -660,13 +660,15 @@ and echo it in the minibuffer."
 
 ;; Use hl-line-mode to highlight the current
 ;; file/directory line in dired
-(use-package hl-line-mode
-  :hook (dired-mode . hl-line-mode)
-  :init
-  ;; We use advice here because the `hl-line` face
-  ;; is not defined until hl-line-mode is loaded
-  (defadvice hl-line-mode (after benv/advise-hl-line-mode)
-    (set-face-background 'hl-line "green")))
+(use-package hl-line
+  :demand t
+  :config
+  (global-hl-line-mode +1)
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "t h" 'global-hl-line-mode))
 
 ;;----------------------------------------
 ;; magit
