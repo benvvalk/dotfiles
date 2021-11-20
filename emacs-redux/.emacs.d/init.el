@@ -696,6 +696,13 @@ and echo it in the minibuffer."
      :non-normal-prefix benv/evil-insert-mode-leader-key
      "g s" 'magit-status
      "p g s" 'benv/projectile-magit-status)
+  :init
+    ;; When I install `emacs` with guix, magit can't find
+    ;; `emacsclient` for some reason, even though it's on PATH.
+    (setq with-editor-emacsclient-executable
+          (locate-file-internal
+           "emacsclient"
+           exec-path))
   :config
     (defun benv/projectile-magit-status ()
       "Jump to magit status buffer for a projectile project."
