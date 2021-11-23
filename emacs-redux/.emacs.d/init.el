@@ -175,6 +175,22 @@
   (evil-collection-init))
 
 ;;----------------------------------------
+;; proced: interactive equivalent of 'ps' command
+;;----------------------------------------
+
+(use-package proced
+  :init
+  (defun benv/proced-mode-setup ()
+    ;; Turn on auto-refresh processes list.
+    (setq proced-auto-update-flag t)
+    ;; Refresh process list every 1 seconds.
+    ;; Note: If try to set this smaller than 1
+    ;; (e.g. 0.5), it doesn't seem to have any
+    ;; practical effect.
+    (setq proced-auto-update-interval 1))
+  (add-hook 'proced-mode-hook #'benv/proced-mode-setup))
+
+;;----------------------------------------
 ;; face-remap (built-in package)
 ;;----------------------------------------
 
@@ -882,6 +898,7 @@ will change the focus to the target window."
   (benv/create-winum-keybinds "m" #'woman)
   (benv/create-winum-keybinds "w d" #'delete-window)
   (benv/create-winum-keybinds "x" #'shelldon)
+  (benv/create-winum-keybinds "P" #'proced)
 
   :config
   ;; enable winum-mode globally
