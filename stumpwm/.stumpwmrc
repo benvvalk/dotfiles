@@ -1,0 +1,30 @@
+(in-package :stumpwm)
+
+;; Set keymap to dvorak and use xmodmap to swap
+;; Control and Escape keys.
+;;
+;; NOTE: This command doesn't do anything and so
+;; far I can't figure out why.
+
+(run-shell-command "setxkbmap dvorak")
+
+;; Use `redshift` to automatically adjust monitor color/brightness
+;; throughout the day.
+;;
+;; * `-b 1.0:0.7`: sets relative brightness for day and night, respectively
+;; * `-l 44:-79` : sets my location in terms of longitude:latitude
+
+(run-shell-command "redshift -b 1.0:0.7 -l 44:-79")
+
+;; Run a shell command with `rofi`
+
+(defcommand benv/rofi-run () ()
+  (run-shell-command "rofi -show run"))
+
+;; Switch to a window (by title) with `rofi`
+
+(defcommand benv/rofi-window () ()
+  (run-shell-command "rofi -show window"))
+
+(define-key *root-map* (kbd "x") "benv/rofi-run")
+(define-key *root-map* (kbd "b") "benv/rofi-window")
