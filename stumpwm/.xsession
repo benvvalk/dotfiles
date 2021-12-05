@@ -19,7 +19,7 @@ xset s off
 # turn off bell
 xset b off
 
-# Increase touchpad speed on Framework laptop.
+# Touchpad: Increase mouse cursor speed/acceleration.
 #
 # * `12` is the device id for the touchpad
 # * `323` is the property id for mouse acceleration
@@ -31,6 +31,11 @@ xset b off
 # property id, see:
 #
 # https://askubuntu.com/questions/172972/configure-mouse-speed-not-pointer-acceleration
+
 xinput set-prop 12 323 0.5
+
+# Touchpad: Enable tap-to-click.
+
+xinput set-prop 12 332 1
 
 exec ssh-agent /home/benv/.guix-profile/bin/stumpwm
