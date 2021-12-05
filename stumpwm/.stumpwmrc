@@ -47,6 +47,9 @@
 (define-key *top-map* (kbd "s-k") "move-focus up")
 (define-key *top-map* (kbd "s-l") "move-focus right")
 
+(define-key *top-map* (kbd "s-n") "pull-hidden-next")
+(define-key *top-map* (kbd "s-N") "pull-hidden-previous")
+
 (define-key *top-map* (kbd "C-M-h") "move-focus left")
 (define-key *top-map* (kbd "C-M-j") "move-focus down")
 (define-key *top-map* (kbd "C-M-k") "move-focus up")
