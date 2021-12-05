@@ -1,5 +1,9 @@
 (in-package :stumpwm)
 
+;; Enable "focus follows mouse".
+
+(setf *mouse-focus-policy* :sloppy)
+
 ;; Set keymap to dvorak and use xmodmap to swap
 ;; Control and Escape keys.
 ;;
