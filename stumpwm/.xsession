@@ -19,23 +19,29 @@ xset s off
 # turn off bell
 xset b off
 
-# Touchpad: Increase mouse cursor speed/acceleration.
+# Touchpad: Tweak settings.
 #
-# * `12` is the device id for the touchpad
-# * `323` is the property id for mouse acceleration
-# * `0.5` is the new value to assign
+# For an explanation of these commands
+# see [1] and [2].
 #
-# It seems like the assigned value (0.5 in this case)
-# must be between 0.0 and 1.0, with default being
-# 0.0. For info about how to determine device ids and
-# property id, see:
+# I have noticed that xinput device IDs
+# and device property IDs can change across
+# system reboots so it better to use
+# device names and property names rather
+# than IDs. It is also easier to understand
+# what the commands are doing.
 #
-# https://askubuntu.com/questions/172972/configure-mouse-speed-not-pointer-acceleration
+# [1]: https://askubuntu.com/questions/172972/configure-mouse-speed-not-pointer-acceleration
+# [2]: https://wiki.archlinux.org/title/libinput
 
-xinput set-prop 12 323 0.5
+touchpad_name=$(xinput --list --name-only | grep -i touchpad)
+xinput list-props "$touchpad_name"
 
-# Touchpad: Enable tap-to-click.
+# Generate mouse clicks when tapping the touchpad with one/two/three fingers.
+xinput set-prop "$touchpad_name" "libinput Tapping Enabled" 1
 
-xinput set-prop 12 332 1
+# Speed up mouse cursor movement while dragging finger(s) on touchpad.
+xinput set-prop "$touchpad_name" "libinput Accel Speed" 0.75
 
+# Start stumpwm as main window manager process.
 exec ssh-agent /home/benv/.guix-profile/bin/stumpwm
