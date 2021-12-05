@@ -20,15 +20,47 @@
 
 (run-shell-command "redshift -b 1.0:0.7 -l 44:-79")
 
-;; Run a shell command with `rofi`
-
-(defcommand benv/rofi-run () ()
-  (run-shell-command "rofi -show run"))
-
-;; Switch to a window (by title) with `rofi`
+;; Switch to a window (by title) with `rofi`.
 
 (defcommand benv/rofi-window () ()
   (run-shell-command "rofi -show window"))
 
-(define-key *root-map* (kbd "x") "benv/rofi-run")
 (define-key *root-map* (kbd "b") "benv/rofi-window")
+(define-key *top-map* (kbd "s-b") "benv/rofi-window")
+
+;; Run a shell command with `rofi`.
+
+(defcommand benv/rofi-run () ()
+  (run-shell-command "rofi -show run"))
+
+(define-key *root-map* (kbd "p") "benv/rofi-run")
+(define-key *root-map* (kbd "x") "benv/rofi-run")
+(define-key *top-map* (kbd "C-M-p") "benv/rofi-run")
+
+;; Keybinds for built-in stumpwm commands.
+
+(define-key *top-map* (kbd "s-v") "hsplit")
+(define-key *top-map* (kbd "s-s") "vsplit")
+
+(define-key *top-map* (kbd "s-h") "move-focus left")
+(define-key *top-map* (kbd "s-j") "move-focus down")
+(define-key *top-map* (kbd "s-k") "move-focus up")
+(define-key *top-map* (kbd "s-l") "move-focus right")
+
+(define-key *top-map* (kbd "C-M-h") "move-focus left")
+(define-key *top-map* (kbd "C-M-j") "move-focus down")
+(define-key *top-map* (kbd "C-M-k") "move-focus up")
+(define-key *top-map* (kbd "C-M-l") "move-focus right")
+
+(define-key *top-map* (kbd "C-M-o") "only")
+
+;; Aesthetics.
+
+(setf *normal-border-width* 7
+      *transient-border-width* 7
+      *window-border-style :tight)
+
+(set-focus-color "SpringGreen")
+(set-float-focus-color "SpringGreen")
+(set-float-unfocus-color "Black")
+(set-unfocus-color "Black")
