@@ -27,17 +27,6 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;;----------------------------------------
-;; minibuffer settings
-;;----------------------------------------
-
-;; Enable recursive minibuffers. Among other uses
-;; cases, this allows you to run a command with M-x
-;; while you are editing text in the minibuffer.
-
-(setq enable-recursive-minibuffers t)
-(minibuffer-depth-indicate-mode)
-
 ;----------------------------------------
 ;; file backups / auto-revert
 ;;----------------------------------------
@@ -173,6 +162,37 @@
               benv/major-mode-leader-key
               benv/evil-insert-mode-leader-key))
   (evil-collection-init))
+
+;;----------------------------------------
+;; minibuffer settings
+;;----------------------------------------
+
+(use-package emacs
+  :defer nil
+  :init
+  ;; Enable recursive minibuffers. Among other uses
+  ;; cases, this allows you to run a command with M-x
+  ;; while you are editing text in the minibuffer.
+  (setq enable-recursive-minibuffers t)
+  ;; Display current depth of minibuffer recursion
+  ;; as a number surrounded by square brackets,
+  ;; e.g. `[2]`.
+  (minibuffer-depth-indicate-mode)
+  :general
+  ;; Unbind the Escape key in the minibuffer.
+  ;;
+  ;; When using `evil-collection-setup-minibuffer`
+  ;; to enable evil keybindings in the minibuffer,
+  ;; the default behaviour of the Escape key is
+  ;; to quit the minibuffer. This is annoying
+  ;; because I often do complex editing of shell
+  ;; commands in the minibuffer, and accidentally
+  ;; hitting the Escape key in normal mode causes
+  ;; me to prematurely exit the minibuffer and lose
+  ;; whatever text/command I was writing.
+  (:states '(motion normal emacs)
+   :keymaps '(minibuffer-local-map minibuffer-inactive-mode-map)
+   "<escape>" nil))
 
 ;;----------------------------------------
 ;; proced: interactive equivalent of 'ps' command
