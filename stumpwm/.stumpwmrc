@@ -10,7 +10,7 @@
 ;; NOTE: This command doesn't do anything and so
 ;; far I can't figure out why.
 
-(run-shell-command "setxkbmap dvorak")
+(run-shell-command "setxkbmap dvorak '' '' -option caps:swapescape")
 
 ;; Use `redshift` to automatically adjust monitor color/brightness
 ;; throughout the day.
