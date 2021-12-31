@@ -517,6 +517,8 @@ and echo it in the minibuffer."
    "t i" 'org-toggle-inline-images
    "t l" 'org-toggle-link-display
    "t L" 'org-latex-preview
+   "T i c" 'org-table-insert-column
+   "T d c" 'org-table-delete-column
    "h i" 'org-insert-heading-after-current
    "I"   'org-clock-in
    "O"   'org-clock-out
