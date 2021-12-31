@@ -719,6 +719,15 @@ and echo it in the minibuffer."
   (aset buffer-display-table ?\^M []))
 
 (use-package magit
+  :config
+  ;; Hack `magit-copy-section-value` with an advice, so that copying
+  ;; a commit in a magit buffer (keybinding `y s`) copies the
+  ;; abbreviated 7-character commit ID rather than the full ID.
+  (defun benv/copy-section-value-abbrev ()
+    (let ((result (substring (car kill-ring-yank-pointer) 0 7)))
+      (kill-new result)
+      (message result)))
+  (advice-add 'magit-copy-section-value :after #'benv/copy-section-value-abbrev)
   :general
     ;; Unset any bindings for my evil leader
     ;; key (currently "SPC") in magit, so that
