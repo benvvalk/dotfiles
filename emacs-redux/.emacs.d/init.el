@@ -917,8 +917,11 @@ will change the focus to the target window."
   (benv/create-winum-keybinds "h v" #'describe-variable)
   (benv/create-winum-keybinds "m" #'woman)
   (benv/create-winum-keybinds "w d" #'delete-window)
-  (benv/create-winum-keybinds "x" #'shelldon)
   (benv/create-winum-keybinds "P" #'proced)
+  (benv/create-winum-keybinds "x" #'shelldon)
+  (benv/create-winum-keybinds "x l" #'shelldon-send-line-at-point)
+  (benv/create-winum-keybinds "x r" #'shelldon-send-region)
+  (benv/create-winum-keybinds "x h" #'shelldon-output-history)
 
   :config
   ;; enable winum-mode globally
@@ -1137,6 +1140,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 
 (use-package shelldon
   :load-path "~/.emacs.d/site-lisp/shelldon"
+  :commands (shelldon shelldon-send-line-at-point shelldon-send-region)
   :config
   ;; Quick-and-dirty function to check if the command (process)
   ;; for the current buffer is still running.
@@ -1149,11 +1153,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "b p" 'benv/print-buffer-process-state
-   "x x" 'shelldon
-   "x h" 'shelldon-output-history
-   "x l" 'shelldon-send-line-at-point
-   "x r" 'shelldon-send-region)
+   "b p" 'benv/print-buffer-process-state)
   :init
   (evil-set-initial-state 'shell-mode 'normal)
   :config
