@@ -735,7 +735,8 @@ and echo it in the minibuffer."
     ;; in magit windows.
     (:keymaps '(magit-status-mode-map
                 magit-log-mode-map
-                magit-diff-mode-map)
+                magit-diff-mode-map
+                magit-refs-mode-map)
                 "SPC" nil)
     (:states '(motion insert emacs)
      :prefix benv/evil-leader-key
