@@ -533,22 +533,23 @@ and echo it in the minibuffer."
   (interactive)
   (counsel-rg nil "~/Sync/notes" nil "grep notes: "))
 
-(use-package org-roam
-  :hook (after-init . org-roam-mode)
-  :general
-  ('motion org-mode-map
-   :prefix benv/major-mode-leader-key
-   "r b" 'org-roam
-   "r i" 'org-roam-insert)
-  ('motion
-   :prefix benv/evil-leader-key
-   "r f" 'org-roam-find-file
-   "r g" 'benv/grep-notes)
-  ('insert
-   "C-c r i" 'org-roam-insert)
-  :config
-  (setq org-roam-directory "~/Sync/notes")
-  (org-roam-mode))
+(when (file-directory-p "~/Sync/notes")
+  (use-package org-roam
+    :hook (after-init . org-roam-mode)
+    :general
+    ('motion org-mode-map
+             :prefix benv/major-mode-leader-key
+             "r b" 'org-roam
+             "r i" 'org-roam-insert)
+    ('motion
+     :prefix benv/evil-leader-key
+     "r f" 'org-roam-find-file
+     "r g" 'benv/grep-notes)
+    ('insert
+     "C-c r i" 'org-roam-insert)
+    :config
+    (setq org-roam-directory "~/Sync/notes")
+    (org-roam-mode)))
 
 ;;----------------------------------------
 ;; markdown-mode
