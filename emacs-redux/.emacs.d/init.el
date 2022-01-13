@@ -1005,8 +1005,12 @@ will change the focus to the target window."
   (add-to-list 'company-backends 'company-omnisharp))
 
 ;;----------------------------------------
-;; lsp-mode
+;; C/C++
 ;;----------------------------------------
+
+(use-package cc-mode
+  :init
+  (setq c-default-style "stroustrup"))
 
 (use-package lsp
   :hook (c-mode . lsp-mode)
