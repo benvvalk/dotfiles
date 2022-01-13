@@ -1158,6 +1158,10 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   :load-path "~/.emacs.d/site-lisp/shelldon"
   :commands (shelldon shelldon-send-line-at-point shelldon-send-region)
   :config
+  ;; Prevents Windows EXEs (e.g. adb.exe) from hanging when starting
+  ;; them from shelldon under WSL1. I don't understand what this change
+  ;; actually does or why it works.
+  (setq process-connection-type nil)
   ;; Quick-and-dirty function to check if the command (process)
   ;; for the current buffer is still running.
   (defun benv/print-buffer-process-state ()
