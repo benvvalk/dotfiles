@@ -144,7 +144,8 @@
    benv/major-mode-leader-key nil)
   :config
   (evil-mode 1)
-  (setq evil-move-cursor-back nil))
+  (setq evil-move-cursor-back nil)
+  (evil-select-search-module 'evil-search-module 'evil-search))
 
 (use-package evil-surround
   :after evil
