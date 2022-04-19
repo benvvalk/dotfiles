@@ -593,21 +593,38 @@ and echo it in the minibuffer."
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
    "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp")))
   :config
-  ;; copied from https://stackoverflow.com/a/35394459
+
+  ;; Add directories to recentf list (recently open files history),
+  ;; so that we can quickly open them in dired using counsel-recentf
+  ;; or similar.
+
+  (recentf-mode)
+
+  (defun benv/recentf-add-dired ()
+    "If the current buffer is a dired buffer, add the directory to the
+recentf list (recently opened files history). This allows me to quickly jump
+to a recently/frequently accessed directory in dired using counsel-recentf
+or similar."
+    (and (derived-mode-p 'dired-mode) default-directory
+         (recentf-add-file default-directory))
+    ;; Must return nil because it is run from `write-file-functions'.
+    nil)
+
+  (add-hook 'dired-after-readin-hook 'benv/recentf-add-dired)
+
   (defun benv/ivy-dired-recent-dirs ()
     "Present a list of recently used directories and open the selected one in dired"
     (interactive)
     (let ((recent-dirs
            (delete-dups
-            (mapcar (lambda (file)
-                      (if (file-directory-p file) file (file-name-directory file)))
-                    recentf-list))))
+            (seq-filter #'file-directory-p recentf-list))))
       (let ((dir (ivy-read "Directory: "
                            recent-dirs
                            :re-builder #'ivy--regex
                            :sort nil
                            :initial-input nil)))
         (dired dir))))
+
   ;; I copied this code from:
   ;; https://emacs.stackexchange.com/questions/64588/how-do-i-get-all-marked-files-from-all-dired-buffers
   (defun benv/dired-get-marked-files-all-buffers ()
