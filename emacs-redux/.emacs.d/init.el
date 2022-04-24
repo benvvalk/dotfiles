@@ -171,6 +171,10 @@
 (use-package emacs
   :defer nil
   :init
+  ;; Create auto-save files (e.g. '#myfile.txt#')
+  ;; in a separate directory.
+  (setq auto-save-file-name-transforms
+        `((".*" "~/.emacs.d/auto-save/" t)))
   ;; Enable recursive minibuffers. Among other uses
   ;; cases, this allows you to run a command with M-x
   ;; while you are editing text in the minibuffer.
