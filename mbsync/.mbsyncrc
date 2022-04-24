@@ -43,3 +43,26 @@ Expunge Both
 Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
 SyncState *
 CopyArrivalDate yes
+
+#-------------------------------------------------------------
+
+IMAPStore fastmail-remote
+Host imap.fastmail.com
+SSLType IMAPS
+AuthMechs *
+User awesomesaucelabs@fastmail.com
+PassCmd "pass fastmail-mbsync"
+
+MaildirStore fastmail-local
+Path ~/Maildir/fastmail/
+Inbox ~/Maildir/fastmail/INBOX
+Subfolders Verbatim
+
+Channel fastmail
+Master :fastmail-remote:
+Slave :fastmail-local:
+Create Both
+Expunge None
+Patterns *
+SyncState *
+CopyArrivalDate yes
