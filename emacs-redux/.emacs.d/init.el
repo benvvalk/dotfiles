@@ -1267,11 +1267,6 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 (use-package smtpmail
   :config
   (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-starttls-credentials
-        '(("smtp.gmail.com" 587 "awesomesaucelabs@gmail.com" nil))
-        smtpmail-default-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-service 587
         smtpmail-debug-info t))
 
 (use-package mu4e
@@ -1299,55 +1294,105 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (setq mu4e-update-interval 600)
   ;; hack to avoid UID errors when using `mbsync`
   (setq mu4e-change-filenames-when-moving t)
-  ;; special folder names
-  (setq mu4e-drafts-folder "/[Gmail]/Drafts"
-        mu4e-sent-folder "/[Gmail]/Sent Mail"
-        mu4e-trash-folder "/[Gmail]/Trash")
   ;; don't save sent messages to Sent folder, Gmail/IMAP does this for us
   (setq mu4e-sent-messages-behaviour 'delete)
-  ;; bookmarks (saved queries)
-  (setq mu4e-bookmarks
-        '((:name "inbox (1 month)"
-           :query "maildir:/INBOX date:1m..now"
-           :key ?i)
-          (:name "inbox unread (1 month)"
-           :query "maildir:/INBOX flag:unread date:1m..now"
-           :key ?u)))
-  ;; folder shortcuts
-  (setq mu4e-maildir-shortcuts
-      '( (:maildir "/INBOX"      :key ?i)
-         (:maildir "/[Gmail]/Sent Mail"  :key ?s)
-         (:maildir "/[Gmail]/Trash"      :key ?t)
-         (:maildir "/[Gmail]/Drafts"     :key ?d)))
   ;; don't show confirmation prompt when quitting mu4e
   (setq mu4e-confirm-quit nil)
   (setq mu4e-contexts
         `(,(make-mu4e-context
+            :name "fastmail"
+            :vars '(
+                    ;; SMTP settings
+					(smtpmail-default-smtp-server . "smtp.fastmail.com")
+                    (smtpmail-smtp-server  . "smtp.fastmail.com")
+                    (smtpmail-smtp-stream-type . 'ssl)
+                    (smtpmail-smtp-service . 465)
+
+                    ;; mu4e folder settings
+                    (mu4e-drafts-folder . "/Drafts")
+                    (mu4e-sent-folder . "/Sent")
+                    (mu4e-trash-folder . "/Trash")
+                    (mu4e-maildir-shortcuts .
+                          ((:maildir "/INBOX"  :key ?i)
+                           (:maildir "/Sent"   :key ?s)
+                           (:maildir "/Trash"  :key ?t)
+                           (:maildir "/Drafts" :key ?d)))
+
+                    ;; Note: I override the default mu database location here
+                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; Maildirs, and `mu` requires a separate database for each.
+                    (mu4e-mu-home . "~/.mu/fastmail")
+                    (mu4e-maildir . "~/Maildir/fastmail")
+
+                    ;; shell command to retrieve new mail
+                    (mu4e-get-mail-command . "mbsync -V fastmail")
+
+                    ;; reply-to address
+                    (mu4e-reply-to-address . "awesomesaucelabs@fastmail.com")
+                    (user-mail-address . "awesomesaucelabs@fastmail.com")
+                    (user-full-name . "Ben Vandervalk")))
+          ,(make-mu4e-context
             :name "awesomesaucelabs@gmail.com"
-            :vars '((smtpmail-starttls-credentials
+            :vars '(
+                    ;; SMTP settings
+                    (smtpmail-starttls-credentials
                      . '(("smtp.gmail.com" 587 "awesomesaucelabs@gmail.com" nil)))
+					(smtpmail-default-smtp-server . "smtp.gmail.com")
+                    (smtpmail-smtp-server . "smtp.gmail.com")
+                    (smtpmail-smtp-service . 587)
+
+                    ;; mu4e folder settings
+                    (mu4e-drafts-folder . "/[Gmail]/Drafts")
+                    (mu4e-sent-folder . "/[Gmail]/Sent Mail")
+                    (mu4e-trash-folder . "/[Gmail]/Trash")
+                    (mu4e-maildir-shortcuts .
+                          ((:maildir "/INBOX"      :key ?i)
+                           (:maildir "/[Gmail]/Sent Mail"  :key ?s)
+                           (:maildir "/[Gmail]/Trash"      :key ?t)
+                           (:maildir "/[Gmail]/Drafts"     :key ?d)))
+
                     ;; Note: I override the default mu database location here
                     ;; ("~/.mu") because I have two gmail accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
                     (mu4e-mu-home . "~/.mu/awesomesaucelabs")
                     (mu4e-maildir . "~/Maildir/awesomesaucelabs")
+
                     ;; shell command to retrieve new mail
                     (mu4e-get-mail-command . "mbsync -V awesomesaucelabs")
+
                     ;; reply-to address
                     (mu4e-reply-to-address . "awesomesaucelabs@gmail.com")
                     (user-mail-address . "awesomesaucelabs@gmail.com")
                     (user-full-name . "Ben Vandervalk")))
           ,(make-mu4e-context
             :name "ben.vvalk@gmail.com"
-            :vars '((smtpmail-starttls-credentials
+            :vars '(
+                    ;; SMTP settings
+                    (smtpmail-starttls-credentials
                      . '(("smtp.gmail.com" 587 "ben.vvalk@gmail.com" nil)))
+					(smtpmail-default-smtp-server . "smtp.gmail.com")
+                    (smtpmail-smtp-server . "smtp.gmail.com")
+                    (smtpmail-smtp-service . 587)
+
+                    ;; mu4e folder settings
+                    (mu4e-drafts-folder . "/[Gmail]/Drafts")
+                    (mu4e-sent-folder . "/[Gmail]/Sent Mail")
+                    (mu4e-trash-folder . "/[Gmail]/Trash")
+                    (mu4e-maildir-shortcuts .
+                          ((:maildir "/INBOX"      :key ?i)
+                           (:maildir "/[Gmail]/Sent Mail"  :key ?s)
+                           (:maildir "/[Gmail]/Trash"      :key ?t)
+                           (:maildir "/[Gmail]/Drafts"     :key ?d)))
+
                     ;; Note: I override the default mu database location here
                     ;; ("~/.mu") because I have two gmail accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
                     (mu4e-mu-home . "~/.mu/ben.vvalk")
                     (mu4e-maildir . "~/Maildir/ben.vvalk")
+
                     ;; shell command to retrieve new mail
                     (mu4e-get-mail-command . "mbsync -V ben.vvalk")
+
                     ;; reply-to address
                     (mu4e-reply-to-address . "ben.vvalk@gmail.com")
                     (user-mail-address . "ben.vvalk@gmail.com")
