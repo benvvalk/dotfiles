@@ -215,6 +215,20 @@
     (setq proced-auto-update-interval 1))
   (add-hook 'proced-mode-hook #'benv/proced-mode-setup))
 
+
+;;----------------------------------------
+;; sudo-edit
+;;
+;; Edit a file with sudo permissions.
+;;----------------------------------------
+
+(use-package sudo-edit
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "t s" 'sudo-edit))
+
 ;;----------------------------------------
 ;; face-remap (built-in package)
 ;;----------------------------------------
