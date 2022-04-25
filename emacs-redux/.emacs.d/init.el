@@ -1268,10 +1268,21 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 ;; https://www.djcbsoftware.nl/code/mu/mu4e/Gmail-configuration.html
 ;;----------------------------------------
 
+;; Tell emacs to retrieve all passwords (e.g. SMTP password
+;; when sending email) using the `pass` command, using the
+;; host name as argument.
+;;
+;; Source: https://www.reddit.com/r/emacs/comments/o4g7dv/comment/h2ilq3n/
+(use-package auth-source-pass
+  :init
+  (auth-source-pass-enable))
+
 (use-package smtpmail
   :config
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-debug-info t))
+  (setq send-mail-function 'smtpmail-send-it
+        message-send-mail-function 'smtpmail-send-it
+        smtpmail-debug-info t
+        smtpmail-debug-verb t))
 
 (use-package mu4e
   :load-path "~/share/emacs/site-lisp/mu4e"
@@ -1298,7 +1309,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (setq mu4e-update-interval 600)
   ;; hack to avoid UID errors when using `mbsync`
   (setq mu4e-change-filenames-when-moving t)
-  ;; don't save sent messages to Sent folder, Gmail/IMAP does this for us
+  ;; don't save sent messages to Sent folder, Fastmail/Gmail does this for us
   (setq mu4e-sent-messages-behaviour 'delete)
   ;; don't show confirmation prompt when quitting mu4e
   (setq mu4e-confirm-quit nil)
@@ -1309,7 +1320,8 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                     ;; SMTP settings
                     (smtpmail-default-smtp-server . "smtp.fastmail.com")
                     (smtpmail-smtp-server  . "smtp.fastmail.com")
-                    (smtpmail-smtp-stream-type . 'ssl)
+                    (smtpmail-smtp-user . "awesomesaucelabs@fastmail.com")
+                    (smtpmail-stream-type . ssl)
                     (smtpmail-smtp-service . 465)
 
                     ;; mu4e folder settings
