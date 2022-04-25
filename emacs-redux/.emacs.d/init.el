@@ -1335,7 +1335,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                            (:maildir "/Drafts" :key ?d)))
 
                     ;; Note: I override the default mu database location here
-                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; ("~/.mu") because I have multiple email accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
                     (mu4e-mu-home . "~/.mu/fastmail")
                     (mu4e-maildir . "~/Maildir/fastmail")
@@ -1368,7 +1368,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                            (:maildir "/[Gmail]/Drafts"     :key ?d)))
 
                     ;; Note: I override the default mu database location here
-                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; ("~/.mu") because I have multiple email accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
                     (mu4e-mu-home . "~/.mu/awesomesaucelabs")
                     (mu4e-maildir . "~/Maildir/awesomesaucelabs")
@@ -1401,7 +1401,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                            (:maildir "/[Gmail]/Drafts"     :key ?d)))
 
                     ;; Note: I override the default mu database location here
-                    ;; ("~/.mu") because I have two gmail accounts with separate
+                    ;; ("~/.mu") because I have multiple email accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
                     (mu4e-mu-home . "~/.mu/ben.vvalk")
                     (mu4e-maildir . "~/Maildir/ben.vvalk")
