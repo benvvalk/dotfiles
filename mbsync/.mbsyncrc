@@ -62,7 +62,7 @@ Channel fastmail
 Master :fastmail-remote:
 Slave :fastmail-local:
 Create Both
-Expunge None
+Expunge Both
 Patterns *
 SyncState *
 CopyArrivalDate yes
