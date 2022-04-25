@@ -1307,7 +1307,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
             :name "fastmail"
             :vars '(
                     ;; SMTP settings
-					(smtpmail-default-smtp-server . "smtp.fastmail.com")
+                    (smtpmail-default-smtp-server . "smtp.fastmail.com")
                     (smtpmail-smtp-server  . "smtp.fastmail.com")
                     (smtpmail-smtp-stream-type . 'ssl)
                     (smtpmail-smtp-service . 465)
@@ -1374,7 +1374,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                     ;; SMTP settings
                     (smtpmail-starttls-credentials
                      . '(("smtp.gmail.com" 587 "ben.vvalk@gmail.com" nil)))
-					(smtpmail-default-smtp-server . "smtp.gmail.com")
+                    (smtpmail-default-smtp-server . "smtp.gmail.com")
                     (smtpmail-smtp-server . "smtp.gmail.com")
                     (smtpmail-smtp-service . 587)
 
