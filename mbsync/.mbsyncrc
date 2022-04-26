@@ -3,7 +3,7 @@ Host imap.gmail.com
 SSLType IMAPS
 AuthMechs *
 User ben.vvalk@gmail.com
-PassCmd "pass email/ben.vvalk@gmail.com"
+PassCmd "pass email/imap.gmail.com/ben.vvalk@gmail.com"
 Timeout 60
 
 MaildirStore ben.vvalk-local
@@ -27,7 +27,7 @@ Host imap.gmail.com
 SSLType IMAPS
 AuthMechs *
 User awesomesaucelabs@gmail.com
-PassCmd "pass email/awesomesaucelabs@gmail.com"
+PassCmd "pass email/imap.gmail.com/awesomesaucelabs@gmail.com"
 Timeout 60
 
 MaildirStore awesomesaucelabs-local
@@ -51,7 +51,7 @@ Host imap.fastmail.com
 SSLType IMAPS
 AuthMechs *
 User awesomesaucelabs@fastmail.com
-PassCmd "pass fastmail-mbsync"
+PassCmd "pass email/imap.fastmail.com/awesomesaucelabs@fastmail.com"
 
 MaildirStore fastmail-local
 Path ~/Maildir/fastmail/
