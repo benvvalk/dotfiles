@@ -1388,11 +1388,11 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
             :name "awesomesaucelabs@gmail.com"
             :vars '(
                     ;; SMTP settings
-                    (smtpmail-starttls-credentials
-                     . '(("smtp.gmail.com" 587 "awesomesaucelabs@gmail.com" nil)))
-					(smtpmail-default-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-service . 587)
+                    (smtpmail-default-smtp-server . "smtp.gmail.com")
+                    (smtpmail-smtp-server  . "smtp.gmail.com")
+                    (smtpmail-smtp-user . "awesomesaucelabs@gmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
 
                     ;; mu4e folder settings
                     (mu4e-drafts-folder . "/[Gmail]/Drafts")
@@ -1421,11 +1421,11 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
             :name "ben.vvalk@gmail.com"
             :vars '(
                     ;; SMTP settings
-                    (smtpmail-starttls-credentials
-                     . '(("smtp.gmail.com" 587 "ben.vvalk@gmail.com" nil)))
                     (smtpmail-default-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-server . "smtp.gmail.com")
-                    (smtpmail-smtp-service . 587)
+                    (smtpmail-smtp-server  . "smtp.gmail.com")
+                    (smtpmail-smtp-user . "ben.vvalk@gmail.com")
+                    (smtpmail-stream-type . ssl)
+                    (smtpmail-smtp-service . 465)
 
                     ;; mu4e folder settings
                     (mu4e-drafts-folder . "/[Gmail]/Drafts")
