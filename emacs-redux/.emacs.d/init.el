@@ -173,6 +173,7 @@
   :init
   ;; Create auto-save files (e.g. '#myfile.txt#')
   ;; in a separate directory.
+  (make-directory "~/.emacs.d/auto-save" t)
   (setq auto-save-file-name-transforms
         `((".*" "~/.emacs.d/auto-save/" t)))
   ;; Enable recursive minibuffers. Among other uses
