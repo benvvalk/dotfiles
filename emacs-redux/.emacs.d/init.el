@@ -1195,11 +1195,25 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 (use-package shelldon
   :load-path "~/.emacs.d/site-lisp/shelldon"
   :commands (shelldon shelldon-send-line-at-point shelldon-send-region)
+  :init
+  ;; Toggle whether emacs communicates with subprocesses (shell commands)
+  ;; using a pty or a simple pipe.
+  ;;
+  ;; I often need to toggle this under WSL1, because Windows EXEs (e.g. adb.exe)
+  ;; will hang when emacs attempt communicate with them over a pty.
+  ;; (I don't understand why this happens.) On the other hand, regular
+  ;; linux shell commands that use password prompts or other types of
+  ;; interactive input will fail unless emacs uses a pty (i.e.
+  ;; process-connection-type is t).
+  (defun benv/toggle-pty-for-shell-commands ()
+    (interactive)
+    (if process-connection-type
+        (setq process-connection-type nil)
+      (setq process-connection-type t))
+    (if process-connection-type
+        (message "pty for shell commands enabled")
+      (message "pty for shell commands disabled")))
   :config
-  ;; Prevents Windows EXEs (e.g. adb.exe) from hanging when starting
-  ;; them from shelldon under WSL1. I don't understand what this change
-  ;; actually does or why it works.
-  (setq process-connection-type nil)
   ;; Quick-and-dirty function to check if the command (process)
   ;; for the current buffer is still running.
   (defun benv/print-buffer-process-state ()
@@ -1211,7 +1225,8 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "b p" 'benv/print-buffer-process-state)
+   "b p" 'benv/print-buffer-process-state
+   "t p" 'benv/toggle-pty-for-shell-commands)
   :init
   (evil-set-initial-state 'shell-mode 'normal)
   :config
