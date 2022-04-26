@@ -1298,6 +1298,13 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
 ;; https://www.djcbsoftware.nl/code/mu/mu4e/Gmail-configuration.html
 ;;----------------------------------------
 
+;; Handy interactive interface to the `pass` program (a la Magit).
+;;
+;; Note: This package is completely optional, and the rest
+;; of my email/password configuration (below) would not be
+;; affected by removing/disabling it.
+(use-package pass)
+
 ;; Tell emacs to retrieve all passwords (e.g. SMTP password
 ;; when sending email) using the `pass` command, using the
 ;; host name as argument.
