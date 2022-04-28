@@ -19,6 +19,8 @@ Expunge Both
 Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
 SyncState *
 CopyArrivalDate yes
+MaxMessages 200
+ExpireUnread yes
 
 #-------------------------------------------------------------
 
