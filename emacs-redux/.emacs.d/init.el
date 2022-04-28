@@ -588,6 +588,21 @@ and echo it in the minibuffer."
    :prefix benv/major-mode-leader-key
    "l" 'ace-link-org))
 
+
+;;----------------------------------------
+;; recentf
+;;----------------------------------------
+
+(use-package recentf
+  :config
+  (recentf-mode)
+  ;; Default is 20.
+  (setq recentf-max-saved-items 500)
+  ;; Save the recent files list to disk every
+  ;; 5 minutes. (The default behaviour only saves
+  ;; it when exiting emacs.)
+  (run-at-time nil (* 5 60) 'recentf-save-list))
+
 ;;----------------------------------------
 ;; dired
 ;;----------------------------------------
