@@ -65,6 +65,30 @@ context."
   "Keymap used for completing shell commands in minibuffer.")
 
 (defvar shelldon--hist '())
+(defun shelldon--get-command ()
+  "Get command string from the user."
+  (minibuffer-with-setup-hook
+      (lambda ()
+        (shell-completion-vars)
+        (set (make-local-variable 'minibuffer-default-add-function)
+             'minibuffer-default-add-shell-commands))
+    (let ((prompt (format-message "%s%s"
+                                  (abbreviate-file-name
+                                   default-directory)
+                                  shelldon-prompt-str))
+          (initial-contents nil))
+      (read-from-minibuffer prompt initial-contents
+                            shelldon-minibuffer-local-command-map
+                            nil
+                            'shell-command-history
+                            (list
+                             (list
+                              (let ((filename
+                                     (cond
+                                      (buffer-file-name)
+                                      ((eq major-mode 'dired-mode)
+                                       (dired-get-filename nil t)))))
+                                (and filename (file-relative-name filename)))))))))
 (defun shelldon-async-command (command)
   "Execute string COMMAND in inferior shell; display output, if any.
 With prefix argument, insert the COMMAND's output at point.
@@ -77,22 +101,7 @@ In Elisp, you will often be better served by calling `call-process' or
 `start-process' directly, since they offer more control and do not
 impose the use of a shell (with its need to quote arguments)."
   (interactive
-   (list
-    (read-from-minibuffer
-     (if shell-command-prompt-show-cwd
-         (format-message "%s%s"
-                         (abbreviate-file-name
-                          default-directory)
-                         shelldon-prompt-str)
-       shelldon-prompt-str)
-     nil shelldon-minibuffer-local-command-map nil
-     'shell-command-history
-     (let ((filename
-            (cond
-             (buffer-file-name)
-             ((eq major-mode 'dired-mode)
-              (dired-get-filename nil t)))))
-       (and filename (file-relative-name filename))))))
+   (list (shelldon--get-command)))
   ;; (when current-prefix-arg (setq output-buffer current-prefix-arg))
   ;; Look for a handler in case default-directory is a remote file name.
   (let* ((output-buffer (concat "*shelldon:" (number-to-string (length shelldon--hist)) ":" command "*"))
@@ -100,21 +109,19 @@ impose the use of a shell (with its need to quote arguments)."
          (error-buffer shell-command-default-error-buffer)
          (handler
 	  (find-file-name-handler (directory-file-name default-directory)
-				  'shell-command)))
+				  'shelldon-async-command)))
     (add-to-list 'shelldon--hist `(,(concat (number-to-string (length shelldon--hist)) ":" command) . ,hidden-output-buffer))
     (if handler
-	(funcall handler 'shell-command command output-buffer error-buffer)
+	(funcall handler 'shelldon-async-command command output-buffer error-buffer)
       ;; Output goes in a separate buffer.
       ;; Preserve the match data in case called from a program.
       ;; FIXME: It'd be ridiculous for an Elisp function to call
       ;; shell-command and assume that it won't mess the match-data!
       (save-match-data
         (let* ((buffer (get-buffer-create output-buffer))
-               (proc (get-buffer-process buffer))
-               (directory default-directory))
-	  (with-current-buffer buffer
+               (proc (get-buffer-process buffer)))
+          (with-current-buffer buffer
             (shell-command-save-pos-or-erase)
-	    (setq default-directory directory)
 	    (let* ((process-environment
                     (nconc
                      (list
@@ -130,21 +137,7 @@ impose the use of a shell (with its need to quote arguments)."
 	    ;; Use the comint filter for proper handling of
 	    ;; carriage motion (see comint-inhibit-carriage-motion).
             (set-process-filter proc #'comint-output-filter)
-            (if async-shell-command-display-buffer
-                ;; Display buffer immediately.
-                (display-buffer buffer '(nil (allow-no-window . t)))
-              ;; Defer displaying buffer until first process output.
-              ;; Use disposable named advice so that the buffer is
-              ;; displayed at most once per process lifetime.
-              (let ((nonce (make-symbol "nonce")))
-                (add-function :before (process-filter proc)
-                              (lambda (proc _string)
-                                (let ((buf (process-buffer proc)))
-                                  (when (buffer-live-p buf)
-                                    (remove-function (process-filter proc)
-                                                     nonce)
-                                    (display-buffer buf))))
-                              `((name . ,nonce)))))
+	    (display-buffer buffer '(nil (allow-no-window . t)))
             ;; FIXME: When the output buffer is hidden before the shell process is started,
             ;; ANSI colors are not displayed. I have no idea why.
             (rename-buffer hidden-output-buffer))))))
