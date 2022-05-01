@@ -1467,18 +1467,6 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
                     (user-full-name . "Ben Vandervalk"))))))
 
 ;;----------------------------------------
-;; Windows clipboard integration
-;;----------------------------------------
-
-(defun yank-region-to-windows-clipboard (start end)
-  (interactive "r")
-  (shell-command-on-region start end "clip.exe"))
-
-(general-def 'motion
-  :prefix benv/evil-leader-key
-  "y w" 'yank-region-to-windows-clipboard)
-
-;;----------------------------------------
 ;; themes
 ;;----------------------------------------
 
