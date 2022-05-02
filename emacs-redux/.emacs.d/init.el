@@ -1041,21 +1041,28 @@ will change the focus to the target window."
 ;;----------------------------------------
 
 (use-package csharp-mode
-  :mode ("\\.cs\\'" . csharp-mode))
+  :mode ("\\.cs\\'" . csharp-mode)
+  :init
+  ;; See: https://eliza.sh/2021-06-01-using-unity-editor-with-emacs.html
+  (setenv "FrameworkPathOverride" "/usr/lib/mono/4.5"))
 
-(use-package omnisharp
-  :hook (csharp-mode . omnisharp-mode)
-  :general
-  ('motion
-   :prefix benv/major-mode-leader-key
-   "g" 'omnisharp-go-to-definition
-   "G" 'omnisharp-go-to-definition-other-window
-   "u" 'omnisharp-find-usages))
+;(use-package omnisharp
+;  :hook (csharp-mode . omnisharp-mode)
+;  :general
+;  ('motion
+;   :prefix benv/major-mode-leader-key
+;   "g" 'omnisharp-go-to-definition
+;   "G" 'omnisharp-go-to-definition-other-window
+;   "u" 'omnisharp-find-usages))
 
 (use-package company
-  :hook (csharp-mode . company-mode)
-  :config
-  (add-to-list 'company-backends 'company-omnisharp))
+  :after lsp-mode
+  :hook (lsp-mode . company-mode)
+  :bind
+  (:map company-active-map
+        ("RET" . company-complete-selection))
+  :custom
+  (company-idle-delay 0.0))
 
 ;;----------------------------------------
 ;; C/C++
@@ -1066,10 +1073,19 @@ will change the focus to the target window."
   (setq c-default-style "stroustrup"))
 
 (use-package lsp
+  :commands (lsp lsp-deferred)
   :hook (c-mode . lsp-mode)
+  :init
+  ;; use projectile/project.el to guess the root dir of the project
+  ;;(setq lsp-auto-guess-root t)
   :config
   (setq lsp-enable-snippet nil)
-  (setq lsp-completion-provider :none))
+  (setq lsp-enable-links nil)
+  (setq lsp-diagnostics-provider :none)
+  (setq lsp-completion-provider :none)
+  :general
+  (:states '(normal motion)
+   "g r" 'lsp-find-references))
 
 ;;----------------------------------------
 ;; calfw
