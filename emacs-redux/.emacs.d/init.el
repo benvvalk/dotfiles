@@ -1256,12 +1256,14 @@ result into current buffer (e.g. minibuffer)."
   ;; Toggle whether emacs communicates with subprocesses (shell commands)
   ;; using a pty or a simple pipe.
   ;;
-  ;; I often need to toggle this under WSL1, because Windows EXEs (e.g. adb.exe)
-  ;; will hang when emacs attempt communicate with them over a pty.
-  ;; (I don't understand why this happens.) On the other hand, regular
+  ;; I often need to toggle this under WSL1, because Windows EXEs that
+  ;; use the console (e.g. adb.exe) will hang when emacs attempt
+  ;; communicate with them over a pty [1]. On the other hand, regular
   ;; linux shell commands that use password prompts or other types of
   ;; interactive input will fail unless emacs uses a pty (i.e.
   ;; process-connection-type is t).
+  ;;
+  ;; [1]: https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Subprocess-hang.html
   (defun benv/toggle-pty-for-shell-commands ()
     (interactive)
     (if process-connection-type
