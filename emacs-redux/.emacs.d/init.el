@@ -490,6 +490,8 @@ and echo it in the minibuffer."
 (use-package org
   :mode ("\\.org\\'" . org-mode)
   :hook (org-mode . visual-line-mode)
+  :custom
+  (org-confirm-babel-evaluate . nil)
   :config
   ;; Set foreground/background colors for all headings to black/gray.
   ;; By default, the "leuven" theme sets each heading level to very
