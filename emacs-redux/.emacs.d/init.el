@@ -55,7 +55,11 @@
 ;; Height units are 1/10 pt. For example,
 ;; using `:height 140` sets font size to 14 pt.
 
-(set-face-attribute 'default nil :height 130)
+(let* ((hostname (system-name))
+       (font-size (cond
+                   ((string= hostname "framework") 110)
+                   (t 130))))
+  (set-face-attribute 'default nil :height font-size))
 
 ;;----------------------------------------
 ;; indentation
