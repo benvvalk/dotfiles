@@ -344,6 +344,18 @@ and echo it in the minibuffer."
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;;----------------------------------------
+;; marginalia
+;;----------------------------------------
+
+(use-package marginalia
+  :defer nil
+  :bind (("M-A" . marginalia-cycle)
+         :map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :config
+  (marginalia-mode))
+
+;;----------------------------------------
 ;; window (built-in emacs package)
 ;;----------------------------------------
 
