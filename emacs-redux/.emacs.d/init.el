@@ -781,35 +781,11 @@ to a recently/frequently accessed directory in dired via recentf."
      :non-normal-prefix benv/evil-insert-mode-leader-key
      "g s" 'magit-status
      "g l" 'benv/magit-log-head
-     "g L" 'magit-log-all
-     "p g s" 'benv/projectile-magit-status
-     "p g l" 'benv/projectile-magit-log-current
-     "p g L" 'benv/projectile-magit-log-all)
+     "g L" 'magit-log-all)
   :config
     (defun benv/magit-log-head ()
       (interactive)
       (magit-log-head))
-    (defun benv/projectile-magit-status ()
-      "Jump to magit status buffer for a projectile project."
-      (interactive)
-      (let ((project-dir (completing-read
-                          "magit status: "
-                          projectile-known-projects)))
-        (magit-status project-dir)))
-    (defun benv/projectile-magit-log-current ()
-      "Jump to magit log buffer for a projectile project."
-      (interactive)
-      (let ((default-directory (completing-read
-                                "magit log all: "
-                                projectile-known-projects)))
-        (magit-log-head)))
-    (defun benv/projectile-magit-log-all ()
-      "Jump to magit log buffer for a projectile project."
-      (interactive)
-      (let ((default-directory (completing-read
-                                "magit log all: "
-                                projectile-known-projects)))
-        (magit-log-all)))
     ;; display magit status buffer in currently
     ;; selected window (not the "other" window)
     (setq magit-display-buffer-function
@@ -831,13 +807,37 @@ to a recently/frequently accessed directory in dired via recentf."
   ;; so that projectile completions are handled by vertico.
   (projectile-completion-system 'default)
   :config
+  (defun benv/projectile-magit-status ()
+    "Jump to magit status buffer for a projectile project."
+    (interactive)
+    (let ((project-dir (completing-read
+                        "magit status: "
+                        projectile-known-projects)))
+      (magit-status project-dir)))
+  (defun benv/projectile-magit-log-current ()
+    "Jump to magit log buffer for a projectile project."
+    (interactive)
+    (let ((default-directory (completing-read
+                              "magit log all: "
+                              projectile-known-projects)))
+      (magit-log-head)))
+  (defun benv/projectile-magit-log-all ()
+    "Jump to magit log buffer for a projectile project."
+    (interactive)
+    (let ((default-directory (completing-read
+                              "magit log all: "
+                              projectile-known-projects)))
+      (magit-log-all)))
   (projectile-mode 1)
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "p p" 'projectile-switch-project
-   "p f" 'projectile-find-file))
+   "p f" 'projectile-find-file
+   "p g s" 'benv/projectile-magit-status
+   "p g l" 'benv/projectile-magit-log-current
+   "p g L" 'benv/projectile-magit-log-all))
 
 ;;----------------------------------------
 ;; winner
