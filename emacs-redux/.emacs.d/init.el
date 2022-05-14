@@ -337,7 +337,12 @@ and echo it in the minibuffer."
 ;; consult
 ;;----------------------------------------
 
-(use-package consult)
+(use-package consult
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "s s" 'consult-line))
 
 ;;----------------------------------------
 ;; orderless
