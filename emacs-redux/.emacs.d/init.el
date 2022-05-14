@@ -331,6 +331,15 @@ and echo it in the minibuffer."
    "M-v" 'vertico-scroll-down))
 
 ;;----------------------------------------
+;; orderless
+;;----------------------------------------
+
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+
+;;----------------------------------------
 ;; window (built-in emacs package)
 ;;----------------------------------------
 
