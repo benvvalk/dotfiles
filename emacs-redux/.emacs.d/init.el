@@ -290,7 +290,12 @@ and echo it in the minibuffer."
   :states '(motion insert emacs)
   :prefix benv/evil-leader-key
   :non-normal-prefix benv/evil-insert-mode-leader-key
+  "b b" 'switch-to-buffer
+  "b d" 'kill-this-buffer
+  "b r" 'rename-buffer
+  "b R" 'rename-buffer
   "e b" 'eval-buffer
+  "f f" 'find-file
   "f s" 'save-buffer
   "f C" 'write-file ; behaves like "File -> Save As"
   "f D" 'benv/delete-file-and-buffer
@@ -306,6 +311,24 @@ and echo it in the minibuffer."
 (general-def 'motion
   "C-i" 'evil-jump-forward
   "C-u" 'evil-scroll-up)
+
+;;----------------------------------------
+;; vertico
+;;----------------------------------------
+
+(use-package vertico
+  :defer nil
+  :config
+  (vertico-mode)
+  :general
+  (:states '(motion insert emacs)
+   :keymaps 'vertico-map
+   "M-<" 'vertico-first
+   "M->" 'vertico-last
+   "C-n" 'vertico-next
+   "C-p" 'vertico-previous
+   "C-v" 'vertico-scroll-up
+   "M-v" 'vertico-scroll-down))
 
 ;;----------------------------------------
 ;; window (built-in emacs package)
@@ -384,67 +407,6 @@ and echo it in the minibuffer."
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   ;; open diffs in a vertical split by default
   (setq ediff-split-window-function 'split-window-horizontally))
-
-;;----------------------------------------
-;; ivy/counsel/swiper
-;;
-;; Note: ivy, counsel, and swiper are
-;; all included in the `ivy` package.
-;;----------------------------------------
-
-(use-package ivy
-  :defer nil
-  :config
-  (ivy-mode 1)
-  ;; remove annoying "^" that is inserted at
-  ;; the beginning of ivy input by default
-  (setq ivy-initial-inputs-alist nil)
-  :general
-  ;; Unbind "SPC" so that evil leader key works in ivy-occur buffers
-  (:keymaps '(ivy-occur-mode-map ivy-occur-grep-mode-map)
-   "SPC" nil)
-  (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "b b" 'ivy-switch-buffer
-   "b d" 'kill-this-buffer
-   "b r" 'rename-buffer
-   "b R" 'rename-buffer
-   "i r" 'ivy-resume)
-  (:keymaps 'ivy-minibuffer-map
-   :states '(motion insert emacs)
-   "C-o" 'ivy-call
-   "S-C-n" 'ivy-next-line-and-call
-   "S-C-p" 'ivy-previous-line-and-call
-   "<C-return>" 'ivy-immediate-done))
-
-(use-package counsel
-  :general
-  ('motion
-   "M-x" 'counsel-M-x)
-  (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "c r" 'counsel-rg
-   "f f" 'counsel-find-file
-   "f r" 'counsel-recentf
-   "p r" 'counsel-projectile-rg))
-
-(use-package counsel-web
-  :general
-  (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "g g" 'counsel-web-search)
-  :config
-  (setq counsel-web-search-action #'browse-url)
-  (setq counsel-web-engine 'google))
-
-(use-package swiper
-  :general
-  ('motion
-   :prefix benv/evil-leader-key
-   "s s" 'swiper))
 
 ;;----------------------------------------
 ;; info-mode
@@ -543,9 +505,10 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 
 (defun benv/grep-notes ()
-  "Run ripgrep on my notes using counsel-rg."
+  "Run grep on my notes."
   (interactive)
-  (counsel-rg nil "~/Sync/notes" nil "grep notes: "))
+  (let ((regexp (read-regexp "grep notes: ")))
+    (rgrep regexp "*.org" "~/Sync/notes"))) 
 
 (when (file-directory-p "~/Sync/notes")
   (use-package org-roam
@@ -588,6 +551,12 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 
 (use-package recentf
+  :init
+  (defun benv/recentf ()
+    "Present a list of recently opened files."
+    (interactive)
+    (let ((file (completing-read "Open File: " recentf-list)))
+      (find-file file)))
   :config
   (recentf-mode)
   ;; Default is 20.
@@ -595,7 +564,12 @@ and echo it in the minibuffer."
   ;; Save the recent files list to disk every
   ;; 5 minutes. (The default behaviour only saves
   ;; it when exiting emacs.)
-  (run-at-time nil (* 5 60) 'recentf-save-list))
+  (run-at-time nil (* 5 60) 'recentf-save-list)
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "f r" 'benv/recentf))
 
 ;;----------------------------------------
 ;; dired
@@ -616,7 +590,7 @@ and echo it in the minibuffer."
    "d /" '(lambda () (interactive) (dired "/"))
    "d e" '(lambda () (interactive) (dired "~/.emacs.d/"))
    "d h" '(lambda () (interactive) (dired "~"))
-   "d r" 'benv/ivy-dired-recent-dirs
+   "d r" 'benv/recentd
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
    "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
@@ -624,16 +598,14 @@ and echo it in the minibuffer."
   :config
 
   ;; Add directories to recentf list (recently open files history),
-  ;; so that we can quickly open them in dired using counsel-recentf
-  ;; or similar.
+  ;; so that we can quickly open them in dired via recentf.
 
   (recentf-mode)
 
   (defun benv/recentf-add-dired ()
     "If the current buffer is a dired buffer, add the directory to the
 recentf list (recently opened files history). This allows me to quickly jump
-to a recently/frequently accessed directory in dired using counsel-recentf
-or similar."
+to a recently/frequently accessed directory in dired via recentf."
     (and (derived-mode-p 'dired-mode) default-directory
          (recentf-add-file default-directory))
     ;; Must return nil because it is run from `write-file-functions'.
@@ -641,17 +613,13 @@ or similar."
 
   (add-hook 'dired-after-readin-hook 'benv/recentf-add-dired)
 
-  (defun benv/ivy-dired-recent-dirs ()
+  (defun benv/recentd ()
     "Present a list of recently used directories and open the selected one in dired"
     (interactive)
     (let ((recent-dirs
            (delete-dups
             (seq-filter #'file-directory-p recentf-list))))
-      (let ((dir (ivy-read "Directory: "
-                           recent-dirs
-                           :re-builder #'ivy--regex
-                           :sort nil
-                           :initial-input nil)))
+      (let ((dir (completing-read "Directory: " recent-dirs)))
         (dired dir))))
 
   ;; I copied this code from:
@@ -808,14 +776,6 @@ or similar."
 
 (use-package projectile
   :config (projectile-mode 1))
-
-(use-package counsel-projectile
-  :general
-  (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "p p" 'counsel-projectile-switch-project
-   "p f" 'counsel-projectile-find-file))
 
 ;;----------------------------------------
 ;; winner
@@ -1168,15 +1128,12 @@ Source: https://www.emacswiki.org/emacs/ExecPath"
                              "$SHELL --login -c 'echo $PATH' 2>/dev/null"))))
       (setenv "PATH" path-from-shell)
       (setq exec-path (split-string path-from-shell path-separator))))
-  (defun counsel-shell-command-history ()
-    "Search shell-command-history with ivy and insert
-result into current buffer (e.g. minibuffer).
-
-Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
+  (defun benv/shell-command-history ()
+    "Search shell-command-history and insert
+result into current buffer (e.g. minibuffer)."
     (interactive)
-    (ivy-read "cmd: " shell-command-history
-              :action 'insert
-              :caller 'counsel-shell-command-history))
+    (let ((command (completing-read "cmd: " shell-command-history)))
+      (insert command)))
   :general
   (:keymaps 'minibuffer-local-shell-command-map
    :states '(motion insert emacs)
@@ -1185,7 +1142,7 @@ Source: https://github.com/abo-abo/swiper/issues/689#issuecomment-249583000"
    "C-k" 'kill-line
    "C-n" 'next-history-element
    "C-p" 'previous-history-element
-   "C-r" 'counsel-shell-command-history)
+   "C-r" 'benv/shell-command-history)
   :config
   (set-exec-path-from-shell-path))
 
