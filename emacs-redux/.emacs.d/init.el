@@ -345,6 +345,52 @@ and echo it in the minibuffer."
    "s s" 'consult-line))
 
 ;;----------------------------------------
+;; embark
+;;----------------------------------------
+
+(use-package embark
+
+  :defer nil
+
+  :general
+
+  (:states '(motion insert emacs)
+   "C-," 'embark-act         ;; pick some comfortable binding
+   "C-;" 'embark-dwim        ;; good alternative: M-.
+   "C-h B" 'embark-bindings) ;; alternative for `describe-bindings'
+
+  :init
+
+  ;; Optionally replace the key help with a completing-read interface
+  (setq prefix-help-command #'embark-prefix-help-command)
+
+  :custom
+
+  ;; Change `embark-prompter` from `embark-keymap-prompter`
+  ;; -> `embark-completing-read-prompter`. This tells
+  ;; Embark to use a completing-read prompt to select
+  ;; the action, rather than waiting for
+  (embark-prompter 'embark-completing-read-prompter)
+
+  ;; Remove `embark-mixed-indicator` from `embark-indicators`.
+  ;; `embark-mixed-indicator` causes Embark to open a separate
+  ;; window with a table of keybindings. I find it very visually
+  ;; distracting, and it's not really necessary, given that
+  ;; we use `embark-completing-read-prompter` above.
+  (embark-indicators '(embark--vertico-indicator
+                       embark-mixed-indicator
+                       embark-highlight-indicator
+                       embark-isearch-highlight-indicator))
+
+  :config
+
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+;;----------------------------------------
 ;; orderless
 ;;----------------------------------------
 
