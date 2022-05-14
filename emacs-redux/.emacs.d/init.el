@@ -711,12 +711,6 @@ or similar."
       (dired-find-file)
       (when (file-directory-p filename)
         (dired-narrow))))
-  (defun benv/dired-narrow-up-directory ()
-    (interactive)
-    (ivy-quit-and-run
-      (revert-buffer)
-      (dired-up-directory)
-      (dired-narrow)))
   (defun benv/dired-narrow-goto-first-file ()
     (interactive)
     (with-current-buffer
@@ -734,7 +728,6 @@ or similar."
    "f" 'dired-narrow)
   (:keymaps 'dired-narrow-map
    :states '(motion insert emacs)
-   "<C-backspace>" 'benv/dired-narrow-up-directory
    "M-<" 'benv/dired-narrow-goto-first-file
    "M->" 'benv/dired-narrow-goto-last-file
    "C-n" 'dired-narrow-next-file
