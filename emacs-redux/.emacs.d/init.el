@@ -220,7 +220,6 @@
     (setq proced-auto-update-interval 1))
   (add-hook 'proced-mode-hook #'benv/proced-mode-setup))
 
-
 ;;----------------------------------------
 ;; sudo-edit
 ;;
