@@ -809,7 +809,18 @@ to a recently/frequently accessed directory in dired via recentf."
 ;;----------------------------------------
 
 (use-package projectile
-  :config (projectile-mode 1))
+  :custom
+  ;; use the emacs' default completion system (i.e. completing-read),
+  ;; so that projectile completions are handled by vertico.
+  (projectile-completion-system 'default)
+  :config
+  (projectile-mode 1)
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "p p" 'projectile-switch-project
+   "p f" 'projectile-find-file))
 
 ;;----------------------------------------
 ;; winner
