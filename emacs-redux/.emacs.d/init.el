@@ -1428,6 +1428,11 @@ result into current buffer (e.g. minibuffer)."
                            (:maildir "/Trash"  :key ?t)
                            (:maildir "/Drafts" :key ?d)))
 
+                    (mu4e-bookmarks .
+                          ((:name  "Inbox (last 7 days)"
+                                   :query "maildir:/INBOX date:1w.."
+                                   :key ?i)))
+
                     ;; Note: I override the default mu database location here
                     ;; ("~/.mu") because I have multiple email accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
@@ -1461,6 +1466,11 @@ result into current buffer (e.g. minibuffer)."
                            (:maildir "/[Gmail]/Trash"      :key ?t)
                            (:maildir "/[Gmail]/Drafts"     :key ?d)))
 
+                    (mu4e-bookmarks .
+                          ((:name  "Inbox (last 7 days)"
+                                   :query "maildir:/INBOX date:1w.."
+                                   :key ?i)))
+
                     ;; Note: I override the default mu database location here
                     ;; ("~/.mu") because I have multiple email accounts with separate
                     ;; Maildirs, and `mu` requires a separate database for each.
@@ -1493,6 +1503,11 @@ result into current buffer (e.g. minibuffer)."
                            (:maildir "/[Gmail]/Sent Mail"  :key ?s)
                            (:maildir "/[Gmail]/Trash"      :key ?t)
                            (:maildir "/[Gmail]/Drafts"     :key ?d)))
+
+                    (mu4e-bookmarks .
+                          ((:name  "Inbox (last 7 days)"
+                                   :query "maildir:/INBOX date:1w.."
+                                   :key ?i)))
 
                     ;; Note: I override the default mu database location here
                     ;; ("~/.mu") because I have multiple email accounts with separate
