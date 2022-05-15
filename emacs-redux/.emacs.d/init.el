@@ -772,6 +772,20 @@ to a recently/frequently accessed directory in dired via recentf."
   (setq dired-narrow-exit-action 'benv/dired-narrow-recurse)
   (setq dired-narrow-exit-when-one-left nil))
 
+;; dired-subtree: expand directories in dired using TAB.
+(use-package dired-subtree
+  :config
+  ;; Fix bug where dired subtrees appear as black blobs:
+  ;; https://github.com/fniessen/emacs-leuven-theme/issues/64
+  (setq dired-subtree-use-backgrounds nil)
+  :general
+  (:keymaps 'dired-mode-map
+   :states 'normal
+   "TAB" 'dired-subtree-toggle
+   ; Note: "<backtab>" represents Shift+Tab.
+   "<backtab>" 'dired-subtree-remove
+   "<C-tab>" 'dired-subtree-cycle))
+
 ;; Use hl-line-mode to highlight the current
 ;; file/directory line in dired
 (use-package hl-line
