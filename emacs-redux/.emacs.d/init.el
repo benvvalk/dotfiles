@@ -342,6 +342,7 @@ and echo it in the minibuffer."
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "m m" 'consult-man
    "s s" 'consult-line))
 
 ;;----------------------------------------
@@ -444,22 +445,6 @@ and echo it in the minibuffer."
    "M-K" 'benv/shrink-window
    "M-H" 'benv/shrink-window-horizontally
    "M-L" 'benv/enlarge-window-horizontally))
-
-;;----------------------------------------
-;; Man-mode (built-in mode for Unix man pages)
-;;----------------------------------------
-
-(use-package Man
-  :commands 'man
-  :config
-  ;; open man pages in current window (default is "friendly",
-  ;; i.e. open in other window)
-  (setq Man-notify-method pushy)
-  :general
-  (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "m m" 'man))
 
 ;;----------------------------------------
 ;; compilation mode
