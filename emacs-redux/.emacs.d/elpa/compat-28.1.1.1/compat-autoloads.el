@@ -1,4 +1,4 @@
-;;; compat-autoloads.el --- automatically extracted autoloads
+;;; compat-autoloads.el --- automatically extracted autoloads  -*- lexical-binding: t -*-
 ;;
 ;;; Code:
 
@@ -9,14 +9,14 @@
 ;;;### (autoloads nil "compat-help" "compat-help.el" (0 0 0 0))
 ;;; Generated autoloads from compat-help.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "compat-help" '("compat---describe")))
+(register-definition-prefixes "compat-help" '("compat---describe"))
 
 ;;;***
 
 ;;;### (autoloads nil "compat-macs" "compat-macs.el" (0 0 0 0))
 ;;; Generated autoloads from compat-macs.el
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "compat-macs" '("compat-")))
+(register-definition-prefixes "compat-macs" '("compat-"))
 
 ;;;***
 
