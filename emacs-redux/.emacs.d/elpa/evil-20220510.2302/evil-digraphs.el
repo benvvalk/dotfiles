@@ -1,9 +1,9 @@
-;;; evil-digraphs.el --- Digraphs
+;;; evil-digraphs.el --- Digraphs -*- lexical-binding: t -*-
 
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.3.0-snapshot
+;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.

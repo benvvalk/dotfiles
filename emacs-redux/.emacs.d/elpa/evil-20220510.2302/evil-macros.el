@@ -1,9 +1,9 @@
-;;; evil-macros.el --- Macros
+;;; evil-macros.el --- Macros -*- lexical-binding: t -*-
 
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.3.0-snapshot
+;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -44,7 +44,6 @@
 The return value is a list (BEG END TYPE)."
   (let ((opoint   (point))
         (omark    (mark t))
-        (omactive (and (boundp 'mark-active) mark-active))
         (obuffer  (current-buffer))
         (evil-motion-marker (move-marker (make-marker) (point)))
         range)
@@ -110,7 +109,18 @@ The return value is a list (BEG END TYPE)."
           (move-marker evil-motion-marker nil))))))
 
 (defmacro evil-define-motion (motion args &rest body)
-  "Define an motion command MOTION.
+  "Define a motion command MOTION.
+ARGS is a list of arguments.  Motions can have any number of
+arguments, but the first (if any) has the predefined meaning of
+count.  BODY must execute the motion by moving point.
+
+Optional keyword arguments are:
+- `:type' - determines how the motion works after an operator (one of
+  `inclusive', `line', `block' and `exclusive', or a self-defined
+  motion type)
+- `:jump' - if non-nil, the previous position is stored in the jump
+  list, so that it can be restored with \
+\\<evil-motion-state-map>\\[evil-jump-backward]
 
 \(fn MOTION (COUNT ARGS...) DOC [[KEY VALUE]...] BODY...)"
   (declare (indent defun)
@@ -120,7 +130,7 @@ The return value is a list (BEG END TYPE)."
                            [&rest keywordp sexp]
                            [&optional ("interactive" [&rest form])]
                            def-body)))
-  (let (arg doc interactive key keys type)
+  (let (arg doc interactive key keys)
     (when args
       (setq args `(&optional ,@(delq '&optional args))
             ;; the count is either numerical or nil
@@ -147,7 +157,7 @@ The return value is a list (BEG END TYPE)."
            '(and (fboundp 'eldoc-add-command)
                  (eldoc-add-command ',motion))))
        (evil-define-command ,motion (,@args)
-         ,@(when doc `(,doc))          ; avoid nil before `interactive'
+         ,@(when doc `(,doc))         ; avoid nil before `interactive'
          ,@keys
          :keep-visual t
          (interactive ,@interactive)
@@ -356,6 +366,14 @@ the new range."
 BODY should return a range (BEG END) to the right of point
 if COUNT is positive, and to the left of it if negative.
 
+Optional keyword arguments:
+- `:type' - determines how the range applies after an operator
+  (`inclusive', `line', `block', and `exclusive', or a self-defined
+  motion type).
+- `:extend-selection' - if non-nil (default), the text object always
+  enlarges the current selection.  Otherwise, it replaces the current
+  selection.
+
 \(fn OBJECT (COUNT) DOC [[KEY VALUE]...] BODY...)"
   (declare (indent defun)
            (doc-string 3)
@@ -444,6 +462,26 @@ if COUNT is positive, and to the left of it if negative.
 
 (defmacro evil-define-operator (operator args &rest body)
   "Define an operator command OPERATOR.
+The operator acts on the range of characters BEG through
+END. BODY must execute the operator by potentially manipulating
+the buffer contents, or otherwise causing side effects to happen.
+
+Optional keyword arguments are:
+- `:type' - force the input range to be of a given type (`inclusive',
+  `line', `block', and `exclusive', or a self-defined motion type).
+- `:motion' - use a predetermined motion instead of waiting for one
+  from the keyboard.  This does not affect the behavior in visual
+  state, where selection boundaries are always used.
+- `:repeat' - if non-nil (default), then \
+  \\<evil-normal-state-map>\\[evil-repeat] will repeat the
+  operator.
+- `:move-point' - if non-nil (default), the cursor will be moved to
+  the beginning of the range before the body executes
+- `:keep-visual' - if non-nil, the selection is not disabled when the
+  operator is executed in visual state.  By default, visual state is
+  exited automatically.
+- `:restore-point' - if non-nil, point is restored when the
+  operator is executed from ex.
 
 \(fn OPERATOR (BEG END ARGS...) DOC [[KEY VALUE]...] BODY...)"
   (declare (indent defun)
@@ -502,6 +540,7 @@ if COUNT is positive, and to the left of it if negative.
                evil-inhibit-operator)
           (setq evil-inhibit-operator-value nil
                 evil-this-operator this-command)
+          (setq evil-operator-start-col (current-column))
           (prog1 ,interactive
             (setq orig (point)
                   evil-inhibit-operator-value evil-inhibit-operator)
@@ -534,7 +573,7 @@ RETURN-TYPE is non-nil."
                      (when evil-ex-p 'evil-line)))
          (type evil-operator-range-type)
          (range (evil-range (point) (point)))
-         command count modifier)
+         command count)
     (setq evil-this-type-modified nil)
     (evil-save-echo-area
       (cond
@@ -614,24 +653,22 @@ RETURN-TYPE is non-nil."
 (defmacro evil-define-type (type doc &rest body)
   "Define type TYPE.
 DOC is a general description and shows up in all docstrings.
-It is followed by a list of keywords and functions:
 
-:expand FUNC     Expansion function. This function should accept
-                 two positions in the current buffer, BEG and END,
-                 and return a pair of expanded buffer positions.
-:contract FUNC   The opposite of :expand, optional.
-:one-to-one BOOL Whether expansion is one-to-one. This means that
-                 :expand followed by :contract always returns the
-                 original range.
-:normalize FUNC  Normalization function, optional. This function should
-                 accept two unexpanded positions and adjust them before
-                 expansion. May be used to deal with buffer boundaries.
-:string FUNC     Description function. This takes two buffer positions
-                 and returns a human-readable string, for example,
-                 \"2 lines\".
+Optional keyword arguments:
+- `:expand' - expansion function.  This function should accept two
+  positions in the current buffer, BEG and END,and return a pair of
+  expanded buffer positions.
+- `:contract' - the opposite of `:expand'.  Optional.
+- `:one-to-one' - non-nil if expansion is one-to-one.  This means that
+  `:expand' followed by `:contract' always return the original range.
+- `:normalize' - normalization function.  This function should accept
+  two unexpanded positions and adjust them before expansion.  May be
+  used to deal with buffer boundaries.
+- `:string' - description function.  Takes two buffer positions and
+  returns a human-readable string.  For example \"2 lines\"
 
 If further keywords and functions are specified, they are assumed to
-be transformations on buffer positions, like :expand and :contract.
+be transformations on buffer positions, like `:expand' and `:contract'.
 
 \(fn TYPE DOC [[KEY FUNC]...])"
   (declare (indent defun)
@@ -646,7 +683,7 @@ be transformations on buffer positions, like :expand and :contract.
     (while (keywordp (car-safe body))
       (setq key (pop body)
             val (pop body))
-      (if (plist-member plist key) ; not a function
+      (if (plist-member plist key)      ; not a function
           (setq plist (plist-put plist key val))
         (setq func val
               sym (intern (replace-regexp-in-string
@@ -657,8 +694,7 @@ be transformations on buffer positions, like :expand and :contract.
               string (if (stringp string)
                          (format "%s\n\n" string) "")
               plist (plist-put plist key `',name))
-        (add-to-list
-         'defun-forms
+        (push
          (cond
           ((eq key :string)
            `(defun ,name (beg end &rest properties)
@@ -712,7 +748,7 @@ with PROPERTIES.\n\n%s%s" sym type string doc)
                     (setq properties
                           (evil-concat-plists properties plist))
                     (apply #'evil-range beg end type properties)))))))
-         t)))
+         defun-forms)))
     ;; :one-to-one requires both or neither of :expand and :contract
     (when (plist-get plist :expand)
       (setq plist (plist-put plist :one-to-one
