@@ -667,7 +667,9 @@ and echo it in the minibuffer."
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
    "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
-   "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp")))
+   "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp"))
+   "e ." '(lambda () (interactive) (benv/open-windows-explorer default-directory))
+   "e r" 'benv/windows-explorer-recentd)
   :config
 
   ;; Add directories to recentf list (recently open files history),
@@ -686,12 +688,17 @@ to a recently/frequently accessed directory in dired via recentf."
 
   (add-hook 'dired-after-readin-hook 'benv/recentf-add-dired)
 
+  (defun benv/recentd-list ()
+    "Return a dedup'ed list of directories recently visited in dired.
+The directory list is extracted from `recentf-list`."
+    (delete-dups
+     (seq-filter #'file-directory-p recentf-list)))
+
   (defun benv/recentd ()
     "Present a list of recently used directories and open the selected one in dired"
     (interactive)
     (let ((recent-dirs
-           (delete-dups
-            (seq-filter #'file-directory-p recentf-list))))
+           (benv/recentd-list)))
       (let ((dir (completing-read "Directory: " recent-dirs)))
         (dired dir))))
 
@@ -717,6 +724,30 @@ to a recently/frequently accessed directory in dired via recentf."
            (dir2 (pop marked-files)))
       (when (and dir1 dir2)
         (ztree-diff dir1 dir2))))
+
+  (defun benv/open-windows-explorer (dir)
+    "Open Windows Explorer (file manager) in directory DIR.
+
+Note: This command works as desired, but the shell command always
+returns exit status 1, for reasons I don't understand.
+"
+    (let ((process-connection-type nil)
+          (default-directory dir)
+          ;; Do not automatically display the buffer with the
+          ;; shell command output. Under normal circumstances,
+          ;; `explorer.exe .` doesn't print anything to the console
+          ;; anyway.
+          (display-buffer-alist
+           (list (cons "\\*Async Shell Command\\*.*"
+                       (cons #'display-buffer-no-window nil)))))
+      (async-shell-command "explorer.exe .")))
+
+  (defun benv/windows-explorer-recentd ()
+    "Open a recently visited directory in Windows Explorer."
+    (interactive)
+    (let ((dir (completing-read "dir: " (benv/recentd-list))))
+      (benv/open-windows-explorer dir)))
+
   ;; When two dired buffers are visible, use the "other" dired buffer
   ;; as the default target for file operations (copy, move, etc.)
   (setq dired-dwim-target t)
