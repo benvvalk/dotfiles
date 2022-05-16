@@ -732,15 +732,8 @@ Note: This command works as desired, but the shell command always
 returns exit status 1, for reasons I don't understand.
 "
     (let ((process-connection-type nil)
-          (default-directory dir)
-          ;; Do not automatically display the buffer with the
-          ;; shell command output. Under normal circumstances,
-          ;; `explorer.exe .` doesn't print anything to the console
-          ;; anyway.
-          (display-buffer-alist
-           (list (cons "\\*Async Shell Command\\*.*"
-                       (cons #'display-buffer-no-window nil)))))
-      (async-shell-command "explorer.exe .")))
+          (default-directory dir))
+      (benv/async-shell-command-silent "explorer.exe .")))
 
   (defun benv/windows-explorer-recentd ()
     "Open a recently visited directory in Windows Explorer."
@@ -1284,6 +1277,19 @@ result into current buffer (e.g. minibuffer)."
     (interactive)
     (let ((command (completing-read "cmd: " shell-command-history)))
       (insert command)))
+
+  (defun benv/async-shell-command-silent (cmd)
+    "Works just like `async-shell-command`, but does not automatically
+display a buffer with the STDOUT/STDERR from the command."
+    (let (;; Do not automatically display the buffer with the
+          ;; shell command output. Under normal circumstances,
+          ;; `explorer.exe .` doesn't print anything to the console
+          ;; anyway.
+          (display-buffer-alist
+           (list (cons "\\*Async Shell Command\\*.*"
+                       (cons #'display-buffer-no-window nil)))))
+      (async-shell-command cmd)))
+
   :general
   (:keymaps 'minibuffer-local-shell-command-map
    :states '(motion insert emacs)
