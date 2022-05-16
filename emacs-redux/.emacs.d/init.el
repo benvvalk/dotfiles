@@ -367,19 +367,24 @@ and echo it in the minibuffer."
 
   :custom
 
-  ;; Change `embark-prompter` from `embark-keymap-prompter`
-  ;; -> `embark-completing-read-prompter`. This tells
-  ;; Embark to use a completing-read prompt to select
-  ;; the action, rather than waiting for
-  (embark-prompter 'embark-completing-read-prompter)
+  ;; The list below is the default value for `embark-indicators`,
+  ;; but with the `embark-mixed-indicator` element removed
+  ;; and `embark--vertico-indicator`/`embark-minimal-indicator`
+  ;; added.
+  ;;
+  ;; `embark-mixed-indicator` causes Embark to automatically
+  ;; open a help window with available keybindings when there
+  ;; no key press for a short period of time. (The behaviour is
+  ;; similar to `which-key`). I don't like that behaviour
+  ;; because the embark help window is huge and obsures a
+  ;; lot of the emacs frame.
+  ;;
+  ;; Instead of the automatic help window, I prefer to press
+  ;; C-h when I can't remember what key to press, which
+  ;; opens a completion list of the available embark actions.
 
-  ;; Remove `embark-mixed-indicator` from `embark-indicators`.
-  ;; `embark-mixed-indicator` causes Embark to open a separate
-  ;; window with a table of keybindings. I find it very visually
-  ;; distracting, and it's not really necessary, given that
-  ;; we use `embark-completing-read-prompter` above.
   (embark-indicators '(embark--vertico-indicator
-                       embark-mixed-indicator
+                       embark-minimal-indicator
                        embark-highlight-indicator
                        embark-isearch-highlight-indicator))
 
