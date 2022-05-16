@@ -338,10 +338,16 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 
 (use-package consult
+  :config
+  (defun benv/grep-notes ()
+    "Run grep on my notes."
+    (interactive)
+    (consult-ripgrep "~/Sync/notes"))
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "r g" 'benv/grep-notes
    "m m" 'consult-man
    "s s" 'consult-line))
 
@@ -576,12 +582,6 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 ;; org-roam
 ;;----------------------------------------
-
-(defun benv/grep-notes ()
-  "Run grep on my notes."
-  (interactive)
-  (let ((regexp (read-regexp "grep notes: ")))
-    (rgrep regexp "*.org" "~/Sync/notes"))) 
 
 (when (file-directory-p "~/Sync/notes")
   (use-package org-roam
