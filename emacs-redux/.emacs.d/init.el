@@ -390,6 +390,10 @@ and echo it in the minibuffer."
    "C-;" 'embark-dwim        ;; good alternative: M-.
    "C-h B" 'embark-bindings) ;; alternative for `describe-bindings'
 
+  (:states '(motion insert emacs)
+   :keymaps 'minibuffer-local-map
+   "M-," 'embark-become)
+
   :init
 
   ;; Optionally replace the key help with a completing-read interface
