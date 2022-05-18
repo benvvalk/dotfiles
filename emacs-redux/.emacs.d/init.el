@@ -316,6 +316,30 @@ and echo it in the minibuffer."
   "C-u" 'evil-scroll-up)
 
 ;;----------------------------------------
+;; hippie-expand ("M-/")
+;;----------------------------------------
+
+;; By default "M-/" is bound to `dabbrev-expand`,
+;; which completes a word based on other
+;; words found in the current buffer.
+;; `hippie-expand` is similar to `dabbrev-expand`
+;; but it is smarter and more configurable [1].
+;;
+;; The "M-=" binding is a no-op that can be used to
+;; concatenate multiple completions (e.g.
+;; completing consecutive components of a file path).
+;; Since repeatedly pressing "M-/" cycles through
+;; the completion candidates, calling `ignore` provides a
+;; way to "accept" the current completion and start
+;; a new one. (I chose "M-=" because `=` is next
+;; `/` in the Dvorak keyboard layout.)
+;;
+;; [1]: https://www.masteringemacs.org/article/text-expansion-hippie-expand
+
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "M-=") 'ignore)
+
+;;----------------------------------------
 ;; vertico
 ;;----------------------------------------
 
