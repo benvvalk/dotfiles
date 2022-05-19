@@ -471,11 +471,32 @@ and echo it in the minibuffer."
   (defun benv/enlarge-window-horizontally ()
     (interactive)
     (enlarge-window-horizontally benv/window-resize-step-horizontal))
+
+  (defun benv/mirror-window (dir)
+    "Make the neighbour window in direction DIR a mirror of
+the current window. In other words, make the selected buffer,
+cursor position, and window scroll position of the neighbour
+window identical to the current window.
+
+If a neighbour window does not already exist in direction DIR,
+this function will split the current window."
+    (unless (window-in-direction dir)
+      (split-window nil nil dir))
+    (let ((buffer (current-buffer))
+          (start (window-start))
+          (window (window-in-direction dir)))
+      (save-selected-window (select-window window)
+                            (set-window-start (selected-window) start)
+                            (switch-to-buffer buffer))))
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "w m" 'delete-other-windows
+   "w m h" '(lambda () (interactive) (benv/mirror-window 'left))
+   "w m l" '(lambda () (interactive) (benv/mirror-window 'right))
+   "w M" 'delete-other-windows
+   "w o" 'delete-other-windows
    "w s" 'split-window-below
    "w v" 'split-window-right
    "y f" 'benv/yank-filename)
