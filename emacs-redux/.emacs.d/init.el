@@ -371,6 +371,7 @@ and echo it in the minibuffer."
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "c r" 'consult-ripgrep
    "r g" 'benv/grep-notes
    "m m" 'consult-man
    "s s" 'consult-line))
