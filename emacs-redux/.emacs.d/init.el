@@ -1493,7 +1493,8 @@ display a buffer with the STDOUT/STDERR from the command."
   ('motion mu4e-view-mode-map
    :prefix benv/major-mode-leader-key
    "a" 'mu4e-view-mime-part-action)
-  ('normal mu4e-main-mode-map
+  (:states '(motion normal emacs)
+   :keymaps '(mu4e-main-mode-map mu4e-view-mode-map mu4e-headers-mode-map)
    ";" 'benv/mu4e-switch-context)
   :commands (mu4e)
   :config
