@@ -11,12 +11,25 @@ Path ~/Maildir/ben.vvalk/
 Inbox ~/Maildir/ben.vvalk/INBOX
 Subfolders Verbatim
 
+# Note: I disable syncing of the drafts folder with !"[Gmail]/Drafts"
+# to avoid a bad interaction between mu4e and mbsync, which causes
+# an unbounded number draft files to be created in the drafts folder
+# while composing a message in emacs [1].
+#
+# The downsides of not synchronizing the drafts folder
+# are that: (1) I cannot start composing a draft on machine A
+# and then resume editing the draft on machine B, and (2) my drafts
+# don't get backed up to gmail. I think I can live with those
+# caveats, though.
+#
+# [1]: https://github.com/djcb/mu/issues/1373#issuecomment-460063934
+
 Channel ben.vvalk
 Master :ben.vvalk-remote:
 Slave :ben.vvalk-local:
 Create Both
 Expunge Both
-Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
+Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin" !"[Gmail]/Drafts"
 SyncState *
 CopyArrivalDate yes
 MaxMessages 200
@@ -37,12 +50,25 @@ Path ~/Maildir/awesomesaucelabs/
 Inbox ~/Maildir/awesomesaucelabs/INBOX
 Subfolders Verbatim
 
+# Note: I disable syncing of the drafts folder with !"[Gmail]/Drafts"
+# to avoid a bad interaction between mu4e and mbsync, which causes
+# an unbounded number draft files to be created in the drafts folder
+# while composing a message in emacs [1].
+#
+# The downsides of not synchronizing the drafts folder
+# are that: (1) I cannot start composing a draft on machine A
+# and then resume editing the draft on machine B, and (2) my drafts
+# don't get backed up to gmail. I think I can live with those
+# caveats, though.
+#
+# [1]: https://github.com/djcb/mu/issues/1373#issuecomment-460063934
+
 Channel awesomesaucelabs
 Master :awesomesaucelabs-remote:
 Slave :awesomesaucelabs-local:
 Create Both
 Expunge Both
-Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin"
+Patterns * !"[Gmail]/All Mail" !"[Gmail]/Important" !"[Gmail]/Starred" !"[Gmail]/Bin" !"[Gmail]/Drafts"
 SyncState *
 CopyArrivalDate yes
 
@@ -60,11 +86,24 @@ Path ~/Maildir/fastmail/
 Inbox ~/Maildir/fastmail/INBOX
 Subfolders Verbatim
 
+# Note: I disable syncing of the drafts folder with !"/Drafts"
+# to avoid a bad interaction between mu4e and mbsync, which causes
+# an unbounded number draft files to be created in the drafts folder
+# while composing a message in emacs [1].
+#
+# The downsides of not synchronizing the drafts folder
+# are that: (1) I cannot start composing a draft on machine A
+# and then resume editing the draft on machine B, and (2) my drafts
+# don't get backed up to fastmail. I think I can live with those
+# caveats, though.
+#
+# [1]: https://github.com/djcb/mu/issues/1373#issuecomment-460063934
+
 Channel fastmail
 Master :fastmail-remote:
 Slave :fastmail-local:
 Create Both
 Expunge Both
-Patterns *
+Patterns * !"/Drafts"
 SyncState *
 CopyArrivalDate yes
