@@ -306,7 +306,6 @@ and echo it in the minibuffer."
   "q q" 'save-buffers-kill-terminal
   "h m" 'woman
   "t l" 'visual-line-mode
-  "t w" 'whitespace-mode
   "u"   'universal-argument)
 
 ;; restore standard vim mappings
@@ -314,6 +313,32 @@ and echo it in the minibuffer."
 (general-def 'motion
   "C-i" 'evil-jump-forward
   "C-u" 'evil-scroll-up)
+
+;;----------------------------------------
+;; whitespace-mode
+;;----------------------------------------
+
+(use-package whitespace
+  :custom
+  ;; Same as default value, but with `lines` removed to
+  ;; disable yellow highlighting of long lines.
+  (whitespace-style '(face
+                      tabs
+                      spaces
+                      trailing
+                      space-before-tab
+                      newline
+                      indentation
+                      empty
+                      space-after-tab
+                      space-mark
+                      tab-mark
+                      newline-mark))
+  :general
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "t w" 'whitespace-mode))
 
 ;;----------------------------------------
 ;; hippie-expand ("M-/")
