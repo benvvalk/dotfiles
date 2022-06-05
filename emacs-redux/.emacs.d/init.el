@@ -133,6 +133,7 @@
 (setq benv/evil-insert-mode-leader-key "C-SPC")
 
 (use-package evil
+  :defer nil
   :init
   ;; evil-collection requires the following settings before
   ;; loading evil and evil-collection. (See evil-collection
