@@ -140,6 +140,29 @@
   ;; README for further details.)
   (setq evil-want-keybinding nil
         evil-want-integration t)
+  :custom
+  ;; Setting `evil-move-beyond-eol` to `t` makes it possible to move
+  ;; the cursor one position past the last character in a line. This
+  ;; can be thought of as positioning the character on the newline
+  ;; character.
+  ;;
+  ;; The default value of `evil-move-beyond-eol` is nil, but this
+  ;; setting prevents some of emacs' built-in elisp functions from
+  ;; working as in a consistent manner, and was making some of my own
+  ;; lisp-parsing code (for lisp-tree-mode) way more complicated than
+  ;; it needed to be. In particular, the intended behaviour of emacs'
+  ;; `forward-sexp` function is to always move to the first character
+  ;; *after* the current/next sexp. But if `evil-move-beyond-eol` is
+  ;; set to nil, then `forward-sexp` can get at the last character of
+  ;; a line (e.g. ")"), rather than moving to the newline character
+  ;; after it.  And that means that I need to handle sexp's that end
+  ;; at line endings as a special case in my code, which I don't want
+  ;; to do.
+  ;;
+  ;; For further explanation/discussion of this issue, see [1].
+  ;;
+  ;; [1]: https://github.com/syl20bnr/spacemacs/issues/2525
+  (evil-move-beyond-eol t)
   :general
   ;; Unbind "," and "SPC" so I can use them as prefix
   ;; keys, without getting "Key sequence starts
