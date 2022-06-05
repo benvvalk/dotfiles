@@ -170,6 +170,16 @@
   (:states '(motion normal visual operator)
    benv/evil-leader-key nil
    benv/major-mode-leader-key nil)
+  ;; Make standard readline/emacs keybinds available
+  ;; in evil insert mode.
+  (:states 'insert
+           "C-a" #'beginning-of-line
+           "M-b" #'backward-word
+           "M-f" #'forward-word
+           "C-k" #'kill-line
+           "M-d" #'kill-word
+           "C-e" #'evil-scroll-line-down
+           "C-y" #'evil-scroll-line-up)
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil)
