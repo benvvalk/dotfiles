@@ -305,6 +305,7 @@ and echo it in the minibuffer."
   "f R" 'benv/rename-file-and-buffer
   "q q" 'save-buffers-kill-terminal
   "h m" 'woman
+  "t d" 'toggle-debug-on-error
   "t l" 'visual-line-mode
   "u"   'universal-argument)
 
