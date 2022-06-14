@@ -1631,6 +1631,15 @@ display a buffer with the STDOUT/STDERR from the command."
                         ;; IMAP-deleted:
                         (mu4e~proc-move docid (mu4e-get-trash-folder msg) "-N"))))
 
+  ;; Settings when composing replies and new messages.
+
+  (add-hook 'mu4e-compose-mode-hook
+            (lambda ()
+              ;; when typing text, don't automatically insert newlines at column 80
+              (auto-fill-mode -1)
+              ;; turn on word wrap
+              (visual-line-mode)))
+
   ;; don't show confirmation prompt when quitting mu4e
   (setq mu4e-confirm-quit nil)
   (setq mu4e-contexts
