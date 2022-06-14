@@ -550,10 +550,46 @@ this function will split the current window."
                             (set-window-start (selected-window) start)
                             (switch-to-buffer buffer))))
 
+  (defun benv/switch-to-buffer-in-dir (dir)
+    "Select a buffer interactively and open it in the
+neighbour window in direction DIR, without changing
+the currently selected window.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (when-let ((buffer (read-buffer "buffer: ")))
+      (unless (window-in-direction dir)
+        (split-window nil nil dir))
+      (save-selected-window (select-window (window-in-direction dir))
+                            (switch-to-buffer buffer))))
+
+  (defun benv/switch-to-buffer-in-dir-and-focus (dir)
+    "Select a buffer interactively, then select the
+neighbour window in direction DIR and open the buffer
+there.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (when-let ((buffer (read-buffer "buffer: ")))
+      (unless (window-in-direction dir)
+        (split-window nil nil dir))
+      (select-window (window-in-direction dir))
+      (switch-to-buffer buffer)))
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "b h" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'left))
+   "b j" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'down))
+   "b k" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'up))
+   "b l" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'right))
+   "b H" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'left))
+   "b J" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'down))
+   "b K" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'up))
+   "b L" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'right))
    "w m h" '(lambda () (interactive) (benv/mirror-window 'left))
    "w m l" '(lambda () (interactive) (benv/mirror-window 'right))
    "w M" 'delete-other-windows
