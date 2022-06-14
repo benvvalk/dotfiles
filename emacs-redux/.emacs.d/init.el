@@ -1008,6 +1008,13 @@ returns exit status 1, for reasons I don't understand.
   ;; so that projectile completions are handled by vertico.
   (projectile-completion-system 'default)
   :config
+  (defun benv/projectile-dired ()
+    "Jump to root directory of a project in dired."
+    (interactive)
+    (let ((dir (completing-read
+                "project: "
+                projectile-known-projects)))
+      (dired dir)))
   (defun benv/projectile-magit-status ()
     "Jump to magit status buffer for a projectile project."
     (interactive)
@@ -1029,13 +1036,37 @@ returns exit status 1, for reasons I don't understand.
                               "magit log all: "
                               projectile-known-projects)))
       (magit-log-all)))
+
+  (defun benv/projectile-ripgrep ()
+    "Run consult-ripgrep on a projectile project."
+    (interactive)
+    (let ((default-directory (completing-read
+                              "ripgrep on project: "
+                              projectile-known-projects)))
+      (consult-ripgrep)))
+
+  (defun benv/projectile-unity ()
+    "Launch Unity from the root directory of a recently opened project.
+Determine the correct Unity executable for the project by using `unity-which`."
+    (interactive)
+    (let ((default-directory (completing-read
+                               "project: "
+                               projectile-known-projects))
+          (process-connection-type nil))
+      (async-shell-command
+        (format "\"$(unity-which)\" -logFile - -projectPath \"$(syspath %s)\""
+                default-directory))))
+
   (projectile-mode 1)
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
+   "p d" 'benv/projectile-dired
    "p p" 'projectile-switch-project
+   "p r" 'benv/projectile-ripgrep
    "p f" 'projectile-find-file
+   "p u" 'benv/projectile-unity
    "p g s" 'benv/projectile-magit-status
    "p g l" 'benv/projectile-magit-log-current
    "p g L" 'benv/projectile-magit-log-all))
