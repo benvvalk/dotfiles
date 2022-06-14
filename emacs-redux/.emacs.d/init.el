@@ -513,10 +513,11 @@ and echo it in the minibuffer."
   (marginalia-mode))
 
 ;;----------------------------------------
-;; window (built-in emacs package)
+;; window.el (built-in)
 ;;----------------------------------------
 
-(use-package window
+(use-package emacs
+  :demand t
   :init
   (setq benv/window-resize-step-horizontal 4)
   (setq benv/window-resize-step-vertical 2)
