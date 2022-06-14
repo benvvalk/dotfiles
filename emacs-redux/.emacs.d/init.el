@@ -1183,10 +1183,6 @@ will change the focus to the target window."
   (benv/create-winum-keybinds "m" #'woman)
   (benv/create-winum-keybinds "w d" #'delete-window)
   (benv/create-winum-keybinds "P" #'proced)
-  (benv/create-winum-keybinds "x" #'shelldon)
-  (benv/create-winum-keybinds "x l" #'shelldon-send-line-at-point)
-  (benv/create-winum-keybinds "x r" #'shelldon-send-region)
-  (benv/create-winum-keybinds "x h" #'shelldon-output-history)
 
   :config
   ;; enable winum-mode globally
@@ -1418,9 +1414,16 @@ display a buffer with the STDOUT/STDERR from the command."
 ;;----------------------------------------
 
 (use-package shelldon
+
   :load-path "~/.emacs.d/site-lisp/shelldon"
-  :commands (shelldon shelldon-send-line-at-point shelldon-send-region)
+
+  :commands (shelldon
+             shelldon-send-line-at-point
+             shelldon-send-region
+             shelldon-output-history)
+
   :init
+
   ;; Toggle whether emacs communicates with subprocesses (shell commands)
   ;; using a pty or a simple pipe.
   ;;
@@ -1440,7 +1443,7 @@ display a buffer with the STDOUT/STDERR from the command."
     (if process-connection-type
         (message "pty for shell commands enabled")
       (message "pty for shell commands disabled")))
-  :config
+
   ;; Quick-and-dirty function to check if the command (process)
   ;; for the current buffer is still running.
   (defun benv/print-buffer-process-state ()
@@ -1448,7 +1451,17 @@ display a buffer with the STDOUT/STDERR from the command."
     (if (get-buffer-process (buffer-name))
         (message "buffer process is RUNNING")
       (message "buffer process is nil")))
+
+  ;; Create keybinds to run commands in specific windows,
+  ;; as identified by winum.
+
+  (benv/create-winum-keybinds "x" #'shelldon)
+  (benv/create-winum-keybinds "x l" #'shelldon-send-line-at-point)
+  (benv/create-winum-keybinds "x r" #'shelldon-send-region)
+  (benv/create-winum-keybinds "x h" #'shelldon-output-history)
+
   :general
+
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
@@ -1456,6 +1469,7 @@ display a buffer with the STDOUT/STDERR from the command."
    "t p" 'benv/toggle-pty-for-shell-commands)
   :init
   (evil-set-initial-state 'shell-mode 'normal)
+
   :config
   ;; Make sure command-line tools like `git log`
   ;; don't try to use a pager (e.g. `less`), since
