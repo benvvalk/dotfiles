@@ -1590,6 +1590,47 @@ display a buffer with the STDOUT/STDERR from the command."
   (setq mu4e-change-filenames-when-moving t)
   ;; don't save sent messages to Sent folder, Fastmail/Gmail does this for us
   (setq mu4e-sent-messages-behaviour 'delete)
+
+  ;; Fix mu4e's non-standard/troublesome behaviour when
+  ;; deleting messages.
+  ;;
+  ;; When executing delete marks, mu4e's default behaviour is to
+  ;; perform two actions: (1) move the message to the trash folder,
+  ;; and (2) set the IMAP deleted/trashed flag on the message. But it
+  ;; should only do (1). Setting the deleted/trash flag causes
+  ;; `mbsync` to follow up with an EXPUNGE command,
+  ;; which then causes gmail/fastmail to immediately (and
+  ;; permanently) delete the message from the trash folder.
+  ;; See [1] for a more detailed discussion/description of the problem.
+  ;;
+  ;; Immediately deleting messages from the trash folder defeats
+  ;; the whole purpose of having a trash folder. I want to
+  ;; my deleted messages to stay in the trash for reasonable
+  ;; length of time, so that I can recover any messages that
+  ;; I deleted accidentally.
+  ;;
+  ;; In order to achieve that behaviour, we just have
+  ;; to make sure that mu4e doesn't set the deleted/trashed
+  ;; flag when moving messages to the trash folder, which is
+  ;; exactly what the code below does. Btw, the code below
+  ;; is based on [2] and [3], with some minor updates due to
+  ;; changes in mu4e's function/variable names.
+  ;;
+  ;; [1]: https://github.com/djcb/mu/issues/1136
+  ;; [2]: https://github.com/djcb/mu/issues/1136#issuecomment-486177435
+  ;; [3]: https://github.com/djcb/mu/issues/1136#issuecomment-1066303788
+
+  (setf (alist-get 'trash mu4e-marks)
+        (list :char '("d" . "▼")
+              :prompt "dtrash"
+              :dyn-target (lambda (target msg)
+                            (mu4e-get-trash-folder msg))
+              :action (lambda (docid msg target)
+                        ;; Here's the main difference to the regular trash mark,
+                        ;; no +T before -N so the message is not marked as
+                        ;; IMAP-deleted:
+                        (mu4e~proc-move docid (mu4e-get-trash-folder msg) "-N"))))
+
   ;; don't show confirmation prompt when quitting mu4e
   (setq mu4e-confirm-quit nil)
   (setq mu4e-contexts
