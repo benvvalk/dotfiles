@@ -733,6 +733,55 @@ this function will split the current window."
 ;;----------------------------------------
 
 (use-package ace-link
+
+  :commands (ace-link
+             ace-link--org-collect
+             ace-link--org-action)
+
+  :init
+
+  (defun benv/ace-link-org-winum (n focus)
+    "Open a visible link in an `org-mode' buffer in window N.
+If focus is non-nil, switch focus to window N. Otherwise,
+focus remains in the current window.
+
+This function is a modified version of `ace-link-org`
+from ace-link.el."
+    (interactive)
+    (require 'org)
+    (let* ((pt (avy-with ace-link-org
+                 (avy-process
+                  (mapcar #'cdr (ace-link--org-collect))
+                  (avy--style-fn avy-style))))
+           (func (lambda () (interactive) (ace-link--org-action pt))))
+      (benv/call-function-in-window-n func n focus)))
+
+  (defun benv/create-ace-link-winum-keybinds ()
+    (dolist (tuple '((1 . "!")
+                     (2 . "@")
+                     (3 . "#")
+                     (4 . "$")
+                     (5 . "%")
+                     (6 . "^")
+                     (7 . "&")
+                     (8 . "*")
+                     (9 . "(")))
+      (general-def
+        :states '(motion insert emacs)
+        :prefix benv/evil-leader-key
+        :non-normal-prefix benv/evil-insert-mode-leader-key
+        "l ." #'ace-link)
+      (let ((n (car tuple))
+            (sym (cdr tuple)))
+        (general-def
+          :states '(motion insert emacs)
+          :prefix benv/evil-leader-key
+          :non-normal-prefix benv/evil-insert-mode-leader-key
+          (format "l %s" n) (lambda () (interactive) (benv/ace-link-org-winum n nil))
+          (format "l %s" sym) (lambda () (interactive) (benv/ace-link-org-winum n t))))))
+
+  (benv/create-ace-link-winum-keybinds)
+
   :general
   ('motion org-mode-map
    :prefix benv/major-mode-leader-key
@@ -1101,48 +1150,6 @@ Determine the correct Unity executable for the project by using `unity-which`."
 (use-package winum
   :defer nil
   :init
-
-  (defun benv/ace-link-org-winum (n focus)
-    "Open a visible link in an `org-mode' buffer in window N.
-If focus is non-nil, switch focus to window N. Otherwise,
-focus remains in the current window.
-
-This function is a modified version of `ace-link-org`
-from ace-link.el."
-    (interactive)
-    (require 'org)
-    (let* ((pt (avy-with ace-link-org
-                 (avy-process
-                  (mapcar #'cdr (ace-link--org-collect))
-                  (avy--style-fn avy-style))))
-           (func (lambda () (interactive) (ace-link--org-action pt))))
-      (benv/call-function-in-window-n func n focus)))
-
-  (defun benv/create-ace-link-winum-keybinds ()
-    (dolist (tuple '((1 . "!")
-                     (2 . "@")
-                     (3 . "#")
-                     (4 . "$")
-                     (5 . "%")
-                     (6 . "^")
-                     (7 . "&")
-                     (8 . "*")
-                     (9 . "(")))
-      (general-def
-        :states '(motion insert emacs)
-        :prefix benv/evil-leader-key
-        :non-normal-prefix benv/evil-insert-mode-leader-key
-        "l ." #'ace-link)
-      (let ((n (car tuple))
-            (sym (cdr tuple)))
-        (general-def
-          :states '(motion insert emacs)
-          :prefix benv/evil-leader-key
-          :non-normal-prefix benv/evil-insert-mode-leader-key
-          (format "l %s" n) (lambda () (interactive) (benv/ace-link-org-winum n nil))
-          (format "l %s" sym) (lambda () (interactive) (benv/ace-link-org-winum n t))))))
-
-  (benv/create-ace-link-winum-keybinds)
 
   (defun benv/call-function-same-window (func)
     "Call function FUNC and display the resulting buffer
