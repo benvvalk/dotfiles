@@ -588,6 +588,16 @@ this function will split the current window."
 
 (use-package ediff
   :config
+
+  ;; Disable confirmation prompt to quit ediff session.
+  ;; See: https://emacs.stackexchange.com/a/24602
+
+  (defun disable-y-or-n-p (orig-fun &rest args)
+    (cl-letf (((symbol-function 'y-or-n-p) (lambda (prompt) t)))
+      (apply orig-fun args)))
+
+  (advice-add 'ediff-quit :around #'disable-y-or-n-p)
+
   ;; Override default behaviour of opening ediff control window
   ;; in a new frame. (Show it in a new window along the bottom
   ;; of the current frame instead.)
