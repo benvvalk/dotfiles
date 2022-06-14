@@ -590,8 +590,10 @@ window."
    "b J" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'down))
    "b K" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'up))
    "b L" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'right))
-   "w m h" (lambda () (interactive) (benv/mirror-window 'left))
-   "w m l" (lambda () (interactive) (benv/mirror-window 'right))
+   "w h" (lambda () (interactive) (benv/mirror-window 'left))
+   "w j" (lambda () (interactive) (benv/mirror-window 'down))
+   "w k" (lambda () (interactive) (benv/mirror-window 'up))
+   "w l" (lambda () (interactive) (benv/mirror-window 'right))
    "w M" 'delete-other-windows
    "w o" 'delete-other-windows
    "w s" 'split-window-below
