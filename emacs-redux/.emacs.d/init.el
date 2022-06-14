@@ -1439,6 +1439,13 @@ display a buffer with the STDOUT/STDERR from the command."
                        (cons #'display-buffer-no-window nil)))))
       (async-shell-command cmd)))
 
+  ;; Make sure command-line tools like `git log`
+  ;; don't try to use a pager (e.g. `less`), since
+  ;; emacs shell buffers can't handle interactive
+  ;; terminal programs and the resulting output gets
+  ;; garbled.
+  (setenv "PAGER" "cat")
+
   :general
   (:keymaps 'minibuffer-local-shell-command-map
    :states '(motion insert emacs)
@@ -1520,15 +1527,7 @@ recency."
    "b p" 'benv/print-buffer-process-state
    "t p" 'benv/toggle-pty-for-shell-commands)
   :init
-  (evil-set-initial-state 'shell-mode 'normal)
-
-  :config
-  ;; Make sure command-line tools like `git log`
-  ;; don't try to use a pager (e.g. `less`), since
-  ;; emacs shell buffers can't handle interactive
-  ;; terminal programs and the resulting output gets
-  ;; garbled.
-  (setenv "PAGER" "cat"))
+  (evil-set-initial-state 'shell-mode 'normal))
 
 ;;----------------------------------------
 ;; vterm
