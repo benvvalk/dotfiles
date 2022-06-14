@@ -1360,6 +1360,7 @@ to running the screenshot command."
 ;;----------------------------------------
 
 (use-package simple
+  :defer nil
   :commands (shell-command async-shell-command)
   :init
   (defun set-exec-path-from-shell-path ()
