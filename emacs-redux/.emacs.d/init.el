@@ -1465,6 +1465,7 @@ display a buffer with the STDOUT/STDERR from the command."
 
 (use-package shelldon
 
+  :demand t
   :load-path "~/.emacs.d/site-lisp/shelldon"
 
   :commands (shelldon
