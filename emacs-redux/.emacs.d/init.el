@@ -1423,7 +1423,8 @@ Source: https://www.emacswiki.org/emacs/ExecPath"
     "Search shell-command-history and insert
 result into current buffer (e.g. minibuffer)."
     (interactive)
-    (let ((command (completing-read "cmd: " shell-command-history)))
+    (let* ((vertico-sort-function nil)
+           (command (completing-read "cmd: " shell-command-history)))
       (insert command)))
 
   (defun benv/async-shell-command-silent (cmd)
