@@ -1494,13 +1494,22 @@ display a buffer with the STDOUT/STDERR from the command."
         (message "buffer process is RUNNING")
       (message "buffer process is nil")))
 
+  (defun benv/shelldon-output-history ()
+    "Run `shelldon-output-history` with `vertico-sort-function`
+set to nil, so that the command history is display in the
+exact order provided by shelldon, i.e. in descending order of
+recency."
+    (interactive)
+    (let ((vertico-sort-function nil))
+      (shelldon-output-history)))
+
   ;; Create keybinds to run commands in specific windows,
   ;; as identified by winum.
 
   (benv/create-winum-keybinds "x" #'shelldon)
   (benv/create-winum-keybinds "x l" #'shelldon-send-line-at-point)
   (benv/create-winum-keybinds "x r" #'shelldon-send-region)
-  (benv/create-winum-keybinds "x h" #'shelldon-output-history)
+  (benv/create-winum-keybinds "x h" #'benv/shelldon-output-history)
 
   :general
 
