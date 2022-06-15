@@ -839,6 +839,7 @@ from ace-link.el."
     (let ((file (completing-read "Open File: " recentf-list)))
       (find-file file)))
   :config
+
   (recentf-mode)
   ;; Default is 20.
   (setq recentf-max-saved-items 500)
@@ -846,11 +847,47 @@ from ace-link.el."
   ;; 5 minutes. (The default behaviour only saves
   ;; it when exiting emacs.)
   (run-at-time nil (* 5 60) 'recentf-save-list)
+
+  (defun benv/recentf-in-dir (dir)
+    "Select a file through recentf and open it in the
+neighbour window in direction DIR, without changing
+the currently selected window.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (when-let ((file (completing-read "recent file: " recentf-list)))
+      (unless (window-in-direction dir)
+        (split-window nil nil dir))
+      (save-selected-window (select-window (window-in-direction dir))
+                            (find-file file))))
+
+  (defun benv/recentf-in-dir-and-focus (dir)
+    "Select a file through recentf, then select the
+neighbour window in direction DIR and open it.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (when-let ((file (completing-read "recent file: " recentf-list)))
+      (unless (window-in-direction dir)
+        (split-window nil nil dir))
+      (select-window (window-in-direction dir))
+      (find-file file)))
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "f r" 'benv/recentf))
+   "f r h" (lambda () (interactive) (benv/recentf-in-dir 'left))
+   "f r j" (lambda () (interactive) (benv/recentf-in-dir 'down))
+   "f r k" (lambda () (interactive) (benv/recentf-in-dir 'up))
+   "f r l" (lambda () (interactive) (benv/recentf-in-dir 'right))
+   "f r H" (lambda () (interactive) (benv/recentf-in-dir-and-focus 'left))
+   "f r J" (lambda () (interactive) (benv/recentf-in-dir-and-focus 'down))
+   "f r K" (lambda () (interactive) (benv/recentf-in-dir-and-focus 'up))
+   "f r L" (lambda () (interactive) (benv/recentf-in-dir-and-focus 'right))
+   "f r ." 'benv/recentf))
 
 ;;----------------------------------------
 ;; dired
