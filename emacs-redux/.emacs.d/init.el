@@ -58,6 +58,7 @@
 (let* ((hostname (system-name))
        (font-size (cond
                    ((string= hostname "framework") 110)
+                   ((string-match-p (regexp-quote "Mac") hostname) 170)
                    (t 130))))
   (set-face-attribute 'default nil :height font-size))
 
