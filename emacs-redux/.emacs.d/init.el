@@ -1435,8 +1435,9 @@ will change the focus to the target window."
 ;;----------------------------------------
 
 (setq browse-url-generic-program
-    (or (executable-find "firefox.exe")
-        (executable-find "firefox")))
+      (or (executable-find "/Applications/Firefox.app/Contents/MacOS/firefox")
+          (executable-find "firefox.exe")
+          (executable-find "firefox")))
 
 (setq browse-url-browser-function 'browse-url-generic)
 
