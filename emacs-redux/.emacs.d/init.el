@@ -765,6 +765,39 @@ window."
 (when (file-directory-p "~/Sync/notes")
   (use-package org-roam
     :hook (after-init . org-roam-mode)
+    :config
+
+    (defun benv/completing-read-notes ()
+      "Select a note by its title using `completing-read`, then
+return the file path for the note."
+      (when-let* ((completions (org-roam--get-title-path-completions))
+                  (title-with-tags (org-roam-completion--completing-read "Note: " completions))
+                  (res (cdr (assoc title-with-tags completions)))
+                  (file-path (plist-get res :path)))
+        file-path))
+
+    (defun benv/switch-to-note-in-dir (dir)
+      "Select a note by its title using `completing-read`, then
+open the note in the neighbor window in direction DIR ('left',
+'right', 'down', 'up'), without changing the currently selected
+window.
+
+If a neighbor window doesn't already exist in direction DIR,
+create it by splitting the current window."
+      (when-let ((note (benv/completing-read-notes)))
+        (benv/with-neighbor-window dir (find-file note))))
+
+    (defun benv/switch-to-note-in-dir-and-focus (dir)
+      "Select a note by its title using `completing-read`,
+switch focus to the neighbour window in direction DIR
+('left', 'right', 'down', or 'up'), and open the note.
+
+If a neighbor window doesn't already exist in direction DIR,
+create it by splitting the current window."
+      (when-let ((note (benv/completing-read-notes)))
+        (benv/select-neighbor-window dir)
+        (find-file note)))
+
     :general
     ('motion org-mode-map
              :prefix benv/major-mode-leader-key
@@ -772,6 +805,15 @@ window."
              "r i" 'org-roam-insert)
     ('motion
      :prefix benv/evil-leader-key
+     "n h" (lambda () (interactive) (benv/switch-to-note-in-dir 'left))
+     "n j" (lambda () (interactive) (benv/switch-to-note-in-dir 'down))
+     "n k" (lambda () (interactive) (benv/switch-to-note-in-dir 'up))
+     "n l" (lambda () (interactive) (benv/switch-to-note-in-dir 'right))
+     "n H" (lambda () (interactive) (benv/switch-to-note-in-dir-and-focus 'left))
+     "n J" (lambda () (interactive) (benv/switch-to-note-in-dir-and-focus 'down))
+     "n K" (lambda () (interactive) (benv/switch-to-note-in-dir-and-focus 'up))
+     "n L" (lambda () (interactive) (benv/switch-to-note-in-dir-and-focus 'right))
+     "n ." 'org-roam-find-file
      "r f" 'org-roam-find-file
      "r g" 'benv/grep-notes)
     ('insert
