@@ -535,6 +535,30 @@ and echo it in the minibuffer."
     (interactive)
     (enlarge-window-horizontally benv/window-resize-step-horizontal))
 
+  (defun benv/select-neighbor-window (dir)
+    "Select the neighbor window in direction DIR,
+where DIR is one of: 'left', 'right', 'up', 'down'.
+
+If there is no neighbor window in direction DIR, create
+it by splitting the current window."
+    (unless (window-in-direction dir)
+      (split-window nil nil dir))
+    (select-window (window-in-direction dir)))
+
+  (defmacro benv/with-neighbor-window (dir body)
+    "Temporarily select neighbor window in direction DIR
+and evaluate BODY. Possible values of dir are 'left',
+'right', 'up', 'down'.
+
+If there is no neigbor window in direction DIR, create
+it by splitting the current window."
+    `(progn
+       (unless (window-in-direction ,dir)
+         (split-window nil nil ,dir))
+       (save-selected-window
+         (select-window (window-in-direction ,dir))
+         ,body)))
+
   (defun benv/mirror-window (dir)
     "Make the neighbour window in direction DIR a mirror of
 the current window. In other words, make the selected buffer,
@@ -561,10 +585,7 @@ If a neighbour window does not already exist in direction DIR,
 this function will create one by splitting the current
 window."
     (when-let ((buffer (read-buffer "buffer: ")))
-      (unless (window-in-direction dir)
-        (split-window nil nil dir))
-      (save-selected-window (select-window (window-in-direction dir))
-                            (switch-to-buffer buffer))))
+      (benv/with-neighbor-window dir (switch-to-buffer buffer))))
 
   (defun benv/switch-to-buffer-in-dir-and-focus (dir)
     "Select a buffer interactively, then select the
@@ -575,9 +596,7 @@ If a neighbour window does not already exist in direction DIR,
 this function will create one by splitting the current
 window."
     (when-let ((buffer (read-buffer "buffer: ")))
-      (unless (window-in-direction dir)
-        (split-window nil nil dir))
-      (select-window (window-in-direction dir))
+      (benv/select-neighbor-window dir)
       (switch-to-buffer buffer)))
 
   :general
