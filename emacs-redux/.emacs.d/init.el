@@ -535,15 +535,42 @@ and echo it in the minibuffer."
     (interactive)
     (enlarge-window-horizontally benv/window-resize-step-horizontal))
 
-  (defun benv/select-neighbor-window (dir)
-    "Select the neighbor window in direction DIR,
-where DIR is one of: 'left', 'right', 'up', 'down'.
-
-If there is no neighbor window in direction DIR, create
-it by splitting the current window."
-    (unless (window-in-direction dir)
-      (split-window nil nil dir))
-    (select-window (window-in-direction dir)))
+  (defmacro benv/in-neighbor-window (dir body)
+    `(let ((exists (window-in-direction ,dir))
+           (current-window (selected-window)))
+       ;; If a neighbor window in direction DIR does
+       ;; not already exist, create one by splitting
+       ;; the current window.
+       (unless exists
+         (split-window nil nil ,dir))
+       ;; Switch focus to the neighbor window in direction DIR.
+       (select-window (window-in-direction ,dir))
+       ;; Execute BODY in neighbor window.
+       ,body
+       ;; If we created a new neighbor window,
+       ;; configure the window state such that
+       ;; calling `quit-window` will close the window and
+       ;; return focus to the previously-focused window (i.e.
+       ;; `current-window`, the window that we split to
+       ;; create the neighbor window.)
+       (unless exists
+         ;; Clear the buffer history for the newly created neighbor window.
+         ;; Otherwise, the buffer for the previously selected window
+         ;; (i.e. the window that we split to create the neighbor
+         ;; window) will be in the buffer history, and this will prevent
+         ;; emacs from deleting the window when `quit-window` is called.
+         (set-window-prev-buffers (selected-window) nil)
+         ;; Set up the `quit-restore` window parameter, which tells
+         ;; emacs how to behave when `quit-window` is called. In our
+         ;; case we want emacs to delete the neighbor window and
+         ;; set the focus back to the previously selected window.
+         (set-window-parameter (selected-window)
+                               'quit-restore
+                               (list
+                                'window
+                                'window
+                                current-window
+                                (current-buffer))))))
 
   (defmacro benv/with-neighbor-window (dir body)
     "Temporarily select neighbor window in direction DIR
@@ -596,8 +623,7 @@ If a neighbour window does not already exist in direction DIR,
 this function will create one by splitting the current
 window."
     (when-let ((buffer (read-buffer "buffer: ")))
-      (benv/select-neighbor-window dir)
-      (switch-to-buffer buffer)))
+      (benv/in-neighbor-window dir (switch-to-buffer buffer))))
 
   :general
   (:states '(motion insert emacs)
@@ -795,8 +821,7 @@ switch focus to the neighbour window in direction DIR
 If a neighbor window doesn't already exist in direction DIR,
 create it by splitting the current window."
       (when-let ((note (benv/completing-read-notes)))
-        (benv/select-neighbor-window dir)
-        (find-file note)))
+        (benv/in-neighbor-window dir (find-file note))))
 
     :general
     ('motion org-mode-map
