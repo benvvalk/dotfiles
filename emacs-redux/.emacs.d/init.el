@@ -344,6 +344,10 @@ and echo it in the minibuffer."
   "t l" 'visual-line-mode
   "u"   'universal-argument)
 
+(general-def
+  :states '(motion normal insert emacs)
+  "M-q" 'quit-window)
+
 ;; restore standard vim mappings
 
 (general-def 'motion
