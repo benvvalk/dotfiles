@@ -184,7 +184,27 @@
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil)
-  (evil-select-search-module 'evil-search-module 'evil-search))
+  (evil-select-search-module 'evil-search-module 'evil-search)
+
+  ;; Customize evil search highlighting behaviour.
+  ;;
+  ;; (1) Automatically disable search highlighting when
+  ;; Enter key is pressed (to select the current match).
+  ;; (2) Add advice to make ctrl-g (keyboard-quit) clear evil search
+  ;; highlighting. (I also tried this using `:after` instead of
+  ;; `:before`, but it didn't work for some reason.)
+  ;;
+  ;; Note: (2) is needed because search highlighting is reactivated
+  ;; when pressing `n` or `N` to jump to the next/previous match
+  ;; of the most recent interactive search.
+
+  (setq evil-ex-search-persistent-highlight nil)
+
+  (defun benv/keyboard-quit-advice (&rest args)
+  	(when (and (boundp 'evil-mode) (eq evil-state 'normal))
+  	  (evil-ex-nohighlight)))
+
+  (advice-add 'keyboard-quit :before #'benv/keyboard-quit-advice))
 
 (use-package evil-surround
   :after evil
