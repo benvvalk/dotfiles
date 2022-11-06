@@ -223,6 +223,9 @@
               benv/evil-insert-mode-leader-key))
   (evil-collection-init))
 
+;; Adds "il"/"al" text objects for current line.
+(use-package evil-textobj-line)
+
 ;;----------------------------------------
 ;; minibuffer settings
 ;;----------------------------------------
