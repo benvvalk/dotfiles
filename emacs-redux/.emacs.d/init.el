@@ -304,8 +304,30 @@
    "C--" 'text-scale-adjust))
 
 ;;----------------------------------------
-;; file management
+;; file management and paths
 ;;----------------------------------------
+
+(defun benv/windows-path-to-wsl-path (path)
+  "Convert a Windows file path to an equivalent WSL file path."
+  (if (string-match "^\\([a-zA-Z]\\):\\(.*\\)" path)
+	  (concat "/mnt/" (downcase (match-string 1 path))
+			  (string-replace "\\" "/" (match-string 2 path)))
+	(string-replace "\\" "/" path)))
+
+(defun benv/wsl-path-to-windows-path (path)
+  "Convert a WSL file path to an equivalent Windows file path."
+  (if (string-match "^/mnt/\\([a-z]\\)\\(.*\\)" path)
+	  (concat (upcase (match-string 1 path)) ":"
+			  (string-replace "/" "\\" (match-string 2 path)))
+	(string-replace "/" "\\" (match-string 2 path))))
+
+(defun benv/yank-wsl-path ()
+  (interactive)
+  (insert (benv/windows-path-to-wsl-path (current-kill 0))))
+
+(defun benv/yank-windows-path ()
+  (interactive)
+  (insert (benv/wsl-path-to-windows-path (current-kill 0))))
 
 ;; based on http://emacsredux.com/blog/2013/04/03/delete-file-and-buffer/
 (defun benv/delete-file-and-buffer ()
