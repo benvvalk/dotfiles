@@ -226,6 +226,8 @@
 ;; Adds "il"/"al" text objects for current line.
 (use-package evil-textobj-line)
 
+(use-package evil-lion :config (evil-lion-mode))
+
 ;;----------------------------------------
 ;; minibuffer settings
 ;;----------------------------------------
