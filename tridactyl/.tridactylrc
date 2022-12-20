@@ -1,1 +1,8 @@
-../windows/tridactyl/_tridactylrc
+bind J tabprev
+bind K tabnext
+
+set smoothscroll true
+bind j scrollline 2
+bind k scrollline -2
+
+set homepages ["google.ca"]

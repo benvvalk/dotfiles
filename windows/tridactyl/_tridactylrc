@@ -1,6 +1,0 @@
-bind J tabprev
-bind K tabnext
-bind j scrollline 2
-bind k scrollline -2
-
-set homepages ["google.ca"] 
