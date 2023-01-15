@@ -18,7 +18,7 @@
 ;; * `-b 1.0:0.7`: sets relative brightness for day and night, respectively
 ;; * `-l 44:-79` : sets my location in terms of longitude:latitude
 
-(run-shell-command "redshift -l 44:-79")
+(run-shell-command "redshift -b 1.0:0.6 -l 44:-79")
 
 ;; Switch to a window (by title) with `rofi`.
 
