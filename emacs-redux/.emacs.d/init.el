@@ -223,17 +223,16 @@
               benv/evil-insert-mode-leader-key))
   (evil-collection-init))
 
+(use-package evil-lion :config (evil-lion-mode))
+
 ;; Adds "il"/"al" text objects for current line.
 (use-package evil-textobj-line)
 
-(use-package evil-lion :config (evil-lion-mode))
-
+;; Adds "ie"/"ae" text objects for entire buffer.
 (use-package evil-textobj-entire
   :config
   ;; Note: The default value of `evil-textobj-entire-key' is "e".
-  ;; This means that the available text objects are `ie' and `ae'.
-  ;; For instance, to visually select the entire buffer, one
-  ;; could type `vie' or `vae'.
+  ;; As a result, the buffer text object gets bound to `ie' and `ae'.
   (define-key evil-outer-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer)
   (define-key evil-inner-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer))
 
