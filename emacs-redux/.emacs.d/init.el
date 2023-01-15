@@ -1658,6 +1658,30 @@ result into current buffer (e.g. minibuffer)."
            (command (completing-read "cmd: " shell-command-history)))
       (insert command)))
 
+  (defun benv/filter-buffer-with-shell-command (shell-command)
+    "Run a shell command, feeding the current buffer as standard input (STDIN).
+Display the output in a new buffer, in the current window."
+    (interactive
+     (list (read-shell-command "Shell command: ")))
+    (let (;; Disable command output in minibuffer.
+          ;; See `shell-command-on-region' documentation for explanation.
+          (resize-mini-windows nil)
+          ;; Display the output buffer in the current window.
+          ;;
+          ;; `shell-command-on-region' calls `display-buffer' on the
+          ;; output buffer, but the default behaviour is pop up the buffer
+          ;; in a new window. IMO, replacing the buffer in the current
+          ;; window is a much better workflow.
+		  (display-buffer-alist '((".*" display-buffer-same-window)))
+          (output-buffer (generate-new-buffer "*filter-buffer*")))
+      (shell-command-on-region (buffer-end 0) (buffer-end 1) shell-command output-buffer)))
+
+  (defun benv/shell-command-on-buffer (shell-command)
+    "Run a shell command, feeding the current buffer as standard input (STDIN)."
+    (interactive
+     (list (read-shell-command "Shell command: ")))
+    (shell-command-on-region (buffer-end 0) (buffer-end 1) shell-command))
+
   (defun benv/async-shell-command-silent (cmd)
     "Works just like `async-shell-command`, but does not automatically
 display a buffer with the STDOUT/STDERR from the command."
@@ -1686,6 +1710,11 @@ display a buffer with the STDOUT/STDERR from the command."
    "C-n" 'next-history-element
    "C-p" 'previous-history-element
    "C-r" 'benv/shell-command-history)
+  (:states '(motion insert emacs)
+   :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
+   "!" #'benv/shell-command-on-buffer
+   "|" #'benv/filter-buffer-with-shell-command)
   :config
   (set-exec-path-from-shell-path))
 
