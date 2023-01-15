@@ -228,6 +228,15 @@
 
 (use-package evil-lion :config (evil-lion-mode))
 
+(use-package evil-textobj-entire
+  :config
+  ;; Note: The default value of `evil-textobj-entire-key' is "e".
+  ;; This means that the available text objects are `ie' and `ae'.
+  ;; For instance, to visually select the entire buffer, one
+  ;; could type `vie' or `vae'.
+  (define-key evil-outer-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer)
+  (define-key evil-inner-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer))
+
 ;;----------------------------------------
 ;; minibuffer settings
 ;;----------------------------------------
