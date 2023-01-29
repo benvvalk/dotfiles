@@ -83,46 +83,20 @@ def lookup(chord):
     assert len(chord) <= LONGEST_KEY
 
     # Normalize chords that use the number key. In Plover's dictionary
-    # format, chords that contain the number key are represented with
-    # numbers instead of letters wherever possible. For example, the
-    # chord "#STW-F" would be represented as "12W-6". (The "W" key
-    # has no corresponding number so it is left unchanged.)
+    # format, whenever a chord contains the '#' key, the other keys
+    # in the chord must written as numbers rather than letters,
+    # when possible. For example, the chord "#STW-F" would
+    # be represented as "12W-6". (The "W" key has no corresponding
+    # number so it is left unchanged.)
     #
-    # Normalizing the number chords here makes it possible to process
-    # number chords without having to handle them as a special case.
+    # However, I want the opposite here -- I wants the keys in the
+    # chord to be written as letters. Otherwise, the chord lookup
+    # tables at the top of this file will not work.
     #
     # Based on a code block from:
     # https://github.com/EPLHREU/emily-symbols/blob/main/emily-symbols.py
 
-    numberFlag = False
     if any(k in stroke for k in "1234506789"):  # if chord contains a number
-
-        # insert dash between left and right keys to ensure
-        # translated chord is never ambiguous
-        if stroke.find('-') == -1 and stroke.find('*') == -1:
-
-            # Find first key pressed with right hand (if any).
-            #
-            # Note: It's preferable not to match any right-hand
-            # keys except EU6789 here because the R key
-            # appears on both sides of the keyboard and is
-            # very tricky to deal with. (The P/S/T keys
-            # also appear on both sides of the keyboard, but
-            # in those cases the left/right keys are disambiguated
-            # by the fact that they are given in their number forms.)
-            #
-            # If any key except EU6789 on the right side is pressed,
-            # the dash will not be inserted and the chord
-            # will not match the `re.fullmatch` call below. That's
-            # fine though, because the presence of other right-hand keys
-            # means it's not a valid modifier chord and
-            # we don't want to handle it with this dictionary
-            # anyway.
-
-            match = re.search(r'[EU6789]', stroke)
-            if match is not None:
-                index = match.start()
-                stroke = stroke[:index] + '-' + stroke[index:]
 
         # replace numbers with letters
         stroke = list(stroke)
@@ -130,16 +104,15 @@ def lookup(chord):
         for key in range(len(stroke)):
             if stroke[key].isnumeric():
                 stroke[key] = numbers[int(stroke[key])]  # set number key to letter
-                numberFlag = True
         stroke = ["#"] + stroke
         stroke = "".join(stroke)
 
     # require the number key to be pressed
-    if not numberFlag:
+    if "#" not in stroke:
         raise KeyError
 
     # extract relevant parts of the stroke
-    firstMatch = re.fullmatch(r'#([STKPWHR]*)([AO]*)([*-])([EU]*)([RBGS]+)', stroke)
+    firstMatch = re.fullmatch(r'#([STKPWHR]*)([AO]*)([*-]?)([EU]*)([RBGS]+)', stroke)
 
     # error out if there are no matches found
     if firstMatch is None:
