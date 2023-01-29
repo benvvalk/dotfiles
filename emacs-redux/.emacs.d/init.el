@@ -388,6 +388,7 @@ and echo it in the minibuffer."
   "b r" 'rename-buffer
   "b R" 'rename-buffer
   "e b" 'eval-buffer
+  "e r" 'eval-region
   "f f" 'find-file
   "f s" 'save-buffer
   "f C" 'write-file ; behaves like "File -> Save As"
