@@ -1650,6 +1650,7 @@ Source: https://www.emacswiki.org/emacs/ExecPath"
                              "$SHELL --login -c 'echo $PATH' 2>/dev/null"))))
       (setenv "PATH" path-from-shell)
       (setq exec-path (split-string path-from-shell path-separator))))
+
   (defun benv/shell-command-history ()
     "Search shell-command-history and insert
 result into current buffer (e.g. minibuffer)."
