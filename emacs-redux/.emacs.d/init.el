@@ -1673,9 +1673,27 @@ Display the output in a new buffer, in the current window."
           ;; output buffer, but the default behaviour is pop up the buffer
           ;; in a new window. IMO, replacing the buffer in the current
           ;; window is a much better workflow.
-		  (display-buffer-alist '((".*" display-buffer-same-window)))
+          (display-buffer-alist '((".*" display-buffer-same-window)))
+          (buffer (current-buffer))
           (output-buffer (generate-new-buffer "*filter-buffer*")))
-      (shell-command-on-region (buffer-end 0) (buffer-end 1) shell-command output-buffer)))
+      (shell-command-on-region (buffer-end 0) (buffer-end 1) shell-command output-buffer)
+      (with-current-buffer output-buffer
+        (setq-local input-buffer buffer)
+        (setq-local buffer-command shell-command))))
+
+  (defun benv/get-ancestor-buffers-and-commands ()
+    "In a buffer that was created using
+`benv/filter-buffer-with-shell-command', return an alist of ancestor
+buffer/command pairs that represent the pipeline that led to the
+generation of the current buffer.
+
+This allows us to easily jump backwards to a previous step in the
+pipeline (i.e. undo)."
+    (let ((alist nil))
+      (while (local-variable-p 'input-buffer)
+        (push (cons input-buffer buffer-command) alist)
+        (set-buffer input-buffer))
+      alist))
 
   (defun benv/shell-command-on-buffer (shell-command)
     "Run a shell command, feeding the current buffer as standard input (STDIN)."
