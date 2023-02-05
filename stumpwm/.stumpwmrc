@@ -39,6 +39,8 @@
 
 ;; Keybinds for built-in stumpwm commands.
 
+(define-key *top-map* (kbd "M-TAB") "pull-hidden-other")
+
 (define-key *top-map* (kbd "s-v") "hsplit")
 (define-key *top-map* (kbd "s-s") "vsplit")
 
