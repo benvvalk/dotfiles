@@ -23,7 +23,7 @@
 ;; Switch to a window (by title) with `rofi`.
 
 (defcommand benv/rofi-window () ()
-  (run-shell-command "rofi -show window"))
+  (run-shell-command "rofi -m -2 -show window"))
 
 (define-key *root-map* (kbd "b") "benv/rofi-window")
 (define-key *top-map* (kbd "s-b") "benv/rofi-window")
@@ -31,7 +31,7 @@
 ;; Run a shell command with `rofi`.
 
 (defcommand benv/rofi-run () ()
-  (run-shell-command "rofi -show run"))
+  (run-shell-command "rofi -m -2 -show run"))
 
 (define-key *root-map* (kbd "p") "benv/rofi-run")
 (define-key *root-map* (kbd "x") "benv/rofi-run")
