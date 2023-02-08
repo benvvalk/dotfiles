@@ -1572,6 +1572,10 @@ will change the focus to the target window."
   (setq lsp-enable-snippet nil)
   (setq lsp-completion-provider :none))
 
+(use-package cmake-mode
+  :config
+  (setq cmake-tab-width 4))
+
 ;;----------------------------------------
 ;; calfw
 ;;----------------------------------------
