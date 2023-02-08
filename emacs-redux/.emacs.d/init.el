@@ -830,7 +830,13 @@ window."
   (setq org-return-follows-link t)
   ;; auto-expand all bullets when opening a file
   (setq org-startup-folded nil)
+  ;; Display inline images in org buffers by default.
   (setq org-startup-with-inline-images t)
+  ;; Displaying large images in org-mode buffers makes scrolling
+  ;; really jumpy and disorienting. This setting tells org-mode to
+  ;; scale the image size up or down as needed, so that the resulting
+  ;; width is 400 pixels.
+  (setq org-image-actual-width 400)
   (setq org-agenda-files '("~/Sync/notes/personal-todo.org"
                            "~/Sync/notes/20200711223732_work_todo.org"))
   ;; increase size of images used to preview LaTeX fragments
