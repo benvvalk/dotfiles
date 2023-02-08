@@ -1518,8 +1518,7 @@ will change the focus to the target window."
 (defun benv/switch-to-previous-buffer ()
   "Switch to most recent non-visible buffer."
   (interactive)
-  (switch-to-buffer
-   (other-buffer (current-buffer))))
+  (switch-to-buffer nil))
 
 (general-def
   :states '(motion insert emacs)
