@@ -685,6 +685,32 @@ window."
     (when-let ((buffer (read-buffer "buffer: ")))
       (benv/in-neighbor-window dir (switch-to-buffer buffer))))
 
+  (defun benv/evil-goto-mark-in-dir (dir)
+    "Read a single character for an evil mark, then
+jump to that mark in the neighbour window in direction DIR,
+without changing the current window focus.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (let ((char (read-char)))
+      (if (evil-get-marker char)
+          (benv/with-neighbor-window dir (evil-goto-mark char))
+        (message "No mark set for %c" char))))
+
+  (defun benv/evil-goto-mark-in-dir-and-focus (dir)
+    "Read a single character for an evil mark, then switch
+focus to the neighbour window in direction DIR and jump to
+the selected mark.
+
+If a neighbour window does not already exist in direction DIR,
+this function will create one by splitting the current
+window."
+    (let ((char (read-char)))
+      (if (evil-get-marker char)
+          (benv/in-neighbor-window dir (evil-goto-mark char))
+        (message "No mark set for %c" char))))
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
@@ -701,6 +727,14 @@ window."
    "w j" (lambda () (interactive) (benv/mirror-window 'down))
    "w k" (lambda () (interactive) (benv/mirror-window 'up))
    "w l" (lambda () (interactive) (benv/mirror-window 'right))
+   "' h" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'left))
+   "' j" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'down))
+   "' k" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'up))
+   "' l" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'right))
+   "' H" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'left))
+   "' J" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'down))
+   "' K" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'up))
+   "' L" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'right))
    "w M" 'delete-other-windows
    "w o" 'delete-other-windows
    "w s" 'split-window-below
