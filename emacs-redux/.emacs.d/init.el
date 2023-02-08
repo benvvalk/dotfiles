@@ -9,6 +9,18 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 
+;; Fix jerky scrolling when scrolling with j/k.
+;; Source: https://stackoverflow.com/a/1128948
+
+(setq scroll-step            1
+      scroll-conservatively  10000)
+
+;; Fix jerky scrolling when scrolling with mouse wheel.
+;; Source: https://stackoverflow.com/a/445881
+
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 2) ((control) . nil)))
+(setq mouse-wheel-progressive-speed nil)
+
 ;; disable annoying "ding" sound on Windows
 ;; when hitting top/bottom of buffer
 
