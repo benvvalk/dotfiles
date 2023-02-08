@@ -461,6 +461,16 @@ and echo it in the minibuffer."
 (global-set-key (kbd "M-=") 'ignore)
 
 ;;----------------------------------------
+;; grep/wgrep
+;;----------------------------------------
+
+(use-package grep
+  :general
+  (:keymaps 'grep-mode-map "SPC" nil))
+
+(use-package wgrep)
+
+;;----------------------------------------
 ;; vertico
 ;;----------------------------------------
 
