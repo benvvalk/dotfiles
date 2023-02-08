@@ -1888,6 +1888,11 @@ recency."
 ;;----------------------------------------
 
 (use-package ledger-mode
+  ;; Use spaces for indentation rather than tabs.
+  ;;
+  ;; I'm don't have any personal preference, but ledger-mode's built-in
+  ;; indentation functions seem to assume that spaces are being used.
+  :hook (ledger-mode . (lambda () (setq indent-tabs-mode nil)))
   :mode ("\\.ledger'" . ledger-mode))
 
 ;;----------------------------------------
