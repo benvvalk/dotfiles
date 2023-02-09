@@ -89,6 +89,7 @@ context."
                                       ((eq major-mode 'dired-mode)
                                        (dired-get-filename nil t)))))
                                 (and filename (file-relative-name filename)))))))))
+
 (defun shelldon-async-command (command)
   "Execute string COMMAND in inferior shell; display output, if any.
 With prefix argument, insert the COMMAND's output at point.
