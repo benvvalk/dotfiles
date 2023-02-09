@@ -106,12 +106,11 @@ impose the use of a shell (with its need to quote arguments)."
   ;; (when current-prefix-arg (setq output-buffer current-prefix-arg))
   ;; Look for a handler in case default-directory is a remote file name.
   (let* ((output-buffer (concat "*shelldon:" (number-to-string (length shelldon--hist)) ":" command "*"))
-         (hidden-output-buffer (concat " " output-buffer))
          (error-buffer shell-command-default-error-buffer)
          (handler
 	  (find-file-name-handler (directory-file-name default-directory)
 				  'shelldon-async-command)))
-    (add-to-list 'shelldon--hist `(,(concat (number-to-string (length shelldon--hist)) ":" command) . ,hidden-output-buffer))
+    (add-to-list 'shelldon--hist `(,(concat (number-to-string (length shelldon--hist)) ":" command) . ,output-buffer))
     (if handler
 	(funcall handler 'shelldon-async-command command output-buffer error-buffer)
       ;; Output goes in a separate buffer.
@@ -138,10 +137,7 @@ impose the use of a shell (with its need to quote arguments)."
 	    ;; Use the comint filter for proper handling of
 	    ;; carriage motion (see comint-inhibit-carriage-motion).
             (set-process-filter proc #'comint-output-filter)
-	    (display-buffer buffer '(nil (allow-no-window . t)))
-            ;; FIXME: When the output buffer is hidden before the shell process is started,
-            ;; ANSI colors are not displayed. I have no idea why.
-            (rename-buffer hidden-output-buffer))))))
+	        (display-buffer buffer '(nil (allow-no-window . t))))))))
   nil)
 
 (define-derived-mode shelldon-mode shell-mode "Shelldon"
