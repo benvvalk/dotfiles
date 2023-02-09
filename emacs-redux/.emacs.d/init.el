@@ -489,7 +489,16 @@ and echo it in the minibuffer."
 (use-package vertico
   :defer nil
   :config
+
+  ;; Wrap long lines.
+  ;; Source: https://github.com/minad/vertico/issues/257#issuecomment-1194441344
+  (advice-add #'vertico--resize-window :after #'set-truncate)
+  (defun set-truncate (&rest _)
+    (setq-local truncate-lines nil))
+
+  ;; Enable vertico for completions.
   (vertico-mode)
+
   :general
   (:states '(motion insert emacs)
    :keymaps 'vertico-map
