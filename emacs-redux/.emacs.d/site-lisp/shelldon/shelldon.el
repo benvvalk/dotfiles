@@ -136,8 +136,8 @@ impose the use of a shell (with its need to quote arguments)."
             (set-process-sentinel proc #'shell-command-sentinel)
 	    ;; Use the comint filter for proper handling of
 	    ;; carriage motion (see comint-inhibit-carriage-motion).
-            (set-process-filter proc #'comint-output-filter)
-	        (display-buffer buffer '(nil (allow-no-window . t))))))))
+            (set-process-filter proc #'comint-output-filter))
+            (switch-to-buffer buffer)))))
   nil)
 
 (define-derived-mode shelldon-mode shell-mode "Shelldon"
