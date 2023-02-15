@@ -528,6 +528,40 @@ and echo it in the minibuffer."
    "m m" 'consult-man
    "s s" 'consult-line))
 
+;; The `consult-dir' package provides an extremely useful function
+;; called `consult-dir', which behaves differently depending on
+;; whether it is called from a regular buffer or from the minibuffer.
+;;
+;; In a regular buffer, `consult-dir' prompts for a recently visited
+;; directory and then opens a `find-file' under that directory to open
+;; a file.
+;;
+;; In the minibuffer, `consult-dir' prompts for a recently visited
+;; directory and then replaces the currently minibuffer text with that
+;; directory. This is extremely handy for quickly filling out
+;; directory prompts (e.g. the destination directory of a dired copy
+;; command).
+(use-package consult-dir
+  :config
+  ;; Get root directories for projects using projectile
+  ;; (as opposed to project.el, which is the default).
+  (setq consult-dir-project-list-function #'consult-dir-projectile-dirs)
+  ;; When selecting a directory for insertion into the minibuffer,
+  ;; replace the existing text rather than "shadowing" it (the
+  ;; default). Shadowing keeps the existing minibuffer text but
+  ;; inactivates it and shows it in a light grey color. I find this
+  ;; very ugly and awkward, and prefer to just replace the
+  ;; existing text.
+  (setq consult-dir-shadow-filenames nil)
+  :general
+  (:states '(emacs insert)
+   :keymaps 'minibuffer-local-map
+   "C-x C-d" #'consult-dir
+   "C-x C-j" #'consult-dir-jump-file)
+  (:states '(motion normal emacs)
+   :prefix benv/evil-leader-key
+   "c d" #'consult-dir))
+
 ;;----------------------------------------
 ;; embark
 ;;----------------------------------------
