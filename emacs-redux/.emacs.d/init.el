@@ -1766,13 +1766,16 @@ result into current buffer (e.g. minibuffer)."
            (command (completing-read "cmd: " shell-command-history)))
       (insert command)))
 
-  (defun benv/filter-buffer-with-shell-command (shell-command)
-    "Run a shell command, feeding the current buffer as standard input (STDIN).
+  (defun benv/filter-region-or-buffer-with-shell-command (shell-command)
+    "Run a shell command, feeding the selected region to standard input (STDIN).
+If no region is currently selected, send the entire contents of the current buffer
+to STDIN instead.
+
 Display the output in a new buffer, in the current window."
     (interactive
      (list (read-shell-command "Shell command: ")))
-    (let (;; Disable command output in minibuffer.
-          ;; See `shell-command-on-region' documentation for explanation.
+    (let (;; Don't allow `shell-command-on-region' to grow the
+          ;; size of the minibuffer in order to show the output.
           (resize-mini-windows nil)
           ;; Display the output buffer in the current window.
           ;;
@@ -1782,15 +1785,25 @@ Display the output in a new buffer, in the current window."
           ;; window is a much better workflow.
           (display-buffer-alist '((".*" display-buffer-same-window)))
           (buffer (current-buffer))
-          (output-buffer (generate-new-buffer "*filter-buffer*")))
-      (shell-command-on-region (buffer-end 0) (buffer-end 1) shell-command output-buffer)
-      (with-current-buffer output-buffer
-        (setq-local input-buffer buffer)
-        (setq-local buffer-command shell-command))))
+          (output-buffer (generate-new-buffer "*filter-buffer*"))
+          (start (if (use-region-p) (region-beginning) (buffer-end 0)))
+          (end (if (use-region-p) (region-end) (buffer-end 1))))
+      (shell-command-on-region start end shell-command output-buffer)
+      ;; Always switch to `output-buffer' after running the command.
+      ;; By default `shell-command-on-region' will only display the
+      ;; output buffer if the output was too large to display in the
+      ;; minibuffer.
+      (switch-to-buffer output-buffer)
+      ;; Store the command that was used to generate the output buffer
+      ;; in a local variable, and also the buffer that was used as
+      ;; input for the command. This should allow us to do some useful
+      ;; history navigation.
+      (setq-local input-buffer buffer)
+      (setq-local buffer-command shell-command)))
 
   (defun benv/get-ancestor-buffers-and-commands ()
     "In a buffer that was created using
-`benv/filter-buffer-with-shell-command', return an alist of ancestor
+`benv/filter-region-or-buffer-with-shell-command', return an alist of ancestor
 buffer/command pairs that represent the pipeline that led to the
 generation of the current buffer.
 
@@ -1840,7 +1853,7 @@ display a buffer with the STDOUT/STDERR from the command."
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "!" #'benv/shell-command-on-buffer
-   "|" #'benv/filter-buffer-with-shell-command)
+   "|" #'benv/filter-region-or-buffer-with-shell-command)
   :config
   (set-exec-path-from-shell-path))
 
