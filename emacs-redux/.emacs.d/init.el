@@ -166,15 +166,14 @@
   ;; it needed to be. In particular, the intended behaviour of emacs'
   ;; `forward-sexp` function is to always move to the first character
   ;; *after* the current/next sexp. But if `evil-move-beyond-eol` is
-  ;; set to nil, then `forward-sexp` can get at the last character of
+  ;; set to nil, then `forward-sexp` can only get to the last character of
   ;; a line (e.g. ")"), rather than moving to the newline character
   ;; after it.  And that means that I need to handle sexp's that end
   ;; at line endings as a special case in my code, which I don't want
   ;; to do.
   ;;
-  ;; For further explanation/discussion of this issue, see [1].
-  ;;
-  ;; [1]: https://github.com/syl20bnr/spacemacs/issues/2525
+  ;; For further explanation/discussion of this issue, see:
+  ;; https://github.com/syl20bnr/spacemacs/issues/2525
   (evil-move-beyond-eol t)
   :general
   ;; Unbind "," and "SPC" so I can use them as prefix
