@@ -1874,6 +1874,23 @@ display a buffer with the STDOUT/STDERR from the command."
 
   :init
 
+  ;; Custom defaults for shelldon-mode buffers.
+  ;;
+  ;; (1) Enable word wrap by default. This way I can always see the
+  ;; full text of error messages, compile commands, etc., without
+  ;; having to manually enable `visual-line-mode' first.
+  ;;
+  ;; (2) Make the buffer editable by default. This makes it possible
+  ;; to answer confirmation prompts and other types of prompts
+  ;; without having to manually disable `read-only-mode' first
+  ;; with `C-x C-q'.
+
+  (defun benv/shelldon-mode-setup ()
+    (visual-line-mode)
+    (read-only-mode 0))
+
+  (add-hook #'shelldon-mode-hook #'benv/shelldon-mode-setup)
+
   ;; Toggle whether emacs communicates with subprocesses (shell commands)
   ;; using a pty or a simple pipe.
   ;;
