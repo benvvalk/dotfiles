@@ -1911,6 +1911,14 @@ display a buffer with the STDOUT/STDERR from the command."
         (message "pty for shell commands enabled")
       (message "pty for shell commands disabled")))
 
+  ;; If we are running emacs under WSL1, default to using a simple
+  ;; pipe to communicate with subprocesses rather than a pty. This
+  ;; prevents Windows executables from hanging when I launch them from
+  ;; emacs running under WSL. For further explanation, see my notes about
+  ;; `benv/toggle-pty-for-shell-commands' above.
+  (when (string-match "-[Mm]icrosoft" operating-system-release)
+    (setq process-connection-type nil))
+
   ;; Quick-and-dirty function to check if the command (process)
   ;; for the current buffer is still running.
   (defun benv/print-buffer-process-state ()
