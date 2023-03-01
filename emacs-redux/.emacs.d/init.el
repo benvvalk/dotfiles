@@ -486,14 +486,41 @@ and echo it in the minibuffer."
 ;;----------------------------------------
 
 (use-package vertico
+
   :defer nil
+
   :config
 
-  ;; Wrap long lines.
-  ;; Source: https://github.com/minad/vertico/issues/257#issuecomment-1194441344
-  (advice-add #'vertico--resize-window :after #'set-truncate)
-  (defun set-truncate (&rest _)
-    (setq-local truncate-lines nil))
+  ;; Some extra code to make the vertico line-wrapping behaviour
+  ;; configurable on a per-command basis.
+  ;;
+  ;; Based on: https://github.com/minad/vertico/issues/257#issuecomment-1194441344
+
+  (defvar benv/vertico-truncate-lines t
+    "Determines the value of `truncate-lines' in the minibuffer.
+
+I use this variable to enable/disable wrapping of vertico completion
+candidates across multiple lines. For example, I set
+`benv/vertico-truncate-lines' to `nil' for the
+`benv/shelldon-output-history' command because I often use very long
+shell commands, and I often need to see full command to select the
+right one.  On the other hand, the majority of completion lists become
+very hard to read if the candidates are wrapped across multiple lines
+(e.g. `describe-variable'), and so I set `benv/vertico-truncate-lines'
+to `t' by default.
+
+Note: This variable needs to be declared with `defvar', rather than
+just set with `setq', so that it has dynamic binding behaviour rather
+than lexical binding behaviour. For example, with lexical binding the
+assignment of `nil' to `benv/vertico-truncate-lines' in
+`benv/shelldon-output-history' has no effect on the value seen by the
+advice function below (`benv/vertico-truncate-lines'). This caused me
+some confusion for a while.")
+
+  (advice-add #'vertico--resize-window :after #'benv/vertico-set-truncate)
+
+  (defun benv/vertico-set-truncate (&rest _)
+    (setq-local truncate-lines benv/vertico-truncate-lines))
 
   ;; Enable vertico for completions.
   (vertico-mode)
@@ -1762,7 +1789,13 @@ Source: https://www.emacswiki.org/emacs/ExecPath"
     "Search shell-command-history and insert
 result into current buffer (e.g. minibuffer)."
     (interactive)
-    (let* ((vertico-sort-function nil)
+    (let* (;; Set `benv/vertico-truncate-lines' to `nil' to show
+           ;; the full string for each candidate shell command, wrapping
+           ;; across multiple lines if necessary. This variable
+           ;; works in conjunction with an advice defined in the
+           ;; `use-package' declaration for `vertico' (above).
+           (benv/vertico-truncate-lines nil)
+           (vertico-sort-function nil)
            (command (completing-read "cmd: " shell-command-history)))
       (insert command)))
 
@@ -1933,7 +1966,13 @@ set to nil, so that the command history is display in the
 exact order provided by shelldon, i.e. in descending order of
 recency."
     (interactive)
-    (let ((vertico-sort-function nil))
+    (let (;; Set `benv/vertico-truncate-lines' to `nil' to show
+          ;; the full string for each candidate shell command, wrapping
+          ;; across multiple lines if necessary. This variable
+          ;; works in conjunction with an advice defined in the
+          ;; `use-package' declaration for `vertico' (above).
+          (benv/vertico-truncate-lines nil)
+          (vertico-sort-function nil))
       (shelldon-output-history)))
 
   ;; Create keybinds to run commands in specific windows,
