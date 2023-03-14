@@ -222,7 +222,7 @@ def lookup(chord):
         combo = mod + "(" + combo + ")"
 
     # package it up with the syntax
-    ret = "{#" + combo + "}"
+    ret = "{#" + combo + "}{^}"
 
     # all done! :D
     return ret
