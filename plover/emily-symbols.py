@@ -147,7 +147,7 @@ def lookup(chord):
         if not attach[0]:
             output = "{}" + output
         if not attach[1]:
-            output = output + "{}"
+            output = output + "{^ ^}"
 
     # apply capitalisation
     if capital:
