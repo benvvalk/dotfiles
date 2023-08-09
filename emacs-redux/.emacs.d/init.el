@@ -386,6 +386,13 @@ and echo it in the minibuffer."
   (kill-new (buffer-file-name))
   (message (buffer-file-name)))
 
+(defun benv/yank-directory ()
+  "Yank absolute file path for current buffer
+and echo it in the minibuffer."
+  (interactive)
+  (kill-new default-directory)
+  (message default-directory))
+
 ;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
@@ -814,6 +821,8 @@ window."
    "b J" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'down))
    "b K" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'up))
    "b L" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'right))
+   "f y" 'benv/yank-filename
+   "d y" 'benv/yank-directory
    "w h" (lambda () (interactive) (benv/mirror-window 'left))
    "w j" (lambda () (interactive) (benv/mirror-window 'down))
    "w k" (lambda () (interactive) (benv/mirror-window 'up))
@@ -830,7 +839,9 @@ window."
    "w o" 'delete-other-windows
    "w s" 'split-window-below
    "w v" 'split-window-right
-   "y f" 'benv/yank-filename)
+   "y f" 'benv/yank-filename
+   "y d" 'benv/yank-directory
+   )
   (:states '(motion normal insert emacs)
    "M-J" 'benv/enlarge-window
    "M-K" 'benv/shrink-window
