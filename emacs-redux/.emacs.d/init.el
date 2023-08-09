@@ -1986,6 +1986,25 @@ recency."
           (vertico-sort-function nil))
       (shelldon-output-history)))
 
+  (defun benv/shelldon-run-line-in-neighbor-window (dir)
+    (interactive)
+    (when-let ((line (thing-at-point 'line t)))
+      (message "running line: %s" line)
+      (benv/with-neighbor-window dir (shelldon-async-command line))))
+
+  (defun benv/shelldon-run-line-in-neighbor-window-and-focus (dir)
+    (interactive)
+    (when-let ((line (thing-at-point 'line t)))
+      (benv/in-neighbor-window dir (shelldon-async-command line))))
+
+  (defun benv/shelldon-run-region-in-neighbor-window (dir)
+    (interactive)
+    (benv/with-neighbor-window dir (shelldon-send-region)))
+
+  (defun benv/shelldon-run-region-in-neighbor-window-and-focus (dir)
+    (interactive)
+    (benv/in-neighbor-window dir (shelldon-send-region)))
+
   ;; Create keybinds to run commands in specific windows,
   ;; as identified by winum.
 
@@ -2000,7 +2019,25 @@ recency."
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "b p" 'benv/print-buffer-process-state
-   "t p" 'benv/toggle-pty-for-shell-commands)
+   "t p" 'benv/toggle-pty-for-shell-commands
+   "' h" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'left))
+   "x j" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'down))
+   "x l h" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window 'left))
+   "x l j" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window 'down))
+   "x l k" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window 'up))
+   "x l l" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window 'right))
+   "x l H" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window-and-focus 'left))
+   "x l J" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window-and-focus 'down))
+   "x l K" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window-and-focus 'up))
+   "x l L" (lambda () (interactive) (benv/shelldon-run-line-in-neighbor-window-and-focus 'right))
+   "x r h" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window 'left))
+   "x r j" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window 'down))
+   "x r k" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window 'up))
+   "x r l" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window 'right))
+   "x r H" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'left))
+   "x r J" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'down))
+   "x r K" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'up))
+   "x r L" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'right)))
   :init
   (evil-set-initial-state 'shell-mode 'normal))
 
