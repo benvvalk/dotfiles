@@ -2022,6 +2022,20 @@ recency."
     (interactive)
     (benv/in-neighbor-window dir (shelldon-send-region)))
 
+  ;; Note: This function is a modified version of
+  ;; `shelldon-output-history` from `shelldon.el`.
+  (defun benv/shelldon-buffer-in-neighbor-window (dir)
+    (interactive)
+    (when-let ((buffer (cdr (assoc (completing-read shelldon-prompt-str shelldon--hist) shelldon--hist))))
+		(benv/with-neighbor-window dir (switch-to-buffer buffer))))
+
+  ;; Note: This function is a modified version of
+  ;; `shelldon-output-history` from `shelldon.el`.
+  (defun benv/shelldon-buffer-in-neighbor-window-and-focus (dir)
+    (interactive)
+    (when-let ((buffer (cdr (assoc (completing-read shelldon-prompt-str shelldon--hist) shelldon--hist))))
+		(benv/in-neighbor-window dir (switch-to-buffer buffer))))
+
   ;; Create keybinds to run commands in specific windows,
   ;; as identified by winum.
 
@@ -2054,7 +2068,15 @@ recency."
    "x r H" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'left))
    "x r J" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'down))
    "x r K" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'up))
-   "x r L" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'right)))
+   "x r L" (lambda () (interactive) (benv/shelldon-run-region-in-neighbor-window-and-focus 'right))
+   "x h h" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window 'left))
+   "x h j" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window 'down))
+   "x h k" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window 'up))
+   "x h l" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window 'right))
+   "x h H" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'left))
+   "x h J" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'down))
+   "x h K" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'up))
+   "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
   :init
   (evil-set-initial-state 'shell-mode 'normal))
 
