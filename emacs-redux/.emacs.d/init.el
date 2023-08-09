@@ -1197,13 +1197,22 @@ window."
    "d /" '(lambda () (interactive) (dired "/"))
    "d e" '(lambda () (interactive) (dired "~/.emacs.d/"))
    "d h" '(lambda () (interactive) (dired "~"))
-   "d r" 'benv/recentd
+   "d r ." 'benv/recentd
+   "d r h" (lambda () (interactive) (benv/recentd-in-neighbor-window 'left))
+   "d r j" (lambda () (interactive) (benv/recentd-in-neighbor-window 'down))
+   "d r k" (lambda () (interactive) (benv/recentd-in-neighbor-window 'up))
+   "d r l" (lambda () (interactive) (benv/recentd-in-neighbor-window 'right))
+   "d r H" (lambda () (interactive) (benv/recentd-in-neighbor-window-and-focus 'left))
+   "d r J" (lambda () (interactive) (benv/recentd-in-neighbor-window-and-focus 'down))
+   "d r K" (lambda () (interactive) (benv/recentd-in-neighbor-window-and-focus 'up))
+   "d r L" (lambda () (interactive) (benv/recentd-in-neighbor-window-and-focus 'right))
    "d w c" '(lambda () (interactive) (dired "/mnt/c/"))
    "d w d" '(lambda () (interactive) (dired "/mnt/d/"))
    "d w h" '(lambda () (interactive) (dired "/mnt/c/Users/Ben"))
    "d w t" '(lambda () (interactive) (dired "/mnt/d/tmp"))
    "e ." '(lambda () (interactive) (benv/open-windows-explorer default-directory))
    "e r" 'benv/windows-explorer-recentd)
+
   :config
 
   ;; Add directories to recentf list (recently open files history),
@@ -1235,6 +1244,14 @@ The directory list is extracted from `recentf-list`."
            (benv/recentd-list)))
       (let ((dir (completing-read "Directory: " recent-dirs)))
         (dired dir))))
+
+  (defun benv/recentd-in-neighbor-window (direction)
+    (when-let ((recentd (completing-read "Directory: " (benv/recentd-list))))
+      (benv/with-neighbor-window direction (dired recentd))))
+
+  (defun benv/recentd-in-neighbor-window-and-focus (direction)
+    (when-let ((recentd (completing-read "Directory: " (benv/recentd-list))))
+      (benv/in-neighbor-window direction (dired recentd))))
 
   ;; I copied this code from:
   ;; https://emacs.stackexchange.com/questions/64588/how-do-i-get-all-marked-files-from-all-dired-buffers
