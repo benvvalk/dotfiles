@@ -962,6 +962,23 @@ window."
    'org-babel-load-languages
    '((emacs-lisp . t)
      (shell . t)))
+
+  (defun benv/org-attach-screenshot-and-insert-link ()
+    (interactive)
+    (unless (derived-mode-p 'org-mode)
+      (user-error "this command only works in org-mode"))
+    (when-let* ((dest-dir (org-attach-dir t))
+                (windows-tmp-dir "/mnt/c/tmp")
+                (basename (read-string "screenshot filename: "))
+                (windows-tmp-path (format "%s/%s" windows-tmp-dir basename))
+                (dest-path (format "%s/%s" dest-dir basename)))
+      (make-directory windows-tmp-dir t)
+      (shell-command
+       (format "i_view64.exe /capture=4 /convert='c:\\tmp\\%s'" basename))
+      (copy-file windows-tmp-path dest-path)
+      (insert (format "[[file:%s]]" dest-path)))
+      (org-redisplay-inline-images))
+
   :general
   ('motion
    :prefix benv/evil-leader-key
