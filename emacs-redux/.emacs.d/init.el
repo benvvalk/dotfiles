@@ -1750,30 +1750,6 @@ will change the focus to the target window."
 (setq browse-url-browser-function 'browse-url-generic)
 
 ;;----------------------------------------
-;; org-attach-screenshot
-;;----------------------------------------
-
-(defun benv/org-attach-screenshot ()
-  "Call org-attach-screenshot with a prefix argument,
-so that the emacs doesn't get hidden prior
-to running the screenshot command."
-  (interactive)
-  (let ((current-prefix-arg '(4)))
-    (call-interactively 'org-attach-screenshot)))
-
-(use-package org-attach-screenshot
-  :load-path "~/.emacs.d/site-lisp/org-screenshot"
-  :general
-  ('motion org-mode-map
-    :prefix benv/major-mode-leader-key
-    "s" 'benv/org-attach-screenshot)
-  ('insert org-mode-map
-    "C-c s" 'benv/org-attach-screenshot)
-  :config
-  (setq org-attach-screenshot-command-line
-        "cliprect-wsl %f"))
-
-;;----------------------------------------
 ;; shell mode
 ;;----------------------------------------
 
