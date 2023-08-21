@@ -956,7 +956,6 @@ window."
   ;; See: https://github.com/syl20bnr/spacemacs/issues/13255
   (setq org-src-preserve-indentation t)
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
-  (use-package orgit)
   ;; org-babel stuff
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -1002,6 +1001,32 @@ window."
    "I"   'org-clock-in
    "O"   'org-clock-out
    "p"   'org-cliplink))
+
+(use-package orgit
+  :config
+  (defun benv/replace-orgit-rev-link-description (&rest args)
+    "Replace the description of the most recently stored org link, if the
+link is of type `orgit-rev'."
+    (when-let* ((link-desc-pair (car org-stored-links))
+                (link (car link-desc-pair))
+                (link-parts (split-string link ":"))
+                (link-type (nth 0 link-parts))
+                (git-repo-path (expand-file-name (nth 1 link-parts)))
+                (git-commit-hash (nth 3 link-parts)))
+      (when (string= link-type "orgit-rev")
+        (let ((new-desc (shell-command-to-string
+                         (format "git --git-dir='%s/.git' log -n1 --format='format:%%h %%s' %s"
+                                 git-repo-path
+                                 git-commit-hash))))
+          (setf (cadar org-stored-links) new-desc)))))
+
+  ;; Use advice to generate nicer default link descriptions for
+  ;; `orgit-rev' links.  The default link description consists of
+  ;; the repo path and the commit hash. My custom description is the
+  ;; commit hash and the subject line of the commit message, which is
+  ;; much more informative.
+  (advice-add 'org-store-link :after #'benv/replace-orgit-rev-link-description)
+  (advice-add 'orgit-store-link :after #'benv/replace-orgit-rev-link-description))
 
 ;;----------------------------------------
 ;; org-roam
