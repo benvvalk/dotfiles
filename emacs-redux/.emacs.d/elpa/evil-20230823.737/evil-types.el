@@ -1,9 +1,9 @@
-;;; evil-types.el --- Type system
+;;; evil-types.el --- Type system -*- lexical-binding: t -*-
 
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.3.0-snapshot
+;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -90,10 +90,8 @@ If the end position is at the beginning of a line, then:
 
 (evil-define-type inclusive
   "Include the character under point.
-If the end position is at the beginning of a line or the end of a
-line and `evil-want-visual-char-semi-exclusive', then:
-
-* If in visual state return `exclusive' (expanded)."
+Handling for `evil-want-visual-char-semi-exclusive' is deprecated,
+and will be removed in a future version."
   :expand (lambda (beg end)
             (if (and evil-want-visual-char-semi-exclusive
                      (evil-visual-state-p)
@@ -106,10 +104,8 @@ line and `evil-want-visual-char-semi-exclusive', then:
   :contract (lambda (beg end)
               (evil-range beg (max beg (1- end))))
   :normalize (lambda (beg end)
-               (goto-char end)
-               (when (eq (char-after) ?\n)
-                 (setq end (max beg (1- end))))
-               (evil-range beg end))
+               (evil-range beg (if (eq (char-after end) ?\n)
+                                   (max beg (1- end)) end)))
   :string (lambda (beg end)
             (let ((width (- end beg)))
               (format "%s character%s" width
@@ -122,18 +118,14 @@ line and `evil-want-visual-char-semi-exclusive', then:
             (evil-range
              (progn
                (goto-char beg)
-               (min (line-beginning-position)
-                    (progn
-                      ;; move to beginning of line as displayed
-                      (evil-move-beginning-of-line)
-                      (line-beginning-position))))
+               ;; move to beginning of line as displayed
+               (evil-move-beginning-of-line)
+               (point))
              (progn
                (goto-char end)
-               (max (line-beginning-position 2)
-                    (progn
-                      ;; move to end of line as displayed
-                      (evil-move-end-of-line)
-                      (line-beginning-position 2))))))
+               ;; move to the end of line as displayed
+               (evil-move-end-of-line)
+               (line-beginning-position 2))))
   :contract (lambda (beg end)
               (evil-range beg (max beg (1- end))))
   :string (lambda (beg end)
@@ -289,8 +281,7 @@ the last column is excluded."
 (evil-define-interactive-code "<c>"
   "Count."
   (list (when current-prefix-arg
-          (prefix-numeric-value
-           current-prefix-arg))))
+          (prefix-numeric-value current-prefix-arg))))
 
 (evil-define-interactive-code "<vc>"
   "Count, but only in visual state.
@@ -340,78 +331,84 @@ If visual state is inactive then those values are nil."
 (evil-define-interactive-code "<a>"
   "Ex argument."
   :ex-arg t
-  (list (when (evil-ex-p) evil-ex-argument)))
+  (list (when evil-called-from-ex-p evil-ex-argument)))
+
+(evil-define-interactive-code "<N>" ()
+  "Prefix argument or ex-arg, converted to number"
+  (list (cond
+         (current-prefix-arg (prefix-numeric-value current-prefix-arg))
+         (evil-ex-argument (string-to-number evil-ex-argument))
+         (evil-called-from-ex-p nil)
+         (t 1))))
 
 (evil-define-interactive-code "<f>"
   "Ex file argument."
   :ex-arg file
-  (list (when (evil-ex-p) (evil-ex-file-arg))))
+  (list (when evil-called-from-ex-p (evil-ex-file-arg))))
 
 (evil-define-interactive-code "<b>"
   "Ex buffer argument."
   :ex-arg buffer
-  (list (when (evil-ex-p) evil-ex-argument)))
+  (list evil-ex-argument))
 
 (evil-define-interactive-code "<sh>"
   "Ex shell command argument."
   :ex-arg shell
-  (list (when (evil-ex-p) evil-ex-argument)))
+  (list evil-ex-argument))
 
 (evil-define-interactive-code "<fsh>"
   "Ex file or shell command argument."
   :ex-arg file-or-shell
-  (list (when (evil-ex-p) evil-ex-argument)))
+  (list evil-ex-argument))
 
 (evil-define-interactive-code "<sym>"
   "Ex symbolic argument."
   :ex-arg sym
-  (list (when (and (evil-ex-p) evil-ex-argument)
-          (intern evil-ex-argument))))
+  (list (and evil-ex-argument (intern evil-ex-argument))))
 
 (evil-define-interactive-code "<addr>"
   "Ex line number."
   (list
-   (and (evil-ex-p)
-        (let ((expr (evil-ex-parse  evil-ex-argument)))
-          (if (eq (car expr) 'evil-goto-line)
-              (save-excursion
-                (goto-char evil-ex-point)
-                (eval (cadr expr)))
-            (user-error "Invalid address"))))))
+   (when evil-called-from-ex-p
+     (let ((expr (evil-ex-parse (or evil-ex-argument ""))))
+       (if (eq (car expr) 'evil-goto-line)
+           (save-excursion (goto-char evil-ex-point)
+                           (eval (cadr expr) t))
+         (user-error "Invalid address"))))))
 
 (evil-define-interactive-code "<!>"
   "Ex bang argument."
   :ex-bang t
-  (list (when (evil-ex-p) evil-ex-bang)))
+  (list evil-ex-bang))
 
 (evil-define-interactive-code "</>"
   "Ex delimited argument."
-  (when (evil-ex-p)
-    (evil-delimited-arguments evil-ex-argument)))
+  (when evil-called-from-ex-p
+    (evil-delimited-arguments (or evil-ex-argument ""))))
 
 (evil-define-interactive-code "<g/>"
   "Ex global argument."
-  (when (evil-ex-p)
-    (evil-ex-parse-global evil-ex-argument)))
+  (when evil-called-from-ex-p
+    (evil-ex-parse-global (or evil-ex-argument ""))))
 
 (evil-define-interactive-code "<s/>"
   "Ex substitution argument."
   :ex-arg substitution
-  (when (evil-ex-p)
-    (evil-ex-get-substitute-info evil-ex-argument t)))
+  (when evil-called-from-ex-p
+    (evil-ex-get-substitute-info (or evil-ex-argument "") t)))
 
 (evil-define-interactive-code "<xc/>"
   "Ex register and count argument, both optional.
 Can be used for commands such as :delete [REGISTER] [COUNT] where the
-command can be called with either zero, one or two arguments. When the
-argument is one, if it's numeric it's treated as a COUNT, otherwise -
-REGISTER"
-  (when (evil-ex-p)
+command can be called with either zero, one or two arguments. With one
+argument, if it is numeric, it is treated as a COUNT, otherwise, as a
+REGISTER."
+  (when evil-called-from-ex-p
     (evil-ex-get-optional-register-and-count evil-ex-argument)))
 
 (defun evil-ex-get-optional-register-and-count (string)
   "Parse STRING as an ex arg with both optional REGISTER and COUNT.
-Returns a list (REGISTER COUNT)."
+Return a list (REGISTER COUNT)."
   (let* ((split-args (split-string (or string "")))
          (arg-count (length split-args))
          (arg0 (car split-args))

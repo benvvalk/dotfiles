@@ -1,9 +1,9 @@
-;;; evil-integration.el --- Integrate Evil with other modules
+;;; evil-integration.el --- Integrate Evil with other modules -*- lexical-binding: t -*-
 
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.3.0-snapshot
+;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -105,89 +105,54 @@
 
 (defadvice show-paren-function (around evil disable)
   "Match parentheses in Normal state."
-  (if (if (memq 'not evil-highlight-closing-paren-at-point-states)
-          (memq evil-state evil-highlight-closing-paren-at-point-states)
-        (not (memq evil-state evil-highlight-closing-paren-at-point-states)))
+  (if (eq (not (memq 'not evil-highlight-closing-paren-at-point-states))
+          (not (memq evil-state evil-highlight-closing-paren-at-point-states)))
       ad-do-it
-    (let ((pos (point)) syntax narrow)
-      (setq pos
-            (catch 'end
-              (dotimes (var (1+ (* 2 evil-show-paren-range)))
-                (if (zerop (mod var 2))
-                    (setq pos (+ pos var))
-                  (setq pos (- pos var)))
-                (setq syntax (syntax-class (syntax-after pos)))
-                (cond
-                 ((eq syntax 4)
-                  (setq narrow pos)
-                  (throw 'end pos))
-                 ((eq syntax 5)
-                  (throw 'end (1+ pos)))))))
-      (if pos
-          (save-excursion
-            (goto-char pos)
-            (save-restriction
-              (when narrow
-                (narrow-to-region narrow (point-max)))
-              ad-do-it))
-        ;; prevent the preceding pair from being highlighted
-        (dolist (ov '(show-paren--overlay
-                      show-paren--overlay-1
-                      show-paren-overlay
-                      show-paren-overlay-1))
-          (let ((ov (and (boundp ov) (symbol-value ov))))
-            (when (overlayp ov) (delete-overlay ov))))))))
+    (let* ((orig-spdf show-paren-data-function)
+           (show-paren-data-function
+            (lambda ()
+              (let ((pos (point)) narrow)
+                (setq
+                 pos (cl-dotimes (i (1+ (* 2 evil-show-paren-range)))
+                       (setq pos (+ pos (if (cl-evenp i) i (- i))))
+                       (pcase (syntax-class (syntax-after pos))
+                         (4 (setq narrow pos) (cl-return pos))
+                         (5 (cl-return (1+ pos))))))
+                (when pos
+                  (save-excursion
+                    (goto-char pos)
+                    (save-restriction
+                      (when narrow (narrow-to-region narrow (point-max)))
+                      (funcall orig-spdf))))))))
+      ad-do-it)))
 
 ;;; Undo tree
-(when (and (require 'undo-tree nil t)
-           (fboundp 'global-undo-tree-mode))
-  (global-undo-tree-mode 1))
-
 (eval-after-load 'undo-tree
   '(with-no-warnings
-     (defun evil-turn-on-undo-tree-mode ()
-       "Enable `undo-tree-mode' if evil is enabled.
-This function enables `undo-tree-mode' when Evil is activated in
-some buffer, but only if `global-undo-tree-mode' is also
-activated."
-       (when (and (boundp 'global-undo-tree-mode)
-                  global-undo-tree-mode)
-         (turn-on-undo-tree-mode)))
+     (evil-ex-define-cmd "undol[ist]" 'undo-tree-visualize)
+     (evil-ex-define-cmd "ul" 'undo-tree-visualize)
 
-     (add-hook 'evil-local-mode-hook #'evil-turn-on-undo-tree-mode)
+     (define-key undo-tree-visualizer-mode-map
+       [remap evil-backward-char] 'undo-tree-visualize-switch-branch-left)
+     (define-key undo-tree-visualizer-mode-map
+       [remap evil-forward-char] 'undo-tree-visualize-switch-branch-right)
+     (define-key undo-tree-visualizer-mode-map
+       [remap evil-next-line] 'undo-tree-visualize-redo)
+     (define-key undo-tree-visualizer-mode-map
+       [remap evil-previous-line] 'undo-tree-visualize-undo)
+     (define-key undo-tree-visualizer-mode-map
+       [remap evil-ret] 'undo-tree-visualizer-set)
 
-     (defadvice undo-tree-visualize (after evil activate)
-       "Initialize Evil in the visualization buffer."
-       (when evil-local-mode
-         (evil-initialize-state)))
-
-     (when (fboundp 'undo-tree-visualize)
-       (evil-ex-define-cmd "undol[ist]" 'undo-tree-visualize)
-       (evil-ex-define-cmd "ul" 'undo-tree-visualize))
-
-     (when (boundp 'undo-tree-visualizer-mode-map)
-       (define-key undo-tree-visualizer-mode-map
-         [remap evil-backward-char] 'undo-tree-visualize-switch-branch-left)
-       (define-key undo-tree-visualizer-mode-map
-         [remap evil-forward-char] 'undo-tree-visualize-switch-branch-right)
-       (define-key undo-tree-visualizer-mode-map
-         [remap evil-next-line] 'undo-tree-visualize-redo)
-       (define-key undo-tree-visualizer-mode-map
-         [remap evil-previous-line] 'undo-tree-visualize-undo)
-       (define-key undo-tree-visualizer-mode-map
-         [remap evil-ret] 'undo-tree-visualizer-set))
-
-     (when (boundp 'undo-tree-visualizer-selection-mode-map)
-       (define-key undo-tree-visualizer-selection-mode-map
-         [remap evil-backward-char] 'undo-tree-visualizer-select-left)
-       (define-key undo-tree-visualizer-selection-mode-map
-         [remap evil-forward-char] 'undo-tree-visualizer-select-right)
-       (define-key undo-tree-visualizer-selection-mode-map
-         [remap evil-next-line] 'undo-tree-visualizer-select-next)
-       (define-key undo-tree-visualizer-selection-mode-map
-         [remap evil-previous-line] 'undo-tree-visualizer-select-previous)
-       (define-key undo-tree-visualizer-selection-mode-map
-         [remap evil-ret] 'undo-tree-visualizer-set))))
+     (define-key undo-tree-visualizer-selection-mode-map
+       [remap evil-backward-char] 'undo-tree-visualizer-select-left)
+     (define-key undo-tree-visualizer-selection-mode-map
+       [remap evil-forward-char] 'undo-tree-visualizer-select-right)
+     (define-key undo-tree-visualizer-selection-mode-map
+       [remap evil-next-line] 'undo-tree-visualizer-select-next)
+     (define-key undo-tree-visualizer-selection-mode-map
+       [remap evil-previous-line] 'undo-tree-visualizer-select-previous)
+     (define-key undo-tree-visualizer-selection-mode-map
+       [remap evil-ret] 'undo-tree-visualizer-set)))
 
 ;;; Auto-complete
 (eval-after-load 'auto-complete
@@ -275,7 +240,8 @@ activated."
       (apply command args)))
 
   (advice-add 'elisp--preceding-sexp :around 'evil--preceding-sexp '((name . evil)))
-  (advice-add 'pp-last-sexp          :around 'evil--preceding-sexp '((name . evil)))))
+  (advice-add 'pp-last-sexp          :around 'evil--preceding-sexp '((name . evil)))
+  (advice-add 'lisp-eval-last-sexp   :around 'evil--preceding-sexp '((name . evil)))))
 
 ;; Show key
 (defadvice quail-show-key (around evil activate)
@@ -290,6 +256,7 @@ activated."
 (declare-function ace-jump-char-mode "ext:ace-jump-mode")
 (declare-function ace-jump-word-mode "ext:ace-jump-mode")
 (declare-function ace-jump-line-mode "ext:ace-jump-mode")
+(defvar ace-jump-mode-scope)
 
 (defvar evil-ace-jump-active nil)
 
@@ -411,6 +378,7 @@ the mark and entering `recursive-edit'."
 (declare-function avy-goto-subword-0 "ext:avy")
 (declare-function avy-goto-subword-1 "ext:avy")
 (declare-function avy-goto-char-timer "ext:avy")
+(defvar avy-all-windows)
 
 (defmacro evil-enclose-avy-for-motion (&rest body)
   "Enclose avy to make it suitable for motions.
@@ -428,7 +396,7 @@ Based on `evil-enclose-ace-jump-for-motion'."
   (declare (indent defun)
            (debug t))
   (let ((name (intern (format "evil-%s" command))))
-    `(evil-define-motion ,name (_count)
+    `(evil-define-motion ,name (count)
        ,(format "Evil motion for `%s'." command)
        :type ,type
        :jump t
@@ -489,41 +457,35 @@ Based on `evil-enclose-ace-jump-for-motion'."
 
 ;; visual-line-mode integration
 (when evil-respect-visual-line-mode
-  (evil-define-command evil-digit-argument-or-evil-beginning-of-visual-line ()
-    :digit-argument-redirection evil-beginning-of-visual-line
-    :keep-visual t
-    :repeat nil
-    (interactive)
-    (cond
-     (current-prefix-arg
-      (setq this-command #'digit-argument)
-      (call-interactively #'digit-argument))
-     (t
-      (let ((target (or (command-remapping #'evil-beginning-of-visual-line)
-                        #'evil-beginning-of-visual-line)))
-        (setq this-command 'evil-beginning-of-visual-line)
-        (call-interactively 'evil-beginning-of-visual-line)))))
-
   (evil-define-minor-mode-key 'motion 'visual-line-mode
     "j" 'evil-next-visual-line
     "gj" 'evil-next-line
     "k" 'evil-previous-visual-line
     "gk" 'evil-previous-line
-    "0" 'evil-digit-argument-or-evil-beginning-of-visual-line
+    "0" 'evil-beginning-of-visual-line
     "g0" 'evil-beginning-of-line
     "$" 'evil-end-of-visual-line
     "g$" 'evil-end-of-line
     "V" 'evil-visual-screen-line))
 
 ;;; abbrev.el
-(when evil-want-abbrev-expand-on-insert-exit
-  (eval-after-load 'abbrev
-    '(add-hook 'evil-insert-state-exit-hook 'expand-abbrev)))
+(defun evil-maybe-expand-abbrev ()
+  (when (and abbrev-mode evil-want-abbrev-expand-on-insert-exit)
+    (expand-abbrev)))
+
+(eval-after-load 'abbrev
+  '(add-hook 'evil-insert-state-exit-hook #'evil-maybe-expand-abbrev))
 
 ;;; ElDoc
 (eval-after-load 'eldoc
   '(when (fboundp 'eldoc-add-command-completions)
      (eldoc-add-command-completions "evil-window-")))
+
+;;; XRef
+(eval-after-load 'xref
+  '(progn
+     (evil-set-command-property 'xref-find-definitions :jump t)
+     (evil-set-command-property 'xref-find-references :jump t)))
 
 (provide 'evil-integration)
 
