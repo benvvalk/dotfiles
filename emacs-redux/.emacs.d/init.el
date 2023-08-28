@@ -1034,6 +1034,7 @@ link is of type `orgit-rev'."
 
 (when (file-directory-p "~/Sync/notes")
   (use-package org-roam
+    :load-path "~/.emacs.d/site-lisp/org-roam"
     :hook (after-init . org-roam-mode)
     :config
 
