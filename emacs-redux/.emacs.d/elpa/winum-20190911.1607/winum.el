@@ -18,7 +18,6 @@
 ;;
 ;; Author: Thomas de Beauchêne <thomas.de.beauchene@gmail.com>
 ;; Version: 2.2.0
-;; Package-Version: 20190911.1607
 ;; Keywords: convenience, frames, windows, multi-screen
 ;; URL: http://github.com/deb0ch/winum.el
 ;; Created: 2016
