@@ -1,11 +1,11 @@
-(define-package "lispy" "20210121.926" "vi-like Paredit"
+(define-package "lispy" "20230314.1738" "vi-like Paredit"
   '((emacs "24.3")
     (ace-window "0.9.0")
     (iedit "0.9.9")
-    (counsel "0.11.0")
+    (swiper "0.13.4")
     (hydra "0.14.0")
-    (zoutline "0.1.0"))
-  :commit "38a7df4cbb16cfe3d62dc8ea98b50e2d9a572e58" :authors
+    (zoutline "0.2.0"))
+  :commit "fe44efd21573868638ca86fc8313241148fabbe3" :authors
   '(("Oleh Krehel" . "ohwoeowho@gmail.com"))
   :maintainer
   '("Oleh Krehel" . "ohwoeowho@gmail.com")
