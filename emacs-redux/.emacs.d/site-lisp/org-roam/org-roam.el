@@ -1482,12 +1482,6 @@ Otherwise, behave as if called interactively."
   :global t
   (cond
    (org-roam-mode
-    (unless (or (and (bound-and-true-p emacsql-sqlite3-executable)
-                     (file-executable-p emacsql-sqlite3-executable))
-                (executable-find "sqlite3"))
-      (lwarn '(org-roam) :error "Cannot find executable 'sqlite3'. \
-Ensure it is installed and can be found within `exec-path'. \
-M-x info for more information at Org-roam > Installation > Post-Installation Tasks."))
     (add-to-list 'org-execute-file-search-functions 'org-roam--execute-file-row-col)
     (add-hook 'find-file-hook #'org-roam--find-file-hook-function)
     (add-hook 'kill-emacs-hook #'org-roam-db--close-all)

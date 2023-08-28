@@ -33,7 +33,7 @@
 ;;;; Library Requires
 (eval-when-compile (require 'subr-x))
 (require 'emacsql)
-(require 'emacsql-sqlite3)
+(require 'emacsql-sqlite)
 (require 'seq)
 
 (eval-and-compile
@@ -126,7 +126,7 @@ Performs a database upgrade when required."
                (emacsql-live-p (org-roam-db--get-connection)))
     (let ((init-db (not (file-exists-p org-roam-db-location))))
       (make-directory (file-name-directory org-roam-db-location) t)
-      (let ((conn (emacsql-sqlite3 org-roam-db-location)))
+      (let ((conn (emacsql-sqlite org-roam-db-location)))
         (set-process-query-on-exit-flag (emacsql-process conn) nil)
         (puthash (expand-file-name org-roam-directory)
                  conn
