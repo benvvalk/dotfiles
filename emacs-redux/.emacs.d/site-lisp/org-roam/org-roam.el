@@ -807,7 +807,7 @@ Each ref is returned as a cons of its type and its key."
                                 (eq 'Mn (get-char-code-property char 'general-category)))
              (strip-nonspacing-marks (s)
                                      (apply #'string (seq-remove #'nonspacing-mark-p
-                                                                 (ucs-normalize-NFD-string s))))
+                                                                 (string-glyph-decompose s))))
              (cl-replace (title pair)
                          (replace-regexp-in-string (car pair) (cdr pair) title)))
     (let* ((pairs `(("[^[:alnum:][:digit:]]" . "_")  ;; convert anything not alphanumeric
