@@ -1733,11 +1733,15 @@ will change the focus to the target window."
   :init
   (setq c-default-style "stroustrup"))
 
-(use-package lsp
-  :hook (c-mode . lsp-mode)
+(use-package eglot
   :config
-  (setq lsp-enable-snippet nil)
-  (setq lsp-completion-provider :none))
+  ;; Tell eldoc not to resize the minibuffer area.
+  ;;
+  ;; Eldoc automatically shows the documentation for the
+  ;; method/variable under the cursor, which is very helpful. However,
+  ;; if the documentation has multiple lines, it automatically resizes
+  ;; the minibuffer area, which is very distracting.
+  (setq eldoc-echo-area-use-multiline-p nil))
 
 (use-package cmake-mode
   :config
