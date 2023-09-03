@@ -3,3 +3,4 @@ set guitabbar=never
 set restoretabs=none
 
 " Mappings
+nmap b :buffer<Space>
