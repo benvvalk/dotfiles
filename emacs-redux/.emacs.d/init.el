@@ -1958,6 +1958,26 @@ display a buffer with the STDOUT/STDERR from the command."
 
   :init
 
+  ;; Set the default `PATH' for Windows shells (`cmd.exe').
+  ;;
+  ;; For whatever reason, in the Windows version of Emacs, the
+  ;; `cmd.exe' shells started by commands like `shell' and
+  ;; `shell-command' don't initialize the `PATH' environment
+  ;; variable. I'm not sure why it doesn't use the value of `PATH'
+  ;; from the Environment Variables dialog in the Control Panel.
+
+  (when (eq system-type 'windows-nt)
+    (add-to-list 'process-environment
+                 (format "PATH=%s"
+                         (string-join
+                          '(
+                            "C:\\Windows\\System32"
+                            "C:\\Windows\\System32\\OpenSSH"
+                            "C:\\Users\\Ben\\scoop\\shims"
+                            "C:\\Users\\Ben\\scoop\\apps\\llvm\\16.0.6\\bin"
+                            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0")
+                          ";"))))
+
   ;; Custom defaults for shelldon-mode buffers.
   ;;
   ;; (1) Enable word wrap by default. This way I can always see the
