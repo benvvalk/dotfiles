@@ -333,17 +333,30 @@
 
 (defun benv/windows-path-to-wsl-path (path)
   "Convert a Windows file path to an equivalent WSL file path."
-  (if (string-match "^\\([a-zA-Z]\\):\\(.*\\)" path)
-	  (concat "/mnt/" (downcase (match-string 1 path))
-			  (string-replace "\\" "/" (match-string 2 path)))
-	(string-replace "\\" "/" path)))
+  (if (string-match "^\\(.*\\)\\([a-zA-Z]\\):\\(.*\\)" path)
+      (let* ((uri-scheme (match-string 1 path))
+             (drive-letter (downcase (match-string 2 path)))
+             (file-path (match-string 3 path))
+             (wsl-path (concat "/mnt/" drive-letter file-path)))
+        (if (string= "" uri-scheme)
+            wsl-path
+          (concat uri-scheme "mnt/" drive-letter file-path)))
+    path))
+
+(benv/windows-path-to-wsl-path
+ "file:///d%3a/git/awesomesauce/LoadImageAsync-plugin/source/RenderAPI_D3D12.cpp")
 
 (defun benv/wsl-path-to-windows-path (path)
   "Convert a WSL file path to an equivalent Windows file path."
-  (if (string-match "^/mnt/\\([a-z]\\)\\(.*\\)" path)
-	  (concat (upcase (match-string 1 path)) ":"
-			  (string-replace "/" "\\" (match-string 2 path)))
-	(string-replace "/" "\\" (match-string 2 path))))
+  (if (string-match "^\\(.*\\)/mnt/\\([a-z]\\)\\(.*\\)" path)
+      (let* ((uri-scheme (match-string 1 path))
+             (drive-letter (match-string 2 path))
+             (file-path (match-string 3 path))
+             (windows-path (concat drive-letter ":" file-path)))
+        (if (string= "" uri-scheme)
+            windows-path
+          (concat uri-scheme "/" drive-letter "%3a" file-path)))
+    path))
 
 (defun benv/yank-wsl-path ()
   (interactive)
@@ -1741,7 +1754,66 @@ will change the focus to the target window."
   ;; method/variable under the cursor, which is very helpful. However,
   ;; if the documentation has multiple lines, it automatically resizes
   ;; the minibuffer area, which is very distracting.
-  (setq eldoc-echo-area-use-multiline-p nil))
+  (setq eldoc-echo-area-use-multiline-p nil)
+
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs
+               '(c++-mode "clangd.exe"))
+
+  )
+
+(defun benv/translate-paths-jsonrpc-request (orig-fun connection method params &rest args)
+  (when-let ((rootPath (plist-get params :rootPath)))
+    (setq params (plist-put params :rootPath (benv/wsl-path-to-windows-path rootPath))))
+  (when-let ((rootUri (plist-get params :rootUri)))
+    (setq params (plist-put params :rootUri (benv/wsl-path-to-windows-path rootUri))))
+  (when-let ((workspaceFolders (plist-get params :workspaceFolders)))
+    (setq workspaceFolders
+          (cl-map 'vector (lambda (item)
+                            (when-let ((uri (plist-get item :uri)))
+                              (setq item (plist-put item :uri (benv/wsl-path-to-windows-path uri))))
+                            (when-let ((name (plist-get item :name)))
+                              (setq item (plist-put item :name (benv/wsl-path-to-windows-path name))))
+                            item)
+                  workspaceFolders))
+    (setq params (plist-put params :workspaceFolders workspaceFolders)))
+  (when-let ((textDocument (plist-get params :textDocument)))
+    (when-let ((uri (plist-get textDocument :uri)))
+      (setq textDocument (plist-put textDocument :uri (benv/wsl-path-to-windows-path uri)))
+      (setq params (plist-put params :textDocument textDocument))))
+  (when-let* ((result (apply orig-fun connection method params args))
+              ;; I record the original type of `result' in
+              ;; `result-type' so that I can tell `cl-map' to generate a
+              ;; result of the same type. In other words, we want
+              ;; `cl-map' to map from vector -> vector, list -> list,
+              ;; string -> string and so on.
+              ;;
+              ;; See the following StackOverflow thread for discussion:
+              ;; https://emacs.stackexchange.com/questions/2961/how-can-i-map-over-a-vector-and-get-a-vector
+              (result-type (cond ((listp result) 'list)
+                                 ((stringp result) 'string)
+                                 ((vectorp result) 'vector)
+                                 (t (error "Unhandled result type")))))
+    (setq result
+          (cl-map result-type (lambda (item)
+                                (when-let ((uri (plist-get item :uri)))
+                                  (setq item (plist-put item :uri (benv/windows-path-to-wsl-path uri))))
+                                item)
+                  result))
+    result))
+
+(advice-add 'jsonrpc-async-request :around #'benv/translate-paths-jsonrpc-request)
+(advice-add 'jsonrpc-request :around #'benv/translate-paths-jsonrpc-request)
+(advice-add 'jsonrpc-notify :around #'benv/translate-paths-jsonrpc-request)
+
+(use-package xref
+  :init
+  (add-to-list 'display-buffer-alist
+               '("\\*xref\\*"
+                 (display-buffer-in-side-window)
+                 (side . bottom)
+                 (slot . 0)
+                 (window-height . 0.3))))
 
 (use-package cmake-mode
   :config
