@@ -1747,6 +1747,7 @@ will change the focus to the target window."
   (setq c-default-style "stroustrup"))
 
 (use-package eglot
+  :hook (eglot-mode . company-mode)
   :config
   ;; Tell eldoc not to resize the minibuffer area.
   ;;
