@@ -1807,6 +1807,22 @@ will change the focus to the target window."
 (advice-add 'jsonrpc-request :around #'benv/translate-paths-jsonrpc-request)
 (advice-add 'jsonrpc-notify :around #'benv/translate-paths-jsonrpc-request)
 
+(defun benv/eglot-handle-notification-advice (orig-fun server method &rest params)
+  "Advice around `eglot-handle-notification' that translates any
+Windows-style file paths/URIs received in notification messages from
+the LSP server to equivalent WSL paths. In particular, the LSP server
+sends compiler warnings/errors to eglot as JSON notification messages.
+
+This is a hack so that I can use the Windows version `clangd.exe' as
+my LSP server while running Emacs under WSL. This is necessary because
+my Unity native plugin builds need to link against Windows-only DLLs
+(e.g. D3D12)."
+  (when-let* ((uri (plist-get params :uri)))
+    (setq params (plist-put params :uri (benv/windows-path-to-wsl-path uri))))
+  (apply orig-fun server method params))
+
+(advice-add 'eglot-handle-notification :around #'benv/eglot-handle-notification-advice)
+
 (use-package xref
   :init
   (add-to-list 'display-buffer-alist
