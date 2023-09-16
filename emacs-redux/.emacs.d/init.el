@@ -1763,7 +1763,15 @@ will change the focus to the target window."
 
   )
 
-(defun benv/translate-paths-jsonrpc-request (orig-fun connection method params &rest args)
+(defun benv/jsonrpc-advice (orig-fun connection method params &rest args)
+  "Advice around jsonrpc functions (`jsonrpc-request',
+`jsonrpc-async-request', `jsonrpc-notify') that translates
+Windows-style paths/URIs to WSL paths and vice versa.
+
+This is a hack so that I can use the Windows version `clangd.exe' as
+my LSP server while running Emacs under WSL. This is necessary because
+my Unity native plugin builds need to link against Windows-only DLLs
+(e.g. D3D12)."
   (when-let ((rootPath (plist-get params :rootPath)))
     (setq params (plist-put params :rootPath (benv/wsl-path-to-windows-path rootPath))))
   (when-let ((rootUri (plist-get params :rootUri)))
@@ -1803,9 +1811,9 @@ will change the focus to the target window."
                   result))
     result))
 
-(advice-add 'jsonrpc-async-request :around #'benv/translate-paths-jsonrpc-request)
-(advice-add 'jsonrpc-request :around #'benv/translate-paths-jsonrpc-request)
-(advice-add 'jsonrpc-notify :around #'benv/translate-paths-jsonrpc-request)
+(advice-add 'jsonrpc-async-request :around #'benv/jsonrpc-advice)
+(advice-add 'jsonrpc-request :around #'benv/jsonrpc-advice)
+(advice-add 'jsonrpc-notify :around #'benv/jsonrpc-advice)
 
 (defun benv/eglot-handle-notification-advice (orig-fun server method &rest params)
   "Advice around `eglot-handle-notification' that translates any
