@@ -431,9 +431,15 @@ and echo it in the minibuffer."
   "t l" 'visual-line-mode
   "u"   'universal-argument)
 
+
+;; Note: The <next>/<prior> lines remap the PageDown/PageUp keys
+;; to half-screen jumps, as is done by the default C-d/C-u bindings
+;; in evil/vim.
 (general-def
   :states '(motion normal insert emacs)
-  "M-q" 'quit-window)
+  "M-q" 'quit-window
+  "<next>" 'evil-scroll-down
+  "<prior>" 'evil-scroll-up)
 
 ;; restore standard vim mappings
 
