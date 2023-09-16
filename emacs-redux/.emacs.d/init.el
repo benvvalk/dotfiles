@@ -1840,6 +1840,15 @@ my Unity native plugin builds need to link against Windows-only DLLs
                  (slot . 0)
                  (window-height . 0.3))))
 
+(use-package flymake
+  :init
+  (add-to-list 'display-buffer-alist
+               '("\\*Flymake"
+                 (display-buffer-in-side-window)
+                 (side . bottom)
+                 (slot . 0)
+                 (window-height . 0.3))))
+
 (use-package cmake-mode
   :config
   (setq cmake-tab-width 4))
