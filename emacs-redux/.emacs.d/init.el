@@ -1764,10 +1764,8 @@ will change the focus to the target window."
   (setq eldoc-echo-area-use-multiline-p nil)
 
   (require 'eglot)
-  (add-to-list 'eglot-server-programs
-               '(c++-mode "clangd.exe"))
-
-  )
+  (add-to-list 'eglot-server-programs '(c++-mode "clangd.exe"))
+  (add-to-list 'eglot-server-programs '(c-mode "clangd.exe")))
 
 (defun benv/jsonrpc-advice (orig-fun connection method params &rest args)
   "Advice around jsonrpc functions (`jsonrpc-request',
