@@ -1809,6 +1809,14 @@ my Unity native plugin builds need to link against Windows-only DLLs
                                  ((stringp result) 'string)
                                  ((vectorp result) 'vector)
                                  (t (error "Unhandled result type")))))
+
+    ;; Fix `:changes' edit list that LSP server sends in response
+    ;; to refactoring operations (e.g. `eglot-rename').
+    (when-let* ((changes (plist-get result :changes))
+                (uri (car changes)))
+      (setcar changes (intern (benv/windows-path-to-wsl-path (symbol-name uri))))
+      (setq result (plist-put result :changes changes)))
+
     (setq result
           (cl-map result-type (lambda (item)
                                 (when-let ((uri (plist-get item :uri)))
