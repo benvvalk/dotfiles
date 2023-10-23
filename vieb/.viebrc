@@ -1,5 +1,9 @@
 " Options
+colorscheme light
 set guitabbar=never
 set restoretabs=none
 
 " Mappings
+nmap o e
+nmap O E
+nmap b :buffer<Space>
