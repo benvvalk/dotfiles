@@ -1895,6 +1895,13 @@ my Unity native plugin builds need to link against Windows-only DLLs
         '((c . ("https://github.com/tree-sitter/tree-sitter-c"))
           (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp")))))
 
+(use-package evil-textobj-tree-sitter
+  :config
+  (define-key evil-outer-text-objects-map "f"
+              (evil-textobj-tree-sitter-get-textobj "function.outer"))
+  (define-key evil-inner-text-objects-map "f"
+              (evil-textobj-tree-sitter-get-textobj "function.inner")))
+
 ;;----------------------------------------
 ;; calfw
 ;;----------------------------------------
