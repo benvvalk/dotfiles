@@ -1866,6 +1866,36 @@ my Unity native plugin builds need to link against Windows-only DLLs
   (setq cmake-tab-width 4))
 
 ;;----------------------------------------
+;; treesit
+;;
+;; The built-in tree sitter package that
+;; comes with emacs 29 and newer.
+;;
+;; I used the following article as a
+;; reference for setting it up:
+;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+;;----------------------------------------
+
+(use-package treesit
+  :config
+  ;; How to add treesitter support for a new language.
+  ;;
+  ;; (1) Add the git repo for the grammar to
+  ;; `treesit-language-source-alist' (below).
+  ;; (2) Compile and install the shared library for the grammar, by
+  ;; invoking `treesit-install-language-grammar' and selecting the
+  ;; target language (e.g. "cpp").
+  ;;
+  ;; In order to setup emacs on a new machine, I will need to rerun
+  ;; step (2) for each language.
+  ;;
+  ;; For detailed instructions, see:
+  ;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
+  (setq treesit-language-source-alist
+        '((c . ("https://github.com/tree-sitter/tree-sitter-c"))
+          (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp")))))
+
+;;----------------------------------------
 ;; calfw
 ;;----------------------------------------
 
