@@ -333,8 +333,10 @@
 
 (defun benv/windows-path-to-wsl-path (path)
   "Convert a Windows file path to an equivalent WSL file path."
+  ;; replace backslashes with forward slashes
+  (setq path (replace-regexp-in-string "\\\\" "/" path))
   (if (string-match "^\\(.*\\)\\([a-zA-Z]\\):\\(.*\\)" path)
-      (let* ((uri-scheme (match-string 1 path))
+      (let* ((uri-scheme (or (match-string 1 path) ""))
              (drive-letter (downcase (match-string 2 path)))
              (file-path (match-string 3 path))
              (wsl-path (concat "/mnt/" drive-letter file-path)))
@@ -343,8 +345,11 @@
           (concat uri-scheme "mnt/" drive-letter file-path)))
     path))
 
+;; Test: Example path taken from a compilation buffer for Windows
+;; CMake build.
+
 (benv/windows-path-to-wsl-path
- "file:///d%3a/git/awesomesauce/LoadImageAsync-plugin/source/RenderAPI_D3D12.cpp")
+ "D:\\git\\awesomesauce\\rabbit-plugin\\src\\PluginAPI.cpp")
 
 (defun benv/wsl-path-to-windows-path (path)
   "Convert a WSL file path to an equivalent Windows file path."
@@ -871,6 +876,19 @@ window."
 ;; compilation mode
 ;;----------------------------------------
 
+(defun benv/compilation-find-file-advice (orig-fun marker filename directory &rest formats)
+  "Advice to make built-in `compilation-find-file' function translate
+Windows-style file paths to Linux-style WSL file paths, when running
+Emacs under WSL.
+
+I need this because I often run Windows builds (e.g. `cmake.exe') from
+inside of Emacs, where Emacs is running under WSL. Unless I add my own
+path translation, clicking on file paths in a compilation buffer will
+not automatically jump to the associated location in the source code
+file."
+  (setq filename (benv/windows-path-to-wsl-path filename))
+  (apply orig-fun marker filename directory formats))
+
 (use-package compilation-mode
 
   :init
@@ -886,6 +904,10 @@ window."
     (setq compilation-scroll-output t))
 
   (add-hook #'compilation-mode-hook #'benv/compilation-mode-setup)
+
+  ;; Advice to make Windows-style file paths clickable in
+  ;; `compilation-mode' buffers.
+  (advice-add 'compilation-find-file :around #'benv/compilation-find-file-advice)
 
   :general
 
