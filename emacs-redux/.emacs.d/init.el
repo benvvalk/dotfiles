@@ -1983,6 +1983,7 @@ my Unity native plugin builds need to link against Windows-only DLLs
 
 (setq browse-url-generic-program
       (or (executable-find "/Applications/Firefox.app/Contents/MacOS/firefox")
+          (executable-find "vieb.exe")
           (executable-find "firefox.exe")
           (executable-find "firefox")))
 
