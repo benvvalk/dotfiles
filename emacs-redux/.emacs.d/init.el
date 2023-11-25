@@ -1504,7 +1504,7 @@ returns exit status 1, for reasons I don't understand.
     ;; selected window (not the "other" window)
     (setq magit-display-buffer-function
           'magit-display-buffer-same-window-except-diff-v1)
-    (setq magit-log-margin '(nil age magit-log-margin-width t 18))
+    (setq magit-log-margin '(nil "%b-%d-%y" magit-log-margin-width t 18))
     (setq magit-diff-refine-hunk t)
     ;; hide windows line endings ("^M") in magit status buffer
     (add-hook 'magit-status-mode-hook 'remove-dos-eol)
