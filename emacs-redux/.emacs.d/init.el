@@ -872,7 +872,23 @@ window."
 ;;----------------------------------------
 
 (use-package compilation-mode
+
+  :init
+
+  (defun benv/compilation-mode-setup ()
+    ;; Turn on "word wrap" by default, so that I can
+    ;; see the full text of long commands and error
+    ;; messages.
+    (visual-line-mode)
+    ;; Automatically scroll to the bottom of the buffer
+    ;; as new output appears. In other words, follow the
+    ;; output like the Unix `tail` command.
+    (setq compilation-scroll-output t))
+
+  (add-hook #'compilation-mode-hook #'benv/compilation-mode-setup)
+
   :general
+
   ;; Unset default "SPC" binding
   ;; so that my evil leader key
   ;; behaves normally in dired
@@ -880,7 +896,11 @@ window."
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
    :non-normal-prefix benv/evil-insert-mode-leader-key
-   "c c" 'compile))
+   "c c" 'compile)
+  (:states '(motion emacs)
+   :keymaps 'compilation-mode-map
+   "RET" 'compilation-display-error
+   "C-RET" 'compile-goto-error))
 
 ;;----------------------------------------
 ;; ediff
