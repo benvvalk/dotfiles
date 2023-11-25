@@ -1796,24 +1796,32 @@ This is a hack so that I can use the Windows version `clangd.exe' as
 my LSP server while running Emacs under WSL. This is necessary because
 my Unity native plugin builds need to link against Windows-only DLLs
 (e.g. D3D12)."
-  (when-let ((rootPath (plist-get params :rootPath)))
-    (setq params (plist-put params :rootPath (benv/wsl-path-to-windows-path rootPath))))
-  (when-let ((rootUri (plist-get params :rootUri)))
-    (setq params (plist-put params :rootUri (benv/wsl-path-to-windows-path rootUri))))
-  (when-let ((workspaceFolders (plist-get params :workspaceFolders)))
-    (setq workspaceFolders
-          (cl-map 'vector (lambda (item)
-                            (when-let ((uri (plist-get item :uri)))
-                              (setq item (plist-put item :uri (benv/wsl-path-to-windows-path uri))))
-                            (when-let ((name (plist-get item :name)))
-                              (setq item (plist-put item :name (benv/wsl-path-to-windows-path name))))
-                            item)
-                  workspaceFolders))
-    (setq params (plist-put params :workspaceFolders workspaceFolders)))
-  (when-let ((textDocument (plist-get params :textDocument)))
-    (when-let ((uri (plist-get textDocument :uri)))
-      (setq textDocument (plist-put textDocument :uri (benv/wsl-path-to-windows-path uri)))
-      (setq params (plist-put params :textDocument textDocument))))
+  ;; We test if `connection' is of type `eglot-lsp-server' so that
+  ;; that we only do Windows <-> WSL file path translations for
+  ;; JSON messages that are related to eglot.
+  ;;
+  ;; `copilot.el' also uses `jsonrpc' to send/receive messages, and
+  ;; that package will break if we try to do the file/URI
+  ;; translations in those contexts.
+  (when (eq (type-of connection) 'eglot-lsp-server)
+    (when-let ((rootPath (plist-get params :rootPath)))
+      (setq params (plist-put params :rootPath (benv/wsl-path-to-windows-path rootPath))))
+    (when-let ((rootUri (plist-get params :rootUri)))
+      (setq params (plist-put params :rootUri (benv/wsl-path-to-windows-path rootUri))))
+    (when-let ((workspaceFolders (plist-get params :workspaceFolders)))
+      (setq workspaceFolders
+            (cl-map 'vector (lambda (item)
+                              (when-let ((uri (plist-get item :uri)))
+                                (setq item (plist-put item :uri (benv/wsl-path-to-windows-path uri))))
+                              (when-let ((name (plist-get item :name)))
+                                (setq item (plist-put item :name (benv/wsl-path-to-windows-path name))))
+                              item)
+                    workspaceFolders))
+      (setq params (plist-put params :workspaceFolders workspaceFolders)))
+    (when-let ((textDocument (plist-get params :textDocument)))
+      (when-let ((uri (plist-get textDocument :uri)))
+        (setq textDocument (plist-put textDocument :uri (benv/wsl-path-to-windows-path uri)))
+        (setq params (plist-put params :textDocument textDocument)))))
   (when-let* ((result (apply orig-fun connection method params args))
               ;; I record the original type of `result' in
               ;; `result-type' so that I can tell `cl-map' to generate a
@@ -1828,20 +1836,29 @@ my Unity native plugin builds need to link against Windows-only DLLs
                                  ((vectorp result) 'vector)
                                  (t (error "Unhandled result type")))))
 
-    ;; Fix `:changes' edit list that LSP server sends in response
-    ;; to refactoring operations (e.g. `eglot-rename').
-    (when-let* ((changes (plist-get result :changes))
-                (uri (car changes)))
-      (setcar changes (intern (benv/windows-path-to-wsl-path (symbol-name uri))))
-      (setq result (plist-put result :changes changes)))
+    ;; We test if `connection' is of type `eglot-lsp-server' so that
+    ;; that we only do Windows <-> WSL file path translations for
+    ;; JSON messages that are related to eglot.
+    ;;
+    ;; `copilot.el' also uses `jsonrpc' to send/receive messages, and
+    ;; that package will break if we try to do the file/URI
+    ;; translations in those contexts.
+    (when (eq (type-of connection) 'eglot-lsp-server)
 
-    (setq result
-          (cl-map result-type (lambda (item)
-                                (when-let ((uri (plist-get item :uri)))
-                                  (setq item (plist-put item :uri (benv/windows-path-to-wsl-path uri))))
-                                item)
-                  result))
-    result))
+      ;; Fix `:changes' edit list that LSP server sends in response
+      ;; to refactoring operations (e.g. `eglot-rename').
+      (when-let* ((changes (plist-get result :changes))
+                  (uri (car changes)))
+        (setcar changes (intern (benv/windows-path-to-wsl-path (symbol-name uri))))
+        (setq result (plist-put result :changes changes)))
+
+      (setq result
+            (cl-map result-type (lambda (item)
+                                  (when-let ((uri (plist-get item :uri)))
+                                    (setq item (plist-put item :uri (benv/windows-path-to-wsl-path uri))))
+                                  item)
+                    result)))
+      result))
 
 (advice-add 'jsonrpc-async-request :around #'benv/jsonrpc-advice)
 (advice-add 'jsonrpc-request :around #'benv/jsonrpc-advice)
