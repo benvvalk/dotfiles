@@ -995,10 +995,13 @@ window."
   ;; See: https://github.com/syl20bnr/spacemacs/issues/13255
   (setq org-src-preserve-indentation t)
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
+  ;; plantuml
+  (setq org-plantuml-exec-mode 'plantuml)
   ;; org-babel stuff
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (plantuml . t)
      (shell . t)))
 
   (defun benv/org-attach-screenshot-and-insert-link ()
