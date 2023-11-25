@@ -411,6 +411,14 @@ and echo it in the minibuffer."
   (kill-new default-directory)
   (message default-directory))
 
+(use-package ffap
+  :init
+  ;; Makes `ffap-find-file-at-point' recognize Windows-style file
+  ;; paths and automatically translate them Linux-style WSL paths.
+  ;; In `evil-mode', this makes "g f" able to navigate to the Windows
+  ;; file path under the cursor.
+  (advice-add 'ffap-string-at-point :filter-return #'benv/windows-path-to-wsl-path))
+
 ;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
