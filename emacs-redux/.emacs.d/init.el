@@ -1052,6 +1052,25 @@ file."
       (insert (format "[[file:%s]]" dest-path)))
       (org-redisplay-inline-images))
 
+  (defun benv/org-open-attach-directory ()
+    "Open the org-attach directory for the current org heading in
+dired, in the current window. Create a new attachment directory if it
+doesn't already exist."
+    (interactive)
+    (when-let* ((attach-dir (org-attach-dir t)))
+      (dired attach-dir)))
+
+  (defun benv/org-open-attach-directory-in-dir (dir)
+    "Open the org-attach directory for the current org heading in
+dired, in a neighbor window. DIR indicates the direction of the target
+neighbor window.
+
+If the current org heading does not have an attachment directory, a
+new directory will be created. If the target neighbor window doesn't
+exist, the current window will be split to create it."
+    (when-let* ((attach-dir (org-attach-dir t)))
+      (benv/in-neighbor-window dir (dired attach-dir))))
+
   :general
   ('motion
    :prefix benv/evil-leader-key
@@ -1066,6 +1085,11 @@ file."
   ('motion org-mode-map
    :prefix benv/major-mode-leader-key
    "o r" 'org-attach-reveal-in-emacs
+   "a ." 'benv/org-open-attach-directory
+   "a h" (lambda () (interactive) (benv/org-open-attach-directory-in-dir 'left))
+   "a j" (lambda () (interactive) (benv/org-open-attach-directory-in-dir 'down))
+   "a k" (lambda () (interactive) (benv/org-open-attach-directory-in-dir 'up))
+   "a l" (lambda () (interactive) (benv/org-open-attach-directory-in-dir 'right))
    "t i" 'org-toggle-inline-images
    "t l" 'org-toggle-link-display
    "t L" 'org-latex-preview
