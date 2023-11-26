@@ -355,7 +355,7 @@
   "Convert a WSL file path to an equivalent Windows file path."
   (if (string-match "^\\(.*\\)/mnt/\\([a-z]\\)\\(.*\\)" path)
       (let* ((uri-scheme (match-string 1 path))
-             (drive-letter (match-string 2 path))
+             (drive-letter (upcase (match-string 2 path)))
              (file-path (match-string 3 path))
              (windows-path (concat drive-letter ":" file-path)))
         (if (string= "" uri-scheme)
