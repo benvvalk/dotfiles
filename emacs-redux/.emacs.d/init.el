@@ -1910,6 +1910,13 @@ my Unity native plugin builds need to link against Windows-only DLLs
             (cl-map result-type (lambda (item)
                                   (when-let ((uri (plist-get item :uri)))
                                     (setq item (plist-put item :uri (benv/windows-path-to-wsl-path uri))))
+                                  ;; `:location` vectors are returned by eglot `workspace/symbol` queries,
+                                  ;; which triggered by calling `xref-find-apropos` (i.e. find symbol in
+                                  ;; project by name).
+                                  (when-let ((location (plist-get item :location))
+                                             (uri (plist-get location :uri)))
+                                    (setq location (plist-put location :uri (benv/windows-path-to-wsl-path uri)))
+                                    (setq item (plist-put item :location location)))
                                   item)
                     result)))
       result))
