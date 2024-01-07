@@ -511,12 +511,16 @@ and echo it in the minibuffer."
 (global-set-key (kbd "M-=") 'ignore)
 
 ;;----------------------------------------
-;; grep/wgrep
+;; grep/wgrep/ripgrep/rg
 ;;----------------------------------------
 
 (use-package grep
   :general
   (:keymaps 'grep-mode-map "SPC" nil))
+
+(use-package rg
+  :general
+  (:keymaps 'rg-mode-map "SPC" nil))
 
 (use-package wgrep)
 
