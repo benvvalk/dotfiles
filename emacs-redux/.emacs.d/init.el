@@ -2509,8 +2509,17 @@ recency."
     (mu4e))
   ;; select package for composing and sending emails
   (setq mail-user-agent 'mu4e-user-agent)
-  ;; automatically run `mu4e-get-mail-command` every 10 minutes
-  (setq mu4e-update-interval 600)
+  ;; Don't automatically fetch and index new mail at regular
+  ;; intervals.  Fetch mail manually with `C-c C-u'
+  ;; (`mu4e-get-mail-command') instead.
+  ;;
+  ;; Automatically fetching mail would be nice but there are
+  ;; two annoying problems with it:
+  ;; (1) It freezes the mu4e UI until the fetching/indexing has
+  ;; completed, which can take up to 30 seconds.
+  ;; (2) Every time mu4e fetches mail it brings up a prompt for my
+  ;; `pass`/`gpg` password, which is highly annoying.
+  (setq mu4e-update-interval nil)
   ;; hack to avoid UID errors when using `mbsync`
   (setq mu4e-change-filenames-when-moving t)
   ;; don't save sent messages to Sent folder, Fastmail/Gmail does this for us
