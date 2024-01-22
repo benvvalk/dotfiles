@@ -1802,6 +1802,16 @@ will change the focus to the target window."
 (add-to-list 'auto-mode-alist '("\\.jslib\\'" . js-mode))
 
 ;;----------------------------------------
+;; dtrt: automatically detect indentation settings from source file
+;; (indent offset and indent-tabs-mode)
+;;----------------------------------------
+
+(use-package dtrt-indent
+  :demand t
+  :config
+  (dtrt-indent-global-mode))
+
+;;----------------------------------------
 ;; C#
 ;;----------------------------------------
 
