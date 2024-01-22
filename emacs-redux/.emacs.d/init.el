@@ -1978,6 +1978,13 @@ my Unity native plugin builds need to link against Windows-only DLLs
   (setq cmake-tab-width 4))
 
 ;;----------------------------------------
+;; gptel (integration for OpenAI and
+;; other LLMs)
+;;----------------------------------------
+
+(use-package gptel)
+
+;;----------------------------------------
 ;; treesit
 ;;
 ;; The built-in tree sitter package that
