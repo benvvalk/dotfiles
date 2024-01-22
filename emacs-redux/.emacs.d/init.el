@@ -480,6 +480,13 @@ and echo it in the minibuffer."
                       space-mark
                       tab-mark
                       newline-mark))
+  :config
+
+  (defun benv/before-save-hook ()
+    (delete-trailing-whitespace))
+
+  (add-hook 'before-save-hook #'benv/before-save-hook)
+
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
