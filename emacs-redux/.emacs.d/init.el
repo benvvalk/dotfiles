@@ -1511,6 +1511,10 @@ returns exit status 1, for reasons I don't understand.
    "<backtab>" 'dired-subtree-remove
    "<C-tab>" 'dired-subtree-cycle))
 
+(use-package find-dired
+  :config
+  (setq find-name-arg "-iname"))
+
 ;; Use hl-line-mode to highlight the current
 ;; file/directory line in dired
 (use-package hl-line
