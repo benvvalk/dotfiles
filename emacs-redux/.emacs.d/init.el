@@ -1827,7 +1827,14 @@ will change the focus to the target window."
 ;;----------------------------------------
 
 (use-package csharp-mode
-  :mode ("\\.cs\\'" . csharp-mode))
+  :mode ("\\.cs\\'" . csharp-mode)
+  :init
+  ;; Tell `csharp-mode` not to automatically add a newline to the end
+  ;; of my source files. It's not necessary and it keeps cluttering up
+  ;; my git unstaged changes.
+  (defun benv/csharp-mode-hook ()
+    (setq require-final-newline nil))
+  (add-hook 'csharp-mode-hook #'benv/csharp-mode-hook))
 
 (use-package omnisharp
   :hook (csharp-mode . omnisharp-mode)
@@ -1849,7 +1856,18 @@ will change the focus to the target window."
 
 (use-package cc-mode
   :init
-  (setq c-default-style "stroustrup"))
+  ;; Set default indentation style for C/C++ code.
+  ;; "stroustrup" mostly works for me, although I
+  ;; did not spend much time trying the different
+  ;; built-in options.
+  (setq c-default-style "stroustrup")
+
+  ;; Tell `c-mode`/`c++-mode` not to automatically add a newline to
+  ;; the end of my source files. It's not necessary and it keeps
+  ;; cluttering up my git unstaged changes.
+  (defun benv/cc-mode-hook ()
+    (setq require-final-newline nil))
+  (add-hook 'c-mode-common-hook #'benv/cc-mode-hook))
 
 (use-package eglot
   :hook (eglot-mode . company-mode)
