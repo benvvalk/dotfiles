@@ -357,7 +357,8 @@
       (let* ((uri-scheme (match-string 1 path))
              (drive-letter (upcase (match-string 2 path)))
              (file-path (match-string 3 path))
-             (windows-path (concat drive-letter ":" file-path)))
+             (file-path-with-backslashes (replace-regexp-in-string "/" "\\\\" file-path))
+             (windows-path (concat drive-letter ":" file-path-with-backslashes)))
         (if (string= "" uri-scheme)
             windows-path
           (concat uri-scheme "/" drive-letter "%3a" file-path)))
