@@ -418,6 +418,13 @@ and echo it in the minibuffer."
   ;; paths and automatically translate them Linux-style WSL paths.
   ;; In `evil-mode', this makes "g f" able to navigate to the Windows
   ;; file path under the cursor.
+  ;;
+  ;; Note: We need two advices here because `ffap-find-file-at-point'
+  ;; parses the string at point with a different function, depending
+  ;; on whether the string at point is quoted or unquoted.
+  ;; `ffap-string-at-point' is used when the string is quoted and
+  ;; `ffap-guesser' is used when the string is unquoted.
+  (advice-add 'ffap-guesser :filter-return #'benv/windows-path-to-wsl-path)
   (advice-add 'ffap-string-at-point :filter-return #'benv/windows-path-to-wsl-path))
 
 ;;----------------------------------------
