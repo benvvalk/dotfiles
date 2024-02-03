@@ -63,7 +63,7 @@
 
 (setf *normal-border-width* 7
       *transient-border-width* 7
-      *window-border-style :tight)
+      *window-border-style* :tight)
 
 (set-focus-color "SpringGreen")
 (set-float-focus-color "SpringGreen")
