@@ -2436,6 +2436,122 @@ recency."
   (evil-set-initial-state 'shell-mode 'normal))
 
 ;;----------------------------------------
+;; rabbit.mk transient
+;;----------------------------------------
+
+(require 'transient)
+
+(defvar benv/rabbit-git-dir "/mnt/d/git/awesomesauce/rabbit")
+(defvar benv/rabbit-plugin-git-dir "/mnt/d/git/awesomesauce/rabbit-plugin")
+
+(defvar benv/rabbit-mk-default-args
+  '("GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_awesomesauce'")
+  "Default arguments which are always added to `rabbit.mk' commands,
+  and which are precede user-supplied arguments.")
+
+(defun benv/read-git-commit (git-dir)
+  (interactive)
+  (let* ((default-directory git-dir)
+         (vertico-sort-function nil)
+         (log-string (shell-command-to-string
+               "git log -n50 --abbrev-commit --format=oneline --decorate"))
+         (log-lines (split-string log-string "\n" t))
+         (log-lines (cons "HEAD" log-lines))
+         (selected-line (completing-read "git commit:" log-lines))
+         (selected-commit (car (split-string selected-line))))
+     selected-commit))
+
+(defun benv/rabbit-mk-run ()
+  (interactive)
+  (let* ((args (transient-args 'benv/rabbit-mk-transient))
+        ;; Note: The reason for all the extra backslashes and spaces
+        ;; here is to split the command across multiple lines,
+        ;; to make it more easily readable.
+        (command (format "rabbit.mk \\\n  %s \\\n  %s \\\n run"
+                         (string-join benv/rabbit-mk-default-args " \\\n  ")
+                         (string-join args " \\\n  "))))
+    (message "running: %s" command)
+    (compile command)))
+
+(transient-define-prefix benv/rabbit-mk-transient ()
+  ["Version Args"
+   (benv/rabbit-mk-arg-rabbit)
+   (benv/rabbit-mk-arg-plugin)
+   (benv/rabbit-mk-arg-unity)]
+  ["Build Args"
+   (benv/rabbit-mk-arg-platform)
+   (benv/rabbit-mk-arg-config)
+   (benv/rabbit-mk-arg-streaming-assets)]
+  ["Run Args"
+   (benv/rabbit-mk-arg-graphics-api)
+   (benv/rabbit-mk-arg-run-args-file)]
+  ["Actions"
+   ("x" "run" benv/rabbit-mk-run)])
+
+(transient-define-infix benv/rabbit-mk-arg-rabbit ()
+  :description "rabbit commit"
+  :class 'transient-option
+  :shortarg "r"
+  :argument "rabbit="
+  :always-read t
+  :reader (lambda (_prompt _initial-input _history)
+            (interactive)
+            (benv/read-git-commit benv/rabbit-git-dir)))
+
+(transient-define-infix benv/rabbit-mk-arg-plugin ()
+  :description "plugin commit"
+  :class 'transient-option
+  :shortarg "p"
+  :argument "plugin="
+  :always-read t
+  :reader (lambda (_prompt _initial-input _history)
+            (interactive)
+            (benv/read-git-commit benv/rabbit-plugin-git-dir)))
+
+(transient-define-infix benv/rabbit-mk-arg-unity ()
+  :description "unity"
+  :class 'transient-option
+  :shortarg "u"
+  :always-read t
+  :argument "unity=")
+
+(transient-define-infix benv/rabbit-mk-arg-platform ()
+  :description "platform"
+  :class 'transient-option
+  :shortarg "P"
+  :argument "platform="
+  :always-read t
+  choices '("android" "ios" "macos" "win64"))
+
+(transient-define-infix benv/rabbit-mk-arg-config ()
+  :description "build config"
+  :class 'transient-option
+  :shortarg "c"
+  :argument "config="
+  :choices '("Debug" "Release"))
+
+(transient-define-infix benv/rabbit-mk-arg-graphics-api ()
+  :description "graphics api"
+  :class 'transient-option
+  :shortarg "g"
+  :argument "graphics-api="
+  :choices '("d3d11" "d3d12" "opengl" "metal" "vulkan"))
+
+(transient-define-infix benv/rabbit-mk-arg-streaming-assets ()
+  :description "StreamingAssets folder"
+  :class 'transient-option
+  :shortarg "s"
+  :argument "streaming-assets="
+  :reader #'transient-read-directory)
+
+(transient-define-infix benv/rabbit-mk-arg-run-args-file ()
+  :description "args file"
+  :class 'transient-option
+  :shortarg "f"
+  :argument "run-args-file="
+  :reader #'transient-read-existing-file)
+
+;;----------------------------------------
 ;; vterm
 ;;----------------------------------------
 
