@@ -804,14 +804,12 @@ window identical to the current window.
 
 If a neighbour window does not already exist in direction DIR,
 this function will split the current window."
-    (unless (window-in-direction dir)
-      (split-window nil nil dir))
     (let ((buffer (current-buffer))
-          (start (window-start))
-          (window (window-in-direction dir)))
-      (save-selected-window (select-window window)
-                            (set-window-start (selected-window) start)
-                            (switch-to-buffer buffer))))
+          (start (window-start)))
+      (benv/with-neighbor-window
+       dir
+       (progn (switch-to-buffer buffer)
+              (set-window-start (selected-window) start)))))
 
   (defun benv/switch-to-buffer-in-dir (dir)
     "Select a buffer interactively and open it in the
