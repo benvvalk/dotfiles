@@ -1443,6 +1443,7 @@ The directory list is extracted from `recentf-list`."
             (setq here  (cdr here)))
           (setq files  (nconc here files))))
       (setq files  (delete-dups files))))
+
   ;; Do a recursive diff on two directories.
   (defun benv/dired-ztree-diff-marked-files ()
     (interactive)
