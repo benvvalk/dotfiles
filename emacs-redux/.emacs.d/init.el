@@ -939,7 +939,12 @@ file."
     ;; Automatically scroll to the bottom of the buffer
     ;; as new output appears. In other words, follow the
     ;; output like the Unix `tail` command.
-    (setq compilation-scroll-output t))
+    (setq compilation-scroll-output t)
+    ;; By default, emacs automatically collapses long lines and shows
+    ;; an ellipsis button/link ("[...]")  to expand them. Disable
+    ;; that, so that I can actually see the damn output without
+    ;; clicking a button.
+    (setq compilation-max-output-line-length nil))
 
   (add-hook #'compilation-mode-hook #'benv/compilation-mode-setup)
 
