@@ -2400,11 +2400,6 @@ recency."
 (defvar benv/rabbit-git-dir "/mnt/d/git/awesomesauce/rabbit")
 (defvar benv/rabbit-plugin-git-dir "/mnt/d/git/awesomesauce/rabbit-plugin")
 
-(defvar benv/rabbit-mk-default-args
-  '("GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa_awesomesauce'")
-  "Default arguments which are always added to `rabbit.mk' commands,
-  and which are precede user-supplied arguments.")
-
 (defun benv/read-git-commit (git-dir)
   (interactive)
   (let* ((default-directory git-dir)
@@ -2419,13 +2414,31 @@ recency."
 
 (defun benv/rabbit-mk-run ()
   (interactive)
-  (let* ((args (transient-args 'benv/rabbit-mk-transient))
-        ;; Note: The reason for all the extra backslashes and spaces
-        ;; here is to split the command across multiple lines,
-        ;; to make it more easily readable.
-        (command (format "rabbit.mk \\\n  %s \\\n  %s \\\n run"
-                         (string-join benv/rabbit-mk-default-args " \\\n  ")
-                         (string-join args " \\\n  "))))
+  (let* ((default-directory "/mnt/d/git/awesomesauce/rabbit-scripts")
+         (args (transient-args 'benv/rabbit-mk-transient))
+         (process-environment
+          (cons "GIT_SSH_COMMAND=ssh -i ~/.ssh/id_rsa_awesomesauce"
+                process-environment))
+         ;; Note: The reason for all the extra backslashes and spaces
+         ;; here is to split the command across multiple lines,
+         ;; to make it more easily readable.
+         (command (format "bin/rabbit.mk \\\n  %s \\\n  run"
+                          (string-join args " \\\n  "))))
+    (message "running: %s" command)
+    (compile command)))
+
+(defun benv/rabbit-mk-test-all ()
+  (interactive)
+  (let* ((default-directory "/mnt/d/git/awesomesauce/rabbit-scripts")
+         (args (transient-args 'benv/rabbit-mk-transient))
+         (process-environment
+          (cons "GIT_SSH_COMMAND=ssh -i ~/.ssh/id_rsa_awesomesauce"
+                process-environment))
+         ;; Note: The reason for all the extra backslashes and spaces
+         ;; here is to split the command across multiple lines,
+         ;; to make it more easily readable.
+         (command (format "bin/test.mk \\\n  %s \\\n  check"
+                          (string-join args " \\\n  "))))
     (message "running: %s" command)
     (compile command)))
 
@@ -2436,13 +2449,18 @@ recency."
    (benv/rabbit-mk-arg-unity)]
   ["Build Args"
    (benv/rabbit-mk-arg-platform)
+   (benv/rabbit-mk-arg-scripting-backend)
    (benv/rabbit-mk-arg-config)
-   (benv/rabbit-mk-arg-streaming-assets)]
+   (benv/rabbit-mk-arg-colorspace)
+   (benv/rabbit-mk-arg-default-args)]
   ["Run Args"
+   (benv/rabbit-mk-arg-working-dir)
    (benv/rabbit-mk-arg-graphics-api)
-   (benv/rabbit-mk-arg-run-args-file)]
+   (benv/rabbit-mk-arg-unity-player-args)
+   (benv/rabbit-mk-arg-run-args)]
   ["Actions"
-   ("x" "run" benv/rabbit-mk-run)])
+   ("x" "run" benv/rabbit-mk-run)
+   ("T" "test-all" benv/rabbit-mk-test-all)])
 
 (transient-define-infix benv/rabbit-mk-arg-rabbit ()
   :description "rabbit commit"
@@ -2479,6 +2497,14 @@ recency."
   :always-read t
   choices '("android" "ios" "macos" "win64"))
 
+(transient-define-infix benv/rabbit-mk-arg-scripting-backend ()
+  :description "scripting backend"
+  :class 'transient-option
+  :shortarg "b"
+  :argument "scripting-backend="
+  :always-read t
+  :choices '("il2cpp" "mono"))
+
 (transient-define-infix benv/rabbit-mk-arg-config ()
   :description "build config"
   :class 'transient-option
@@ -2486,26 +2512,46 @@ recency."
   :argument "config="
   :choices '("Debug" "Release"))
 
+(transient-define-infix benv/rabbit-mk-arg-colorspace ()
+  :description "colorspace"
+  :class 'transient-option
+  :shortarg "C"
+  :argument "colorspace="
+  :always-read t
+  :choices '("Gamma" "Linear"))
+
+(transient-define-infix benv/rabbit-mk-arg-working-dir ()
+  :description "working directory"
+  :class 'transient-option
+  :shortarg "-C"
+  :argument "-C "
+  :reader #'transient-read-directory)
+
 (transient-define-infix benv/rabbit-mk-arg-graphics-api ()
   :description "graphics api"
   :class 'transient-option
   :shortarg "g"
   :argument "graphics-api="
+  :always-read t
   :choices '("d3d11" "d3d12" "opengl" "metal" "vulkan"))
 
-(transient-define-infix benv/rabbit-mk-arg-streaming-assets ()
-  :description "StreamingAssets folder"
+(transient-define-infix benv/rabbit-mk-arg-default-args ()
+  :description "default args"
   :class 'transient-option
-  :shortarg "s"
-  :argument "streaming-assets="
-  :reader #'transient-read-directory)
+  :shortarg "d"
+  :argument "default-args=")
 
-(transient-define-infix benv/rabbit-mk-arg-run-args-file ()
-  :description "args file"
+(transient-define-infix benv/rabbit-mk-arg-unity-player-args ()
+  :description "unity player args"
   :class 'transient-option
-  :shortarg "f"
-  :argument "run-args-file="
-  :reader #'transient-read-existing-file)
+  :shortarg "a"
+  :argument "unity-player-args=")
+
+(transient-define-infix benv/rabbit-mk-arg-run-args ()
+  :description "run args"
+  :class 'transient-option
+  :shortarg "R"
+  :argument "run-args=")
 
 ;;----------------------------------------
 ;; vterm
