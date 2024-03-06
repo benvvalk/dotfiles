@@ -175,6 +175,7 @@
   ;; For further explanation/discussion of this issue, see:
   ;; https://github.com/syl20bnr/spacemacs/issues/2525
   (evil-move-beyond-eol t)
+  (evil-undo-system 'undo-redo)
   :general
   ;; Unbind "," and "SPC" so I can use them as prefix
   ;; keys, without getting "Key sequence starts
