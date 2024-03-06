@@ -811,6 +811,14 @@ this function will split the current window."
        (progn (switch-to-buffer buffer)
               (set-window-start (selected-window) start)))))
 
+  (defun benv/mirror-window-in-dir-and-focus (dir)
+    (let ((buffer (current-buffer))
+          (start (window-start)))
+      (benv/in-neighbor-window
+       dir
+       (progn (switch-to-buffer buffer)
+              (set-window-start (selected-window) start)))))
+
   (defun benv/switch-to-buffer-in-dir (dir)
     "Select a buffer interactively and open it in the
 neighbour window in direction DIR, without changing
@@ -877,6 +885,10 @@ window."
    "w j" (lambda () (interactive) (benv/mirror-window 'down))
    "w k" (lambda () (interactive) (benv/mirror-window 'up))
    "w l" (lambda () (interactive) (benv/mirror-window 'right))
+   "w H" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'left))
+   "w J" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'down))
+   "w K" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'up))
+   "w L" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'right))
    "' h" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'left))
    "' j" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'down))
    "' k" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'up))
