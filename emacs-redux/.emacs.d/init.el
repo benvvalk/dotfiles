@@ -527,20 +527,6 @@ and echo it in the minibuffer."
 (global-set-key (kbd "M-=") 'ignore)
 
 ;;----------------------------------------
-;; grep/wgrep/ripgrep/rg
-;;----------------------------------------
-
-(use-package grep
-  :general
-  (:keymaps 'grep-mode-map "SPC" nil))
-
-(use-package rg
-  :general
-  (:keymaps 'rg-mode-map "SPC" nil))
-
-(use-package wgrep)
-
-;;----------------------------------------
 ;; vertico
 ;;----------------------------------------
 
@@ -2390,6 +2376,20 @@ recency."
    "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
   :init
   (evil-set-initial-state 'shell-mode 'normal))
+
+;;----------------------------------------
+;; grep/wgrep/ripgrep/rg
+;;----------------------------------------
+
+(use-package grep
+  :general
+  (:keymaps 'grep-mode-map "SPC" nil))
+
+(use-package rg
+  :general
+  (:keymaps 'rg-mode-map "SPC" nil))
+
+(use-package wgrep)
 
 ;;----------------------------------------
 ;; rabbit.mk transient
