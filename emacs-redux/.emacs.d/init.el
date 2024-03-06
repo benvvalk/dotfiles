@@ -1695,10 +1695,7 @@ Determine the correct Unity executable for the project by using `unity-which`."
 ;; avy
 ;;----------------------------------------
 
-(use-package avy
-  :general
-  (:states '(motion normal)
-   "s" 'avy-goto-char-timer))
+(use-package avy)
 
 ;;----------------------------------------
 ;; winum
