@@ -906,7 +906,7 @@ Windows-style file paths to Linux-style WSL file paths, when running
 Emacs under WSL.
 
 I need this because I often run Windows builds (e.g. `cmake.exe') from
-inside of Emacs, where Emacs is running under WSL. Unless I add my own
+an Emacs instance that is running under WSL. Unless I add my own
 path translation, clicking on file paths in a compilation buffer will
 not automatically jump to the associated location in the source code
 file."
