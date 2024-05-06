@@ -3,7 +3,7 @@ import re
 
 # define your starters here
 #                standard  custom
-uniqueStarters = ["STPR", "#STPR"]
+uniqueStarters = ["KWH"]
 
 # define if attachment keys define where "space"s or "attachment"s lie
 attachmentMethod = "space"
@@ -53,10 +53,6 @@ symbols = {
         "PB"     : ["|", "⊤", "⊥", "¦"],
         "FPBG"   : ["~", "⊆", "⊇", "˜"],
         "FPBL"   : ["↑", "←", "→", "↓"]
-    },
-    uniqueStarters[1]: { # custom
-        # add your own strokes here (or above, or wherever else you like)!
-        ""       : "test"
     }
 }
 
