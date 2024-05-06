@@ -1,5 +1,3 @@
-import re
-
 # Max number of strokes in chords handled by this dictionary.
 #
 # Note: This is a special global variable that must be set by all
@@ -7,108 +5,95 @@ import re
 
 LONGEST_KEY = 1
 
-# Regex for recognizing when one or more right-hand steno keys are
-# pressed.
-
-right_hand_keys = re.compile(r'([EUFBLGDZ6789])|([-*AEOU].*[RPTS])')
-
 # Left-hand-only fingerspelling chords.
 
-chars = {
-    "SP": " ",
-    "SKH": "/",
-    "TPW": "\t",
-    "KHR": ":",
-    "STR": "a",
-    "PWR": "b",
-    "KPR": "c",
-    "STK": "d",
-    "SKR": "e",
+mappings = {
+    "KPR": "a",
+    "SPW": "b",
+    "SKR": "c",
+    "STK": "d", # overwrites brief for `and`; use SKPW instead
+    "TKP": "e",
     "STP": "f",
-    "TKPWR": "g",
-    "SH": "h",
-    "STKPWR": "i",
-    "SKWR": "j",
-    "PWH": "k",
+    "TKPWH": "g", # use TKPWH so we don't clobber TKPW for `go`
+    "SWH": "h", # use SWH so that Alt+S chord (SHO) doesn't clobber `should`
+    "SKWH": "i", # mnemonic: chord shape looks like bottom part of "I"
+    "SKWR": "j", # changes SKWR* to capital J
+    "SKH": "k", # use SKH so we don't clobber SK for `ask`
     "SHR": "l",
     "SPH": "m",
     "STPH": "n",
-    "SPR": "o",
-    "P": "p",
+    "KPH": "o",
+    "SP": "p",
     "SKW": "q",
-    "PR": "r",
-    "SWH": "s",
-    "TW": "t",
-    "SWR": "u",
-    "KPH": "v",
+    "SWR": "r", # SR conflicts with `have`; can use SW-R instead of SWR for `somewhere`
+    "PWH": "s", # special case: S conflicts with `is`, full-row chord is memorable
+    "TPW": "t", # ST conflicts with `is it`; mnemonic: chord shape is a "T"
+    "TKH": "u", # mnemonic: chord shape is two vertical lines, like the left/right sides of "U"
+    "TWH": "v", # mnemonic: chord has "V" shape
     "SW": "w",
-    "KPW": "x",
-    "TKWR": "y",
-    "STKPW": "z"
+    "SKP": "x", # overwrites brief for `and`; use built-in STKP instead
+    "KWHR": "y", # SKWR conflicts with `j`
+    "STKPW": "z" # changes STKPW* to capital Z
     }
 
-# Plover requires using special names for non-alphanumeric characters
-# in keyboard shortcuts, e.g."{#alt(slash)}" for Alt+/.
+def lookup(strokes):
 
-shortcut_chars = {
-    "SP": "space",
-    "SKH": "slash",
-    "TPW": "tab",
-    "KHR": "colon",
-    "SKWH": "escape"
-    }
+    assert len(strokes) <= LONGEST_KEY
 
-def lookup(key):
+    prefix = ""
+    suffix = ""
 
-    assert len(key) <= LONGEST_KEY
+    shift = False
+    control = False
+    alt = False
+    in_prefix = True
 
-    if right_hand_keys.findall(key[0]):
-        raise KeyError
-
-    char = ""
-
-    for k in key[0]:
-        if k in "AO-*":
-            break
-        char += k
-
-    if (not char in chars) and (not char in shortcut_chars):
-        raise KeyError
-
-    shift = "*" in key[0]
-
-    mods = []
-
-    if "A" in key[0]:
-        mods.append("control")
-    if "O" in key[0]:
-        mods.append("alt")
-
-    # Control characters (e.g. Escape) are characters that have no
-    # printable representation. Such characters have an entry
-    # in `shortcut_chars`, but no entry in `chars`.
-
-    control_char = (char in shortcut_chars) and (not char in chars)
-
-    shortcut = mods or control_char
-
-    if shortcut:
-        output = shortcut_chars[char]
-    else:
-        output = chars[char]
-
-    for mod in mods:
-        output = mod + "(" + output + ")"
-
-    if shift:
-        if shortcut:
-            output = mod + 'shift(' + output + ')'
+    for c in strokes[0]:
+        if c == "*":
+            shift = True
+            in_prefix = False
+        elif c == "-":
+            in_prefix = False
+        elif c == "A":
+            control = True
+            in_prefix = False
+        elif c == "O":
+            alt = True
+            in_prefix = False
+        elif in_prefix:
+            prefix += c
         else:
-            output = output.upper()
+            suffix += c
 
-    if shortcut:
-        output = '{^}{#' + output + '}{^}'
+    if (not prefix in mappings):
+        raise KeyError
+
+    output = mappings[prefix]
+
+    if alt or control:
+        # -FP / -PS / -FPS suffices are for adding spaces before/after
+        # a literal output character; these suffices are not
+        # recognized in combination with control chords (e.g. Ctrl+Z
+        # for undo)
+        if suffix != '':
+            raise KeyError
+        if alt:
+            output = 'alt(' + output + ')'
+        if control:
+            output = 'control(' + output + ')'
+        if shift:
+            output = 'shift(' + output + ')'
+        output = '{#' + output + '}'
     else:
+        if shift:
+            output = output.upper()
+        # check for valid suffix (adds leading/trailing space)
+        if not suffix in ['', 'FP', 'FPS', 'PS']:
+            raise KeyError
+        if suffix.startswith('FP'):
+            output = ' ' + output
+        if suffix.endswith('PS'):
+            output = output + ' '
         output = '{^' + output + '^}'
 
     return output
