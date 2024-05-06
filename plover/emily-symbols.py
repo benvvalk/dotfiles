@@ -91,6 +91,7 @@ def lookup(chord):
 
     if starter not in uniqueStarters:
         raise KeyError
+
     if len(chord) != 1:
         raise KeyError
     assert len(chord) <= LONGEST_KEY
