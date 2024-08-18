@@ -897,6 +897,17 @@ window."
    "M-L" 'benv/enlarge-window-horizontally))
 
 ;;----------------------------------------
+;; which-window.el: prompt user for target
+;; window when emacs wants to display a
+;; buffer (my own package)
+;;----------------------------------------
+
+(use-package which-window
+  :load-path "~/.emacs.d/site-lisp/which-window"
+  :config
+  (which-window-mode 1))
+
+;;----------------------------------------
 ;; compilation mode
 ;;----------------------------------------
 
