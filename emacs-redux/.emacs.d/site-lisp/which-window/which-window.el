@@ -23,6 +23,13 @@ for a target window, every time it wants to display a buffer."
 should *not* handle. Buffer names that match this list will be
 displayed with `display-buffer', as per default behaviour.")
 
+(defvar which-window--side-window-percent-size 40
+  "The percent size of a side window, relative to the
+total height/width of the frame. This only variable
+only affects the size of windows that are created by
+which-window mode; when the which-window reuses an
+existing side window, its size is left unchanged.")
+
 (defun which-window--string-match-list-p (regex list)
   "Return non-nil if REGEX exactly matches one or more strings in LIST.
 Return nil otherwise."
@@ -91,6 +98,74 @@ Return the neighbor window."
         (when focus (select-window neighbor-window))
         neighbor-window)))
 
+(defun which-window--display-buffer-in-bottom-window (bufname &optional focus)
+  "Display the buffer with name BUFNAME in a window along the bottom
+of the frame. If no such window exists, create one by splitting the
+top-level window. The size of a newly created bottom window is
+determined by `which-window--side-window-percent-size'.
+
+If the optional FOCUS parameter is non-nil, switch input focus to the
+bottom window.
+
+Return the bottom window."
+  (let* ((root-window (frame-root-window))
+         (root-window-height (window-size root-window))
+         ;; `window-top-child' will return `nil' unless the root node
+         ;; of the window layout tree represents a vertical split.
+         (bottom-window-exists (window-top-child root-window))
+         (bottom-window-fraction (/ (float which-window--side-window-percent-size) 100))
+         (bottom-window-height (round (* bottom-window-fraction root-window-height))))
+    (message "root-window-height: %d, bottom-window-height: %d" root-window-height bottom-window-height)
+    (unless bottom-window-exists
+      (split-window root-window (- bottom-window-height)))
+    (let* ((root-window (frame-root-window))
+           (bottom-window (window-top-child root-window)))
+      ;; traverse siblings until we get to the bottom-most child window
+      (while (window-next-sibling bottom-window)
+        (setq bottom-window (window-next-sibling bottom-window)))
+      ;; display the given buffer in the bottom-most window
+      (set-window-buffer bottom-window bufname)
+      ;; If we created the bottom window by splitting the
+      ;; top-level window, configure the `quit-restore'
+      ;; window parameter, so that calling `quit-window' will close
+      ;; the window and return focus to the previously selected
+      ;; window.
+      ;;
+      ;; Background: By convention, most read-only buffers
+      ;; (e.g. `help-mode' buffers) bind the 'q' key to the
+      ;; `quit-window' function. The purpose of `quit-window' is to:
+      ;; (1) hide/close the current buffer, and (2) restore emacs'
+      ;; window configuration to its previous state before
+      ;; displaying the buffer. For further explanation, see:
+      ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Quitting-Windows.html
+      (unless bottom-window-exists
+        ;; Clear the buffer history for the newly created neighbor window.
+        ;; Otherwise, the buffer for the previously selected window
+        ;; (i.e. the window that we split to create the neighbor
+        ;; window) will be in the buffer history, and this will prevent
+        ;; emacs from deleting the window when `quit-window` is called.
+        (set-window-prev-buffers bottom-window nil)
+        ;; Set the `quit-restore' window parameter, which tells
+        ;; emacs what to do when `quit-window` is called. In our
+        ;; case we want emacs to delete the bottom window and
+        ;; set the focus back to the previously selected window.
+        ;;
+        ;; Note: The semantics of the `quit-restore' parameter (a
+        ;; 4-element list) are a bit tricky/non-obvious. For
+        ;; a detailed explanation, see:
+        ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Quitting-Windows.html
+        (set-window-parameter bottom-window
+                              'quit-restore
+                              (list
+                               'window
+                               'window
+                               (selected-window)
+                               (get-buffer bufname))))
+      ;; Switch focus to the bottom window if the FOCUS
+      ;; parameter to this function was non-nil.
+      (when focus (select-window bottom-window))
+      bottom-window)))
+
 (defun which-window--display-buffer-full-frame (bufname)
   "Display buffer with name BUFNAME in a window that occupies the
 entire frame, by displaying the buffer in currently selected window
@@ -158,6 +233,14 @@ and then deleting all other windows in the same frame."
     (lambda () (interactive)
       (which-window--display-buffer-in-neighbor-window
        which-window--bufname 'right)))]
+   [("b" "bottom & focus"
+     (lambda () (interactive)
+       (which-window--display-buffer-in-bottom-window
+       which-window--bufname t)))]
+   [("B" "bottom"
+     (lambda () (interactive)
+       (which-window--display-buffer-in-bottom-window
+       which-window--bufname)))]
    [("." "current window"
      (lambda () (interactive)
        (set-window-buffer (selected-window) which-window--bufname)))
