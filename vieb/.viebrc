@@ -3,6 +3,8 @@ colorscheme light
 set guitabbar=never
 set restoretabs=none
 set downloadmethod=ask
+set splitright=true
+set splitbelow=true
 
 " Mappings
 nmap o e
