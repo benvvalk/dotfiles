@@ -8,13 +8,13 @@ LONGEST_KEY = 1
 # Left-hand-only fingerspelling chords.
 
 mappings = {
-    "KPR": "a",
+    "KPWR": "a",
     "SPW": "b",
     "SKR": "c",
     "STK": "d", # overwrites brief for `and`; use SKPW instead
     "TKP": "e",
     "STP": "f",
-    "TKPWH": "g", # use TKPWH so we don't clobber TKPW for `go`
+    "TKPWR": "g", # use TKPWR so we don't clobber TKPW/TKPWO for `go`
     "SWH": "h", # use SWH so that Alt+S chord (SHO) doesn't clobber `should`
     "SKWH": "i", # mnemonic: chord shape looks like bottom part of "I"
     "SKWR": "j", # changes SKWR* to capital J
@@ -22,13 +22,13 @@ mappings = {
     "SHR": "l",
     "SPH": "m",
     "STPH": "n",
-    "KPH": "o",
+    "KPR": "o",
     "SP": "p",
     "SKW": "q",
     "SWR": "r", # SR conflicts with `have`; can use SW-R instead of SWR for `somewhere`
     "PWH": "s", # special case: S conflicts with `is`, full-row chord is memorable
     "TPW": "t", # ST conflicts with `is it`; mnemonic: chord shape is a "T"
-    "TKH": "u", # mnemonic: chord shape is two vertical lines, like the left/right sides of "U"
+    "TKHR": "u", # mnemonic: chord shape is two vertical lines, like the left/right sides of "U"
     "TWH": "v", # mnemonic: chord has "V" shape
     "SW": "w",
     "SKP": "x", # overwrites brief for `and`; use built-in STKP instead
