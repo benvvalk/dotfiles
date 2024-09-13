@@ -15,18 +15,40 @@ def lookup(key):
 
     stroke = key[0]
 
-    stroke = stroke.replace('-','')
+    space_before = False
+    space_after = False
 
-    isReversed = False
-    if 'EU' in stroke:
-        isReversed = True
-        stroke = stroke.replace('EU','')
+    if 'K' in stroke:
+        stroke = stroke.replace('K','')
+        space_before = True
+
+    if 'R' in stroke:
+        # We only want to match the left 'R' key here.  (I map the
+        # combination of the number key and the right 'R' key
+        # to the Alt key in `emily-modifiers.py`.)
+        if not '-' in stroke or stroke.index('-') > stroke.index('R'):
+            stroke = stroke.replace('R', '', 1)
+            space_after = True
+
+    if 'D' in stroke:
+        stroke = stroke.replace('D','')
+        stroke = stroke + stroke
+
+    if 'Z' in stroke:
+        stroke = stroke.replace('Z','')
         stroke = "".join(reversed(stroke))
+
+    stroke = stroke.replace('-','')
 
     if re.fullmatch(r'[0-9]+', stroke) is None:
         raise KeyError
 
-    if isReversed and len(stroke) != 2:
-        raise KeyError
+    output = "{^"
+    if space_before:
+        output += " "
+    output += "%s" % stroke
+    if space_after:
+        output += " "
+    output += "^}"
 
-    return "{^%s}" % stroke
+    return output
