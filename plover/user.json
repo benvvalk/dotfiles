@@ -1,5 +1,4 @@
 {
-"#": "{#escape}{MODE:RESET}{}{^}",
 "12K350": "{#F12}",
 "123WR50": "{#F11}",
 "123W50": "{#F10}",
@@ -381,6 +380,7 @@
 "TKOT/TPHET": "dotnet",
 "TK*EFBG": "desc",
 "TK*EP": "{^dE^}",
+"TK*EBT": "debit",
 "TK*ES": "dest",
 "TK*U": "du",
 "TK*R": "Dr.",
@@ -397,6 +397,7 @@
 "TKEUPBLG": "digital",
 "TKEUPBLG/O*EGS": "DigitalOcean",
 "TKEF": "def",
+"TKER": "der",
 "TKEP": "{^dE^}",
 "TKEPL": "demo",
 "TKEL": "del",
