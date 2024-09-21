@@ -2644,7 +2644,10 @@ recency."
 ;; Source: https://www.reddit.com/r/emacs/comments/o4g7dv/comment/h2ilq3n/
 (use-package auth-source-pass
   :init
-  (auth-source-pass-enable))
+  (auth-source-pass-enable)
+  :config
+  ;; Change the default length of randomly-generated passwords from 25 -> 10.
+  (setq password-store-password-length 10))
 
 (use-package smtpmail
   :config
