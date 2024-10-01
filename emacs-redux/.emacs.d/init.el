@@ -2575,6 +2575,16 @@ recency."
    "$" 'vterm))
 
 ;;----------------------------------------
+;; guile scheme
+;;----------------------------------------
+
+(use-package geiser-guile
+  :config
+  (add-to-list 'geiser-guile-load-path "~/.config/guix")
+  (add-to-list 'geiser-guile-load-path "~/git/guix")
+  (use-package paredit))
+
+;;----------------------------------------
 ;; emacs-lisp-mode
 ;;----------------------------------------
 
