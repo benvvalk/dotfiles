@@ -6,7 +6,13 @@
 
 (use-modules (gnu home)
              (gnu packages)
+             (gnu packages databases)
+             (gnu packages package-management)
+             (gnu packages rust-apps)
+             (gnu packages ssh)
+             (gnu packages version-control)
              (gnu services)
+             (gnu system)
              (gnu home services shells)
              (gnu home services syncthing)
              (guix channels)
@@ -38,25 +44,26 @@
 
  (packages
 
-  (cons*
+  (cons
 
-   ;; Install Emacs 29.1, the specific version of Emacs that I know
-   ;; works well with my `init.el`.
+   ;; Emacs 29.1, the version of Emacs that I know works with my `init.el`.
 
    (first (lookup-inferior-packages emacs-29.1-inferior "emacs-pgtk-xwidgets"))
 
-   ;; Other packages, for which installed versions don't really matter.
-   ;; Note: Ideally I would like to nail down the exact version
-   ;; of every package, but for now this is good enough.
+   (append
 
-   (specifications->packages
-    (list "guix"
-          "coreutils"
-          "git"
-          "openssh"
-          "recutils"
-          "ripgrep"
-          "which"))))
+    ;; Small list of packages that Guix developers consider essential
+    ;; (e.g. coreutils, grep, certs).
+    %base-packages
+
+    ;; Other packages, for which installed versions probably really matter.
+    ;; Note: Ideally I would like to pin all packages to exact versions,
+    ;; but this is good enough for now.
+    (list git
+          guix
+          openssh
+          recutils
+          ripgrep))))
 
  ;; Below is the list of Home services.  To search for available
  ;; services, run 'guix home search KEYWORD' in a terminal.
