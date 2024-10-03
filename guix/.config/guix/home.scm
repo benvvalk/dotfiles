@@ -7,12 +7,16 @@
 (use-modules (gnu home)
              (gnu packages)
              (gnu packages databases)
+             (gnu packages gnupg)
+             (gnu packages gnuzilla)
              (gnu packages package-management)
+             (gnu packages password-utils)
              (gnu packages rust-apps)
              (gnu packages ssh)
              (gnu packages version-control)
              (gnu services)
              (gnu system)
+             (gnu home services gnupg)
              (gnu home services shells)
              (gnu home services syncthing)
              (guix channels)
@@ -36,7 +40,6 @@
           (url "https://git.savannah.gnu.org/git/guix.git")
           (commit "c7f937cf")))))
 
-
 (home-environment
 
   ;; Below is the list of packages that will show up in your
@@ -58,12 +61,17 @@
 
     ;; Other packages, for which installed versions probably really matter.
     ;; Note: Ideally I would like to pin all packages to exact versions,
-    ;; but this is good enough for now.
+    ;; but this is good enough until I learn how to use guix better.
     (list git
+          gnupg
           guix
+          icecat
           openssh
+          password-store
+          pinentry-emacs
           recutils
-          ripgrep))))
+          ripgrep
+          stow))))
 
  ;; Below is the list of Home services.  To search for available
  ;; services, run 'guix home search KEYWORD' in a terminal.
