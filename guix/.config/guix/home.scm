@@ -59,9 +59,11 @@
     ;; (e.g. coreutils, grep, certs).
     %base-packages
 
-    ;; Other packages, for which installed versions probably really matter.
-    ;; Note: Ideally I would like to pin all packages to exact versions,
-    ;; but this is good enough until I learn how to use guix better.
+    ;; Other packages that I use daily.
+    ;;
+    ;; It's probably fine to use rolling versions of these packages,
+    ;; rather than pinning them to a specific version, like I do with
+    ;; Emacs above.
     (list git
           gnupg
           guix
