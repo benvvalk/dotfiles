@@ -86,7 +86,50 @@
 
    (service home-bash-service-type
             (home-bash-configuration
-             (guix-defaults? #t)))
+             (guix-defaults? #t)
+             (bash-profile (list (plain-file "bash-profile" "\
+
+# Symlink shared `.gnupg` and `.password-store` directories from
+# Syncthing to my home directory.
+#
+# Note: On a new machine, the source directories under `~/Sync`
+# (e.g. `~/Sync/.gnupg`) will not exist until I've done the initial
+# setup of Syncthing in the web UI, in order to connect this machine to
+# my other computers. I don't think it's practical to automate that
+# step, and it only has to be done once anyway.
+
+if [ ! -e .gnupg -a -d Sync/.gnupg ]; then ln -s Sync/.gnupg .; fi
+if [ ! -e .password-store -a -d Sync/.password-store ]; then ln -s Sync/.gnupg .; fi
+
+# Symlink my dotfiles into my home directory.
+#
+# Notes:
+#
+# * I prefer to just symlink my dotfiles into my home directory using `stow`,
+# rather than using Guix's built-in `home-dotfiles-service-type`, because
+# the latter copies the dotfiles into `/gnu/store` and makes them read-only.
+# This would prevent me from editing my dotfiles in place, which would seriously
+# hamper my fun/productivity. For example, I would need to run
+# `guix home reconfigure` every time I made a change to my `init.el`,
+# which would be extremely slow and awkward! On top of that, I don't
+# see much value in storing all the historical versions of my dotfiles in
+# the Guix store. It makes a lot more sense to use `git` for that.
+#
+# * On a new machine, the source directories under `~/dotfiles`
+# (e.g. `~/dotfiles/emacs-redux`) won't exist until I've manually `git clone`d
+# my `dotfiles` repo from GitHub. I could potentially automate that
+# step if I shared `ssh` keys between my machines using Syncthing, because
+# then I wouldn't have to manually add a new `ssh` key on GitHub. But I'm not
+# sure that's a good idea security-wise.
+#
+# * It does no harm to repeatedly run `stow` on a directory
+# from my `~/dotfiles` directory. The operation is idempotent,
+# so I don't need check if the target files/directories already exist
+# (e.g. `~/.emacs.d`).
+
+if [ -d dotfiles/emacs-redux ]; then stow --dir=dotfiles emacs-redux; fi
+
+")))))
 
    ;; Syncthing configuration.
    ;;
