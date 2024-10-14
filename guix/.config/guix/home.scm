@@ -106,6 +106,12 @@
              (guix-defaults? #t)
              (bash-profile (list (plain-file "bash-profile" "\
 
+# Use Nix package manager for installing 'non-free' packages
+# (e.g. Firefox).
+
+NIX_PROFILE=$HOME/.nix-profile/etc/profile.d/nix.sh
+if [ -f $NIX_PROFILE ]; then source $NIX_PROFILE; fi
+
 # Symlink shared `.gnupg` and `.password-store` directories from
 # Syncthing to my home directory.
 #
