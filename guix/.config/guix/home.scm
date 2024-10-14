@@ -66,7 +66,6 @@
     ;; Emacs above.
     (list git
           gnupg
-          guix
           icecat
           openssh
           password-store
