@@ -55,10 +55,6 @@
 
    (append
 
-    ;; Small list of packages that Guix developers consider essential
-    ;; (e.g. coreutils, grep, certs).
-    %base-packages
-
     ;; Other packages that I use daily.
     ;;
     ;; It's probably fine to use rolling versions of these packages,
