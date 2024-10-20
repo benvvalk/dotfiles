@@ -1,3 +1,11 @@
+# NixOS/home-manager video guide
+
+I created my configuration files and learned about the associated CLI commands
+by watching the following video:
+
+"Full NixOS Guide: Everything You Need to Know in One Place!",
+https://www.youtube.com/watch?v=nLwbNhSxLd4
+
 # Bootstrapping my config on a new NixOS install
 
 ## 1. Enable Nix flakes feature
