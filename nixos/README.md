@@ -1,18 +1,46 @@
-# Note!
+# Bootstrapping my config on a new NixOS install
 
-I can't symlink these NixOS configuration files into my home directory with
-`stow`, because Nix has trouble with flake directories that are symlinks [1].
+## 1. Enable Nix flakes feature
 
-Instead, I should just edit and apply these files from their original location
-in this git repo. For example, since I normally clone this repo to
-`~/dotfiles`, I can apply system configuration changes with: 
-
+Add the following line to `/etc/nixos/configuration.nix`:
 
 ```
-sudo nixos-rebuild switch --flake ~/dotfiles/nixos#nixos
+nix.settings.experimental-features = ["nix-command" "flakes"];
 ```
 
-Contrary to my expectations, the `#nixos` in the command above is not
-interpreted as a comment by `bash`, so it does not need to be quoted.
+Then apply the change with:
 
-[1]: https://github.com/NixOS/nix/issues/9253
+```
+sudo nixos-rebuild switch
+```
+
+## 2. Apply my Nix system configuration
+
+Now that Nix flakes are enabled, I am able to apply my own custom
+NixOS/home-manager configuration from my `dotfiles` repo.
+
+First clone my `dotfiles` repo to `~/dotfiles`:
+
+```
+git clone https://https://github.com/benvvalk/dotfiles.git ~/dotfiles
+```
+
+Then apply my custom NixOS configuration with:
+
+```
+sudo nixos-rebuild switch ~/dotfiles/nixos#nixos
+```
+
+The above command will install the `home-manager` command-line tool, among
+other changes.
+
+Note!: Don't try to symlink the files from `~/dotfiles/nixos` into my home
+directory, because Nix gets confused by flake directories that are symlinks, as
+discussed in "Symlinks to flakes have poor UX":
+https://github.com/NixOS/nix/issues/9253 
+
+## 3. Apply my Nix home-manager configuration
+
+```
+home-manager switch --flake ~/dotfiles/nixos#benv
+```
