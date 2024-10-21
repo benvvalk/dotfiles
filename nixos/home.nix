@@ -8,8 +8,11 @@
 
     programs.bash = {
         enable = true;
-        shellAliases = {
-            rebuild = "sudo nixos-rebuild switch";
-        };
     };
+
+    # Automatically starts user-level systemd service for Syncthing.
+    #
+    # Initial set-up to connect to other machines and share folders needs to be
+    # done manually through the web UI.
+    services.syncthing.enable = true;
 }
