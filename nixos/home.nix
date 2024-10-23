@@ -4,6 +4,7 @@
         username = "benv";
         homeDirectory = "/home/benv";
         packages = [
+            pkgs.plover.dev
             pkgs-emacs.emacs
         ];
         stateVersion = "24.05";
