@@ -1,8 +1,11 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, pkgs-emacs, ... }: {
 
     home = {
         username = "benv";
         homeDirectory = "/home/benv";
+        packages = [
+            pkgs-emacs.emacs
+        ];
         stateVersion = "24.05";
     };
 
