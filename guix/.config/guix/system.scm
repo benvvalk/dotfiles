@@ -10,7 +10,6 @@
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
 (use-modules (gnu) (nongnu packages linux))
-
 (use-service-modules cups desktop networking ssh xorg)
 
 (operating-system
@@ -27,7 +26,9 @@
                   (comment "")
                   (group "users")
                   (home-directory "/home/benv")
-                  (supplementary-groups '("wheel" "netdev" "audio" "video")))
+		  ;; Add "dialout" to default groups, so that Plover can access
+		  ;; my steno keyboard via serial device (e.g. /dev/ttyACM0).
+                  (supplementary-groups '("wheel" "netdev" "audio" "video" "dialout")))
                 %base-user-accounts))
 
   ;; Packages installed system-wide.  Users can also install packages
