@@ -26,52 +26,23 @@
              (guix inferior)
              (srfi srfi-1))
 
-;; Note: Guix "inferiors" are used to install a
-;; package using a specific commit of the
-;; Guix packages repo [1]. In this case, I am using
-;; it to install emacs-29.1, because that's the
-;; version that I know works with the emacs configuration
-;; from my `dotfiles` repo.
-;;
-;; [1]: https://guix.gnu.org/manual/en/html_node/Inferiors.html
-
-(define emacs-29.1-inferior
-  (inferior-for-channels
-   (list (channel
-          (name 'guix)
-          (url "https://git.savannah.gnu.org/git/guix.git")
-          (commit "c7f937cf")))))
-
 (home-environment
 
   ;; Below is the list of packages that will show up in your
   ;; Home profile, under ~/.guix-home/profile.
 
  (packages
-
-  (cons
-
-   ;; Emacs 29.1, the version of Emacs that I know works with my `init.el`.
-
-   (first (lookup-inferior-packages emacs-29.1-inferior "emacs-pgtk-xwidgets"))
-
-   (append
-
-    ;; Other packages that I use daily.
-    ;;
-    ;; It's probably fine to use rolling versions of these packages,
-    ;; rather than pinning them to a specific version, like I do with
-    ;; Emacs above.
-    (list git
-          glibc-locales
+    (list emacs
+          git
           gnupg
-          icecat
           openssh
           password-store
           pinentry-emacs
           recutils
           ripgrep
-          stow))))
+          stow
+          xhost
+          xset))
 
  ;; Below is the list of Home services.  To search for available
  ;; services, run 'guix home search KEYWORD' in a terminal.
