@@ -26,8 +26,8 @@
                   (comment "")
                   (group "users")
                   (home-directory "/home/benv")
-		  ;; Add "dialout" to default groups, so that Plover can access
-		  ;; my steno keyboard via serial device (e.g. /dev/ttyACM0).
+                  ;; Add "dialout" to default groups, so that Plover can access
+                  ;; my steno keyboard via serial device (e.g. /dev/ttyACM0).
                   (supplementary-groups '("wheel" "netdev" "audio" "video" "dialout")))
                 %base-user-accounts))
 
@@ -46,6 +46,7 @@
            ;; This is the default list of services we
            ;; are appending to.
            %desktop-services))
+
   (bootloader (bootloader-configuration
                 (bootloader grub-bootloader)
                 (targets (list "/dev/sda"))
