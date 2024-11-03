@@ -56,22 +56,11 @@
                   (lambda _
                     (format #t "#!~a ~@
                      ~a +SI:localuser:$USER ~@
-                     exec ~a --exit-with-session ~a \"$@\" --eval '~s' ~%"
+                     exec ~a --exit-with-session ~a --maximized --debug-init \"$@\" ~%"
                             (search-input-file inputs "/bin/sh")
                             (search-input-file inputs "/bin/xhost")
                             (search-input-file inputs "/bin/dbus-launch")
-                            (search-input-file inputs "/bin/emacs")
-                            '(cond
-                              ((file-exists-p "~/.exwm")
-                               (load-file "~/.exwm"))
-                              ((not (featurep 'exwm))
-                               (require 'exwm)
-                               (exwm-enable)
-                               (message (concat "exwm configuration not found. "
-                                                "Falling back to minimal configuration. "
-                                                "An example configuration can be found here "
-                                                "https://github.com/emacs-exwm/exwm"
-                                                "/wiki/Configuration-Example")))))))
+                            (search-input-file inputs "/bin/emacs"))))
                 (chmod exwm-executable #o555)))))))
     (home-page "https://github.com/ch11ng/exwm")
     (description
