@@ -193,9 +193,37 @@
            "M-d" #'kill-word
            "C-e" #'evil-scroll-line-down
            "C-y" #'evil-scroll-line-up)
+  ;; For some reason, evil's default window swapping functions
+  ;; "rebalance" the window sizes after swapping the target windows.
+  ;; That doesn't work well for my usage of EXWM, because the windows
+  ;; end up spanning my two monitors, as I noted with my
+  ;; `evil-auto-balance-windows' setting below.
+  (:states '(motion normal)
+           "C-w H" #'windmove-swap-states-left
+           "C-w J" #'windmove-swap-states-down
+           "C-w K" #'windmove-swap-states-up
+           "C-w L" #'windmove-swap-states-right)
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil)
+
+  ;; When splitting windows, don't adjust the window sizes to make
+  ;; them all the same height/width. Just divide the current window in
+  ;; half.
+  ;;
+  ;; This setting is important for me to be productive in EXWM,
+  ;; because I use one large emacs frame that is split across two
+  ;; monitors. If `evil-auto-balance-windows` is set true, the windows
+  ;; get resized such that they straddle the gaps between my two
+  ;; monitors, which is very distracting.
+  ;;
+  ;; The reason that I only use a single emacs frame is that EXWM has
+  ;; an annoying design flaw, where X11 apps in other
+  ;; frames/workspaces don't appear in the Emacs buffer list. By only
+  ;; using a single emacs frame, I completely avoid that annoyance
+  ;; and the overall experience is much better.
+  (setq evil-auto-balance-windows nil)
+
   (evil-select-search-module 'evil-search-module 'evil-search)
 
   ;; Customize evil search highlighting behaviour.
@@ -2889,6 +2917,48 @@ recency."
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+;;----------------------------------------
+;; EXWM
+;;----------------------------------------
+
+(use-package exwm
+  :config
+  (setq exwm-workspace-number 1)
+
+  ;; Key prefixes that are always passed through to Emacs.
+  (setq exwm-input-prefix-keys
+        '(?\C-h ;; `describe-key`, `describe-variable`, etc.
+          ?\C-w ;; evil window commands (note: masks `C-w` to close tab in Firefox)
+          ?\C-x ;; emacs window commands (e.g. `C-x 2` for `split-window-below`)
+          ?\M-! ;; `shell-command`
+          ?\M-& ;; `async-shell-command`
+          ?\M-: ;; `eval-expression`
+          ?\M-x)) ;; `execute-extended-command`
+
+  (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+
+  (setq exwm-input-global-keys
+        ;; Reset EXWM input mode to "line mode". In other words,
+        ;; escape "char mode" where all keys get sent to the
+        ;; X application.
+        ;;
+        ;; Note: Fullscreening an automatically puts it into
+        ;; "char mode".
+        '(([?\s-r] . exwm-reset)))
+
+  (defun exwm-rename-buffer ()
+    (interactive)
+    (exwm-workspace-rename-buffer
+     (concat exwm-class-name ":"
+             (if (<= (length exwm-title) 50) exwm-title
+               (concat (substring exwm-title 0 49) "...")))))
+
+  ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
+  (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+  (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+
+  (exwm-enable))
 
 ;;----------------------------------------
 ;; Print emacs startup time.
