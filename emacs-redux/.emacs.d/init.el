@@ -1034,6 +1034,14 @@ file."
   :custom
   (org-confirm-babel-evaluate . nil)
   :config
+  ;; Enable org habit-tracker module:
+  ;; https://orgmode.org/manual/Tracking-your-habits.html
+  ;;
+  ;; Always show habit consistency graph in org-agenda,
+  ;; but only for the current day.
+  (add-to-list 'org-modules 'org-habit)
+  (setq org-habit-show-all-today t)
+  (setq org-habit-show-habits-only-for-today t)
   ;; Set foreground/background colors for all headings to black/gray.
   ;; By default, the "leuven" theme sets each heading level to very
   ;; different colors, resulting in an ugly rainbow effect that I find
@@ -1068,8 +1076,7 @@ file."
   ;; scale the image size up or down as needed, so that the resulting
   ;; width is 400 pixels.
   (setq org-image-actual-width 400)
-  (setq org-agenda-files '("~/Sync/notes/personal-todo.org"
-                           "~/Sync/notes/20200711223732_work_todo.org"))
+  (setq org-agenda-files '("~/Sync/notes/habits.org"))
   ;; increase size of images used to preview LaTeX fragments
   (setq org-format-latex-options
         (plist-put org-format-latex-options :scale 1.75))
