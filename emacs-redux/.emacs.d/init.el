@@ -2931,6 +2931,7 @@ recency."
 ;;----------------------------------------
 
 (use-package exwm
+  :disabled
   :config
   (setq exwm-workspace-number 1)
 
