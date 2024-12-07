@@ -931,6 +931,7 @@ window."
 ;;----------------------------------------
 
 (use-package which-window
+  :disabled
   :load-path "~/.emacs.d/site-lisp/which-window"
   :config
   (which-window-mode 1))
