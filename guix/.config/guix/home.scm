@@ -94,7 +94,7 @@ if [ -f $NIX_PROFILE ]; then source $NIX_PROFILE; fi
 
 if [ ! -e .ssh -a -d Sync/.ssh ]; then ln -s Sync/.ssh .; fi
 if [ ! -e .gnupg -a -d Sync/.gnupg ]; then ln -s Sync/.gnupg .; fi
-if [ ! -e .password-store -a -d Sync/.password-store ]; then ln -s Sync/.gnupg .; fi
+if [ ! -e .password-store -a -d Sync/.password-store ]; then ln -s Sync/.password-store .; fi
 
 # Symlink my dotfiles into my home directory.
 #
