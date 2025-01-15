@@ -531,7 +531,7 @@ and echo it in the minibuffer."
   "C-u" 'evil-scroll-up)
 
 ;;----------------------------------------
-;; whitespace-mode
+;; whitespace-related
 ;;----------------------------------------
 
 (use-package whitespace
@@ -550,13 +550,7 @@ and echo it in the minibuffer."
                       space-mark
                       tab-mark
                       newline-mark))
-  :config
-
-  (defun benv/before-save-hook ()
-    (delete-trailing-whitespace))
-
-  (add-hook 'before-save-hook #'benv/before-save-hook)
-
+  (mode-require-final-newline nil)
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
