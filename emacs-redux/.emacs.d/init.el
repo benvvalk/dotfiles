@@ -482,6 +482,14 @@ and echo it in the minibuffer."
   (advice-add 'ffap-string-at-point :filter-return #'benv/windows-path-to-wsl-path))
 
 ;;----------------------------------------
+;; direnv
+;;----------------------------------------
+
+(use-package direnv
+	:config
+	(direnv-mode))
+
+;;----------------------------------------
 ;; basic keybindings
 ;;----------------------------------------
 
