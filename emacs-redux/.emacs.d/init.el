@@ -1300,7 +1300,9 @@ create it by splitting the current window."
 ;;----------------------------------------
 
 (use-package markdown-mode
-  :mode ("\\.md\\'" . markdown-mode))
+  :mode ("\\.md\\'" . markdown-mode)
+  :config (setq markdown-fontify-code-blocks-natively t)
+  :hook (markdown-mode . visual-line-mode))
 
 ;;----------------------------------------
 ;; ace-link
