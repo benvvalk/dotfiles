@@ -563,6 +563,16 @@ and echo it in the minibuffer."
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "t w" 'whitespace-mode))
 
+;; Automatically delete trailing whitespace when saving a file, but
+;; only on lines that were modified. This lets me automatically clean
+;; up trailing whitespaces in my own work, while leaving other people's
+;; code alone (e.g. Colin's code). Cleaning up whitespace errors
+;; in other people's code is a bad idea, because it leads to unexpected
+;; version control conflicts.
+
+(use-package ws-butler
+	:hook prog-mode)
+
 ;;----------------------------------------
 ;; hippie-expand ("M-/")
 ;;----------------------------------------
