@@ -2545,6 +2545,14 @@ recency."
   :commands (ztree-diff ztree-dir))
 
 ;;----------------------------------------
+;; html editing
+;;----------------------------------------
+
+(use-package mhtml-mode
+  :config
+  (setq sgml-basic-offset 4))
+
+;;----------------------------------------
 ;; email (mu4e)
 ;;
 ;; Setup in this section is based on:
