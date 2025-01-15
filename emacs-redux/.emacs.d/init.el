@@ -276,6 +276,31 @@
   (define-key evil-outer-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer)
   (define-key evil-inner-text-objects-map evil-textobj-entire-key 'evil-entire-entire-buffer))
 
+;; Support for editing with multiple cursors.
+;;
+;; I also tried `evil-mc`, but for some reason it was insanely bugged
+;; when I tried it with my emacs configuration on macOS`(perhaps an
+;; unexpected interaction with another emacs package). For example,
+;; when I created multiple cursors and started typing characters in
+;; Insert mode, only a subset of the characters were replicated at the
+;; other cursor locations! No idea what's going on there, and I didn't
+;; attempt to debug it.
+;;
+;; `evil-multiedit` (below) worked out-of-the-box for me, but the
+;; functionality is much more basic than `evil-mc`. For example,
+;; `evil-mc` allows you to manually place the cursors wherever you
+;; want, whereas `evil-multiedit` can only place cursors by matching
+;; the region or the word under the cursor.
+
+(use-package evil-multiedit
+  :config
+  (setq evil-multiedit-follow-matches t)
+  :general
+  (:states '(normal visual multiedit)
+   "C-M-<down>"  'evil-multiedit-match-and-next
+   "C-M-<up>"    'evil-multiedit-match-and-prev
+   "RET" 		 'evil-multiedit-toggle-or-restrict-region))
+
 ;;----------------------------------------
 ;; minibuffer settings
 ;;----------------------------------------
