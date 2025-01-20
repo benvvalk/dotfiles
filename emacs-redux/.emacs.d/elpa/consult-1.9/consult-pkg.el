@@ -1,0 +1,2 @@
+;;; Generated package description from consult.el  -*- no-byte-compile: t -*-
+(define-package "consult" "1.9" "Consulting completing-read" '((emacs "28.1") (compat "30")) :kind vc :url "https://github.com/minad/consult" :commit "a055b4cde4d8038c5cd57251e0985835bc17cf16" :revdesc "a055b4cde4d8" :keywords '("matching" "files" "completion") :maintainers '(("Daniel Mendler" . "mail@daniel-mendler.de")) :maintainer '("Daniel Mendler" . "mail@daniel-mendler.de"))
