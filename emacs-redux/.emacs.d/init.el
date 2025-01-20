@@ -701,6 +701,22 @@ some confusion for a while.")
    :prefix benv/evil-leader-key
    "c d" #'consult-dir))
 
+;; Package that defines many additional `consult` commands
+;; for searching Google, Wikipedia, etc.
+(use-package consult-omni
+  :config
+  (use-package consult-omni-sources
+    :load-path "~/.emacs.d/elpa/consult-omni/sources"
+    :config
+    (setq consult-omni-sources-modules-to-load '(consult-omni-google consult-omni-wikipedia))
+    (setq consult-omni-google-customsearch-key
+          (lambda ()
+            (auth-source-pass-get 'secret "developers.google.com/api-key")))
+    (setq consult-omni-google-customsearch-cx
+          (lambda ()
+            (auth-source-pass-get 'secret "developers.google.com/cx-number")))
+    (consult-omni-sources-load-modules)))
+
 ;;----------------------------------------
 ;; embark
 ;;----------------------------------------
