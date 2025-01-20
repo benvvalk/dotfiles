@@ -514,6 +514,9 @@ and echo it in the minibuffer."
   "t l" 'visual-line-mode
   "u"   'universal-argument)
 
+(general-def
+  :states '(motion insert emacs)
+  "s-b"   'consult-buffer)
 
 ;; Note: The <next>/<prior> lines remap the PageDown/PageUp keys
 ;; to half-screen jumps, as is done by the default C-d/C-u bindings
