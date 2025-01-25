@@ -16,6 +16,7 @@
              (gnu packages rust-apps)
              (gnu packages ssh)
              (gnu packages version-control)
+             (gnu packages xorg)
              (gnu services)
              (gnu system)
              (gnu home services)
@@ -115,6 +116,11 @@ if [ ! -e .password-store -a -d Sync/.password-store ]; then ln -s Sync/.passwor
 
 if [ -d dotfiles/emacs-redux ]; then stow --dir=dotfiles emacs-redux; fi
 
+# Needed so `Plover` can display itself.
+xhost +SI:localuser:benv
+
+# Keyboard repeat delay (in milliseconds) and repeat rate (in Hertz),
+# respectively.
 ")))))
 
    ;; Syncthing configuration.
