@@ -51,25 +51,6 @@
 
   (list
 
-   ;; Set environment variables.
-   ;;
-   ;; Note: I added the `GUIX_LOCPATH` setting to fix the
-   ;; following message that appeared every time I ran a `guix`
-   ;; command:
-   ;;
-   ;; ```
-   ;; hint: Consider installing the `glibc-locales' package and defining `GUIX_LOCPATH', along these lines:
-   ;;
-   ;; guix install glibc-locales
-   ;; export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
-   ;;
-   ;; See the "Application Setup" section in the manual, for more info.
-   ;; ```
-
-   (simple-service 'benv-environment-variables-service
-                   home-environment-variables-service-type
-                   '(("GUIX_LOCPATH" . "$HOME/.guix-home/profile/lib/locale")))
-
    ;; Bash configuration (.bash_profile / .bashrc)
 
    (service home-bash-service-type
