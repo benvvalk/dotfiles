@@ -59,10 +59,19 @@
              (guix-defaults? #t)
              (bash-profile (list (plain-file "bash-profile" "\
 
-# Use Nix package manager for installing 'non-free' packages
-# (e.g. Firefox).
+# Source Nix home profile.
+#
+# I use Nix to install 'non-free' packages that are missing
+# from Guix (e.g. Firefox).
+#
+# The `nix.sh` script sets environment variables (e.g. `PATH`)
+# for my user-level Nix profile. It is installed as part of Guix's
+# `nix` package, which I added to my system-level Guix package.
+# I also added the `nix-service-type` at the system level for
+# running the Nix build daemon. See Guix's documentation for
+# `nix-service-type`, for further info.
 
-NIX_PROFILE=$HOME/.nix-profile/etc/profile.d/nix.sh
+NIX_PROFILE=/run/current-system/profile/etc/profile.d/nix.sh
 if [ -f $NIX_PROFILE ]; then source $NIX_PROFILE; fi
 
 # Symlink shared `.gnupg` and `.password-store` directories from
