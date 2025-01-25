@@ -44,6 +44,7 @@
           ripgrep
           stow
           xhost
+          xrandr
           xset))
 
  ;; Below is the list of Home services.  To search for available
