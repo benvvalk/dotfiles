@@ -2849,6 +2849,9 @@ recency."
           ?\M-: ;; `eval-expression`
           ?\M-x)) ;; `execute-extended-command`
 
+  ;; The above `exwm-input-prefix-keys'
+  ;; can still be passed through to the underlying X11 program,
+  ;; if one presses `C-q` first.
   (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
 
   (setq exwm-input-global-keys
