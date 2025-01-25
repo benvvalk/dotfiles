@@ -8,6 +8,7 @@
              (gnu packages)
              (gnu packages base)
              (gnu packages databases)
+             (gnu packages emacs)
              (gnu packages gnupg)
              (gnu packages gnuzilla)
              (gnu packages package-management)
