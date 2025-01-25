@@ -2835,9 +2835,31 @@ recency."
 ;;----------------------------------------
 
 (use-package exwm
-  :disabled
+
+  ;; Only enable EXWM on specified machines.
+  :if (let ((hostname (system-name)))
+        (or (equal hostname "guix") ;; guix desktop
+            (equal hostname "framework"))) ;; framework laptop
+
   :config
-  (setq exwm-workspace-number 1)
+
+  ;; Machine-specific screen/workpace configuration.
+  (let ((hostname (system-name)))
+    (cond ((equal hostname "guix")
+           ;; My Guix desktop machine with 2 monitors.
+           ;; The code below was copied and modified from:
+           ;; https://github.com/emacs-exwm/exwm/wiki#randr-multi-screen
+           (setq exwm-workspace-number 2)
+           (setq exwm-randr-workspace-monitor-plist
+                 '(0 "DVI-I-1" 1 "DP-3"))
+           (add-hook 'exwm-randr-screen-change-hook
+                     (lambda ()
+                       (start-process-shell-command
+                        "xrandr" nil "xrandr --output DVI-I-1 --left-of DP-3 --auto")))
+           (exwm-randr-mode 1))
+          (t
+           ;; Assume one screen and workspace by default.
+           (setq exwm-workspace-number 1))))
 
   ;; Key prefixes that are always passed through to Emacs.
   (setq exwm-input-prefix-keys
