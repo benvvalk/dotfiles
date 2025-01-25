@@ -9,8 +9,11 @@
 
 ;; Indicate which modules to import to access the variables
 ;; used in this configuration.
-(use-modules (gnu) (nongnu packages linux))
-(use-service-modules cups desktop networking ssh xorg)
+(use-modules (gnu)
+             (nongnu packages linux))
+
+(use-service-modules cups desktop networking nix ssh xorg)
+(use-package-modules emacs emacs-xyz package-management) ;; for Nix
 
 (operating-system
   (kernel linux)
@@ -34,12 +37,14 @@
   ;; Packages installed system-wide.  Users can also install packages
   ;; under their own account: use 'guix search KEYWORD' to search
   ;; for packages and 'guix install PACKAGE' to install a package.
-  (packages %base-packages)
+  (packages (append (list emacs nix)
+                    %base-packages))
 
   ;; Below is the list of system services.  To search for available
   ;; services, run 'guix system search KEYWORD' in a terminal.
   (services
    (append (list (service gnome-desktop-service-type)
+                 (service nix-service-type)
                  (set-xorg-configuration
                   (xorg-configuration (keyboard-layout keyboard-layout))))
 
