@@ -1,7 +1,4 @@
 (list (channel
-        (name 'my-channel)
-        (url (string-append "file://" (getenv "HOME") "/dotfiles")))
-      (channel
         (name 'nonguix)
         (url "https://gitlab.com/nonguix/nonguix")
         (branch "master")
