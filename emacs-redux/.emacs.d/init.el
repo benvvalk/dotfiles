@@ -203,6 +203,7 @@
            "C-w J" #'windmove-swap-states-down
            "C-w K" #'windmove-swap-states-up
            "C-w L" #'windmove-swap-states-right)
+
   :config
   (evil-mode 1)
   (setq evil-move-cursor-back nil)
@@ -223,6 +224,12 @@
   ;; using a single emacs frame, I completely avoid that annoyance
   ;; and the overall experience is much better.
   (setq evil-auto-balance-windows nil)
+
+  ;; Make window movement work across frames, as per:
+  ;; https://github.com/doomemacs/doomemacs/issues/2577
+  (use-package framemove
+   :config
+   (setq framemove-hook-into-windmove t))
 
   (evil-select-search-module 'evil-search-module 'evil-search)
 
