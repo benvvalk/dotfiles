@@ -2580,6 +2580,10 @@ recency."
 ;; https://www.djcbsoftware.nl/code/mu/mu4e/Gmail-configuration.html
 ;;----------------------------------------
 
+(use-package epg-config
+  :config
+  (setq epg-pinentry-mode 'loopback))
+
 ;; Handy interactive interface to the `pass` program (a la Magit).
 ;;
 ;; Note: This package is completely optional, and the rest
