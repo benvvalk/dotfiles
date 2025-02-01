@@ -2490,6 +2490,8 @@ recency."
    "x h J" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'down))
    "x h K" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'up))
    "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
+  (:states '(motion emacs)
+   "s-x" #'shelldon)
   :init
   (evil-set-initial-state 'shell-mode 'normal))
 
