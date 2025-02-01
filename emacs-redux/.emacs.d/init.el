@@ -1318,7 +1318,8 @@ create it by splitting the current window."
      "n ." 'org-roam-find-file
      "r f" 'org-roam-find-file
      "r g" 'benv/grep-notes)
-    ('insert
+    (:states '(motion normal insert emacs)
+     "s-n" 'org-roam-find-file
      "C-c r i" 'org-roam-insert)
     :config
     (setq org-roam-directory "~/Sync/notes")
