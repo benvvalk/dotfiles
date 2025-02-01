@@ -2900,6 +2900,7 @@ recency."
           ?\M-! ;; `shell-command`
           ?\M-& ;; `async-shell-command`
           ?\M-: ;; `eval-expression`
+          ?\M-q ;; quit-window
           ?\M-x ;; `execute-extended-command`
           ?\s-j ;; evil-window-left
           ?\s-k ;; evil-window-down
