@@ -2899,7 +2899,24 @@ recency."
           ?\M-! ;; `shell-command`
           ?\M-& ;; `async-shell-command`
           ?\M-: ;; `eval-expression`
-          ?\M-x)) ;; `execute-extended-command`
+          ?\M-x ;; `execute-extended-command`
+          ?\s-j ;; evil-window-left
+          ?\s-k ;; evil-window-down
+          ?\s-l ;; evil-window-up
+          ?\s-; ;; evil-window-right
+          ?\s-J ;; windmove-swap-states-left
+          ?\s-K ;; windmove-swap-states-down
+          ?\s-L ;; windmove-swap-states-up
+          ?\s-: ;; windmove-swap-states-right
+          ?\s-u ;; winner-undo
+          ?\s-U ;; winner-redo
+          ?\s-o ;; delete-other-windows
+          ?\s-v ;; evil-window-vsplit
+          ?\s-s ;; evil-window-split
+          ?\s-b ;; consult-buffer
+          ?\s-n ;; org-roam-find-file
+          ?\s-x ;; shelldon (run shell command)
+          ))
 
   ;; The above `exwm-input-prefix-keys'
   ;; can still be passed through to the underlying X11 program,
