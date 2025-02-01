@@ -665,6 +665,9 @@ some confusion for a while.")
     "Run grep on my notes."
     (interactive)
     (consult-ripgrep "~/Sync/notes"))
+  ;; Disable "live previews" when selecting a new buffers.
+  ;; I find it very distracting.
+  (consult-customize consult-buffer :preview-key "M-.")
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
