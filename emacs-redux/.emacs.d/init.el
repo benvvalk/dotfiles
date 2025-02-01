@@ -999,6 +999,7 @@ window."
    "s-:" #'windmove-swap-states-right
    "s-u" #'winner-undo
    "s-U" #'winner-redo
+   "s-d" #'delete-window
    "s-o" #'delete-other-windows
    "s-v" #'evil-window-vsplit
    "s-s" #'evil-window-split))
@@ -2910,6 +2911,7 @@ recency."
           ?\s-: ;; windmove-swap-states-right
           ?\s-u ;; winner-undo
           ?\s-U ;; winner-redo
+          ?\s-d ;; delete-window
           ?\s-o ;; delete-other-windows
           ?\s-v ;; evil-window-vsplit
           ?\s-s ;; evil-window-split
