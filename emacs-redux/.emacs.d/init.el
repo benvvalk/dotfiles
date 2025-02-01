@@ -988,7 +988,20 @@ window."
    "M-J" 'benv/enlarge-window
    "M-K" 'benv/shrink-window
    "M-H" 'benv/shrink-window-horizontally
-   "M-L" 'benv/enlarge-window-horizontally))
+   "M-L" 'benv/enlarge-window-horizontally
+   "s-j" #'evil-window-left
+   "s-k" #'evil-window-down
+   "s-l" #'evil-window-up
+   "s-;" #'evil-window-right
+   "s-J" #'windmove-swap-states-left
+   "s-K" #'windmove-swap-states-down
+   "s-L" #'windmove-swap-states-up
+   "s-:" #'windmove-swap-states-right
+   "s-u" #'winner-undo
+   "s-U" #'winner-redo
+   "s-o" #'delete-other-windows
+   "s-v" #'evil-window-vsplit
+   "s-s" #'evil-window-split))
 
 ;;----------------------------------------
 ;; which-window.el: prompt user for target
