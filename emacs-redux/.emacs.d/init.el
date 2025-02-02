@@ -1940,6 +1940,10 @@ will change the focus to the target window."
   :non-normal-prefix benv/evil-insert-mode-leader-key
   "TAB" 'benv/switch-to-previous-buffer)
 
+(general-def
+  :states '(motion normal insert emacs)
+  "s-<tab>" 'benv/switch-to-previous-buffer)
+
 ;;----------------------------------------
 ;; javascript
 ;;----------------------------------------
@@ -2924,7 +2928,13 @@ recency."
   ;; The above `exwm-input-prefix-keys'
   ;; can still be passed through to the underlying X11 program,
   ;; if one presses `C-q` first.
-  (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
+  (define-key exwm-mode-map
+              [?\C-q] 'exwm-input-send-next-key)
+
+  ;; Couldn't get this keybinding to work with `exwm-input-prefix-keys'
+  ;; above, but adding to `exwm-mode-map' instead seems to work.
+  (define-key exwm-mode-map
+              (kbd "s-<tab>") 'benv/switch-to-previous-buffer)
 
   (setq exwm-input-global-keys
         ;; Reset EXWM input mode to "line mode". In other words,
