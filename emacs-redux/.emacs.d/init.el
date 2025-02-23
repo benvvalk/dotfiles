@@ -2095,7 +2095,10 @@ will change the focus to the target window."
 ;; other LLMs)
 ;;----------------------------------------
 
-(use-package gptel)
+(use-package gptel
+  :general
+  (:states '(motion normal insert emacs)
+   "M-g" #'gptel-menu))
 
 ;;----------------------------------------
 ;; treesit
