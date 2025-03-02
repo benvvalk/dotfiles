@@ -2962,6 +2962,16 @@ recency."
   (exwm-enable))
 
 ;;----------------------------------------
+;; Start emacs server and set EDITOR=emacsclient.
+;;
+;; I added this so that `jj describe` would show a new buffer in my
+;; running emacs instance, for writing a commit message.
+;;----------------------------------------
+
+(server-start)
+(setenv "EDITOR" "emacsclient")
+
+;;----------------------------------------
 ;; Print emacs startup time.
 ;;
 ;; (Overrides default minibuffer message
