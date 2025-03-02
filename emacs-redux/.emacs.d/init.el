@@ -2096,6 +2096,10 @@ will change the focus to the target window."
 ;;----------------------------------------
 
 (use-package gptel
+  :config
+  (gptel-make-anthropic "Claude"
+    :stream t
+    :key (lambda () (auth-source-pass-get 'secret "console.anthropic.com/awesomesaucelabs@gmail.com/api-key")))
   :general
   (:states '(motion normal insert emacs)
    "M-g" #'gptel-menu))
