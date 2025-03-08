@@ -199,6 +199,7 @@
   ;; end up spanning my two monitors, as I noted with my
   ;; `evil-auto-balance-windows' setting below.
   (:states '(motion normal)
+           "RET" nil
            "C-w H" #'windmove-swap-states-left
            "C-w J" #'windmove-swap-states-down
            "C-w K" #'windmove-swap-states-up
@@ -306,7 +307,7 @@
   (:states '(normal visual multiedit)
    "C-M-<down>"  'evil-multiedit-match-and-next
    "C-M-<up>"    'evil-multiedit-match-and-prev
-   "RET" 		 'evil-multiedit-toggle-or-restrict-region))
+   "RET" 		 nil))
 
 ;;----------------------------------------
 ;; minibuffer settings
@@ -719,6 +720,7 @@ some confusion for a while.")
     :load-path "~/.emacs.d/elpa/consult-omni/sources"
     :config
     (setq consult-omni-sources-modules-to-load '(consult-omni-google consult-omni-wikipedia))
+    (setq consult-omni-dynamic-refresh-delay 5.0)
     (setq consult-omni-google-customsearch-key
           (lambda ()
             (auth-source-pass-get 'secret "developers.google.com/api-key")))
@@ -1685,6 +1687,15 @@ returns exit status 1, for reasons I don't understand.
   (setq buffer-display-table (make-display-table))
   (aset buffer-display-table ?\^M []))
 
+(use-package magit-section
+  :general
+  (:states '(motion insert emacs)
+           ;; Make sure that evil doesn't interfere with using
+           ;; TAB key to toggle sections in `magit-section-mode'.
+           ;; While developing my `difftool.el', I observed that
+           ;; tab was being mapped to `evil-jump-forward'.
+           "TAB" #'magit-section-toggle))
+
 (use-package magit
 
   :custom
@@ -2117,7 +2128,7 @@ will change the focus to the target window."
 
 (use-package treesit
   :config
-  ;; How to add treesitter support for a new language.
+  ;; How to add treesitter support for a new language:
   ;;
   ;; (1) Add the git repo for the grammar to
   ;; `treesit-language-source-alist' (below).
@@ -2132,7 +2143,8 @@ will change the focus to the target window."
   ;; https://www.masteringemacs.org/article/how-to-get-started-tree-sitter
   (setq treesit-language-source-alist
         '((c . ("https://github.com/tree-sitter/tree-sitter-c"))
-          (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp")))))
+          (cpp . ("https://github.com/tree-sitter/tree-sitter-cpp"))
+          (diff . ("https://github.com/the-mikedavis/tree-sitter-diff.git")))))
 
 (use-package evil-textobj-tree-sitter
   :config
@@ -2557,6 +2569,15 @@ recency."
 ;;----------------------------------------
 ;; emacs-lisp-mode
 ;;----------------------------------------
+
+; (use-package emacs-lisp-mode
+;   :config
+;   (use-package paredit)
+;   :general
+;   (:keymaps 'emacs-lisp-mode-map
+;    :states '(motion normal insert emacs)
+;    "M-j" #'paredit-backward-up
+;   ))
 
 (use-package lispy
   :hook (emacs-lisp-mode . lispy-mode)

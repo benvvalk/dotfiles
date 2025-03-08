@@ -1,7 +1,0 @@
-#!/bin/bash
-
-source $HOME/.nix-profile/etc/profile.d/nix.sh
-export PATH=$HOME/dotfiles/ratpoison/bin:$PATH
-export MANPATH=$HOME/.nix-profile/share/man:$MANPATH
-
-exec $HOME/.nix-profile/bin/ratpoison
