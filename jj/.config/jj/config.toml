@@ -1,0 +1,17 @@
+[user]
+name = "Ben Vandervalk"
+email = "ben.vvalk@gmail.com"
+
+[merge-tools.ediff]
+program = "emacsclient"
+# Copied from https://stackoverflow.com/a/42636500
+diff-args = ["--eval", "\"(ediff-directories \\\"$left\\\" \\\"$right\\\")\""]
+
+[colors]
+# Highlight hunks with background
+"diff removed token" = { underline = false }
+"diff added token" = { underline = false }
+
+[ui]
+# Possible values: "color-words" (default), "git", "summary"
+diff.format = "git"
