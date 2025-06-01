@@ -2899,10 +2899,10 @@ recency."
 
 (use-package exwm
 
-  ;; Only enable EXWM on specified machines.
-  :if (let ((hostname (system-name)))
-        (or (equal hostname "guix") ;; guix desktop
-            (equal hostname "framework"))) ;; framework laptop
+  ;; Only load EXWM if the `EXWM` environment variable is defined.
+  ;; I usually do from my `.xsession` file, with a line like
+  ;; `export EXWM=1`.
+  :if (getenv "EXWM")
 
   :config
 
