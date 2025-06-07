@@ -1689,7 +1689,8 @@ returns exit status 1, for reasons I don't understand.
 
 (use-package magit-section
   :general
-  (:states '(motion insert emacs)
+  (:keymaps 'magit-section-mode-map
+   :states '(motion insert emacs)
            ;; Make sure that evil doesn't interfere with using
            ;; TAB key to toggle sections in `magit-section-mode'.
            ;; While developing my `difftool.el', I observed that
