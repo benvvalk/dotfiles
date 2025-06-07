@@ -9,7 +9,7 @@ spelling = {
         "PW"    : "b",
         "KR"    : "c",
         "TK"    : "d",
-        "E"     : "e",
+        "TH"    : "e",
         "TP"    : "f",
         "TKPW"  : "g",
         "H"     : "h",
