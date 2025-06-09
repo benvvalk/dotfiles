@@ -381,7 +381,7 @@
 (use-package face-remap
   :config
   ;; adjusts text-scaling increment for each keypress
-  (setq text-scale-mode-step 1.1)
+  (setq text-scale-mode-step 1.05)
   :general
   ;; use the keybinds for zoom in/out as web browsers
   (:states '(motion insert emacs)
