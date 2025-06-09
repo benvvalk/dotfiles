@@ -1,12 +1,12 @@
 ;; -*- no-byte-compile: t; lexical-binding: nil -*-
-(define-package "gptel" "20241207.1916"
+(define-package "gptel" "20250605.1803"
   "Interact with ChatGPT or other LLMs."
   '((emacs     "27.1")
-    (transient "0.4.0")
+    (transient "0.7.4")
     (compat    "29.1.4.1"))
   :url "https://github.com/karthink/gptel"
-  :commit "ba07a52e73f8a6cbce6b94b8628ddcb9c0677330"
-  :revdesc "ba07a52e73f8"
-  :keywords '("convenience")
+  :commit "430c5ee84f3dd1cc36a93c042ef3e27b555fd36c"
+  :revdesc "430c5ee84f3d"
+  :keywords '("convenience" "tools")
   :authors '(("Karthik Chikmagalur" . "karthik.chikmagalur@gmail.com"))
   :maintainers '(("Karthik Chikmagalur" . "karthik.chikmagalur@gmail.com")))
