@@ -2581,7 +2581,7 @@ recency."
 ;   ))
 
 (use-package lispy
-  :hook (emacs-lisp-mode . lispy-mode)
+  :hook (elisp-mode . lispy-mode)
   :general
   (:keymaps 'lispy-mode-map
    :states '(motion insert emacs)
