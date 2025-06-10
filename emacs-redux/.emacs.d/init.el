@@ -2571,14 +2571,9 @@ recency."
 ;; emacs-lisp-mode
 ;;----------------------------------------
 
-; (use-package emacs-lisp-mode
-;   :config
-;   (use-package paredit)
-;   :general
-;   (:keymaps 'emacs-lisp-mode-map
-;    :states '(motion normal insert emacs)
-;    "M-j" #'paredit-backward-up
-;   ))
+(use-package elisp-mode
+  :config
+  (electric-pair-mode))
 
 (use-package lispy
   :hook (elisp-mode . lispy-mode)
