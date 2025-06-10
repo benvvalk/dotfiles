@@ -7,6 +7,19 @@
 # emacs: compiled elisp files
 /emacs-redux/.emacs.d/elpa/**/*.elc
 
+# emacs: sqlite binary (needed for org-roam).
+#
+# Note:
+#
+# I need to manually compile this binary whenever I'm setting up a new
+# machine, by going into the
+# `emacs-redux/.emacs.d/elpa/emacsql-sqlite-20230225.2205/sqlite`
+# directory and running `make`.
+#
+# I don't why the `emacsql-sqlite' package can't just use the
+# system-wide `sqlite3` binary, but whatever.
+/emacs-redux/.emacs.d/elpa/emacsql-sqlite-20230225.2205/sqlite/emacsql-sqlite
+
 # emacs: package lists and descriptions
 /emacs-redux/.emacs.d/elpa/archives/
 /emacs-redux/.emacs.d/elpa/*.txt
