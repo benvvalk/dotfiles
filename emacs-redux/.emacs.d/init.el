@@ -2454,6 +2454,21 @@ recency."
           (vertico-sort-function nil))
       (shelldon-output-history)))
 
+  (defun benv/shelldon-from-history ()
+    "Select a command from shell command history and use it prefill a shelldon prompt."
+    (interactive)
+    (let* ((benv/vertico-truncate-lines nil)
+           (vertico-sort-function nil)
+           (command (completing-read "Select command: " shell-command-history)))
+      ;; Call shelldon interactively, then insert the selected command
+      (minibuffer-with-setup-hook
+          (lambda ()
+            ;; This function runs when the minibuffer is set up
+            (insert command)
+            ;; Move cursor to end of inserted text
+            (goto-char (point-max)))
+        (call-interactively #'shelldon))))
+
   (defun benv/shelldon-run-line-in-neighbor-window (dir)
     (interactive)
     (when-let ((line (thing-at-point 'line t)))
@@ -2529,6 +2544,7 @@ recency."
    "x h K" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'up))
    "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
   (:states '(motion emacs)
+   "s-r" #'benv/shelldon-from-history
    "s-x" #'shelldon)
   :init
   (evil-set-initial-state 'shell-mode 'normal))
@@ -2944,6 +2960,7 @@ recency."
           ?\s-o ;; delete-other-windows
           ?\s-v ;; evil-window-vsplit
           ?\s-s ;; evil-window-split
+          ?\s-r ;; benv/shelldon-from-history
           ?\s-b ;; consult-buffer
           ?\s-n ;; org-roam-find-file
           ?\s-x ;; shelldon (run shell command)
