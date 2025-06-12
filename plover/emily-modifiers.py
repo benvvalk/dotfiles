@@ -27,7 +27,7 @@ spelling = {
         "R"     : "r",
         "S"     : "s",
         "T"     : "t",
-        "U"     : "u",
+        "TKHR"  : "u",
         "SR"    : "v",
         "W"     : "w",
         "KP"    : "x",
