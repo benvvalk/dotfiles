@@ -3000,6 +3000,14 @@ recency."
   (exwm-enable))
 
 ;;----------------------------------------
+;; Dictionary setup, by following the instructions from:
+;; https://mbork.pl/2017-01-14_I'm_now_using_the_right_dictionary
+;;----------------------------------------
+
+(use-package sdcv-mode
+  :load-path "~/.emacs.d/site-lisp/sdcv-mode")
+
+;;----------------------------------------
 ;; Start emacs server and set EDITOR=emacsclient.
 ;;
 ;; I added this so that `jj describe` would show a new buffer in my
