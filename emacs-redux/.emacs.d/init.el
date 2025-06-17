@@ -2906,6 +2906,63 @@ recency."
 (load custom-file)
 
 ;;----------------------------------------
+;; Firefox intergrations.
+;;----------------------------------------
+
+(defun benv/firefox-visit-history-url ()
+  "Select URL from Firefox history sorted by frecency score."
+  (interactive)
+
+  (unless (executable-find "sqlite3")
+    (user-error "Cannot find sqlite3 executable on PATH"))
+
+  (let* ((profile-dir (car (directory-files
+                           "~/.mozilla/firefox" t ".*\\.default-release$")))
+         (history-db (concat profile-dir "/places.sqlite"))
+         (temp-db "/tmp/firefox-places-temp.sqlite")
+         (urls nil))
+
+    ;; Copy DB since Firefox might have it locked
+    (copy-file history-db temp-db t)
+
+    ;; Get URLs sorted by frecency
+    (with-temp-buffer
+      (call-process "sqlite3" nil t nil
+                    temp-db
+                    "SELECT url, title, frecency FROM moz_places
+                     WHERE url LIKE 'http%'
+                     ORDER BY frecency DESC LIMIT 500;")
+      (goto-char (point-min))
+      (while (not (eobp))
+        (when (looking-at "\\(.*\\)|\\(.*\\)|\\([0-9]+\\)")
+          (let* ((url (match-string 1))
+                 (title (match-string 2))
+                 (frecency (match-string 3))
+                 (display-title (if (string-empty-p title)
+                                    "*no title*"
+                                  title)))
+            (push (cons (format "%s | %s | frecency:%s"
+                               url
+                               display-title
+                               frecency)
+                       url)
+                  urls)))
+        (forward-line 1)))
+
+    ;; Clean up temp DB
+    (delete-file temp-db)
+
+    ;; Let user select URL
+    (let* ((vertico-sort-function nil)
+           (selected (completing-read "Firefox history: " (reverse urls) nil t)))
+      (when selected
+        (browse-url (cdr (assoc selected urls)))))))
+
+(general-def
+  :states '(motion insert emacs)
+  "s-w"   'benv/firefox-visit-history-url)
+
+;;----------------------------------------
 ;; EXWM
 ;;----------------------------------------
 
@@ -2963,6 +3020,7 @@ recency."
           ?\s-r ;; benv/shelldon-from-history
           ?\s-b ;; consult-buffer
           ?\s-n ;; org-roam-find-file
+          ?\s-w ;; benv/firefox-visit-history-url
           ?\s-x ;; shelldon (run shell command)
           ))
 
