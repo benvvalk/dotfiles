@@ -1168,6 +1168,8 @@ file."
   (setq org-capture-templates
         '(("i" "inbox" entry (file "~/Sync/notes/20210325174000_inbox.org")
            "* TODO %?\n%i" :prepend t)
+          ("b" "bugpile todo" entry (file "/home/benv/Sync/notes/20250220160301-bugpile_todo.org")
+           "* TODO %?\n%i" :prepend t)
           ("r" "rabbit todo" entry (file "/home/benv/Sync/notes/20220808131306-rabbit_todo.org")
            "* TODO %?\n%i" :prepend t)
           ("w" "workflow" entry (file "~/Sync/notes/20210325103700_workflow_todo.org")
