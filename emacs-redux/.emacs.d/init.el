@@ -2911,21 +2911,32 @@ recency."
 ;; Firefox intergrations.
 ;;----------------------------------------
 
+(defun benv/find-firefox-places-db (firefox-dir)
+  "Find places.sqlite in any profile directory under FIREFOX-DIR."
+  (let ((places-db nil))
+    (dolist (file (directory-files-recursively firefox-dir "places\\.sqlite$" t))
+      (when (and (file-readable-p file)
+                 (not places-db))
+        (setq places-db file)))
+    places-db))
+
 (defun benv/firefox-visit-history-url ()
-  "Select URL from Firefox history sorted by frecency score."
+  "Select URL from Firefox history sorted by frecency score, or enter search terms."
   (interactive)
 
   (unless (executable-find "sqlite3")
     (user-error "Cannot find sqlite3 executable on PATH"))
 
-  (let* ((profile-dir (car (directory-files
-                           "~/.mozilla/firefox" t ".*\\.default-release$")))
-         (history-db (concat profile-dir "/places.sqlite"))
+  (let* ((firefox-dir "~/.mozilla/firefox")
+         (places-db (benv/find-firefox-places-db firefox-dir))
          (temp-db "/tmp/firefox-places-temp.sqlite")
          (urls nil))
 
+    (unless places-db
+      (user-error "Cannot find Firefox places.sqlite database"))
+
     ;; Copy DB since Firefox might have it locked
-    (copy-file history-db temp-db t)
+    (copy-file places-db temp-db t)
 
     ;; Get URLs sorted by frecency
     (with-temp-buffer
@@ -2944,21 +2955,29 @@ recency."
                                     "*no title*"
                                   title)))
             (push (cons (format "%s | %s | frecency:%s"
-                               url
-                               display-title
-                               frecency)
-                       url)
+                                url
+                                display-title
+                                frecency)
+                        url)
                   urls)))
         (forward-line 1)))
 
     ;; Clean up temp DB
     (delete-file temp-db)
 
-    ;; Let user select URL
+    ;; Let user select URL from history or enter custom input
     (let* ((vertico-sort-function nil)
-           (selected (completing-read "Firefox history: " (reverse urls) nil t)))
+           (selected (completing-read "Firefox history or enter search terms: "
+                                      (reverse urls)
+                                      nil nil)))
       (when selected
-        (browse-url (cdr (assoc selected urls)))))))
+        (if (assoc selected urls)
+            ;; User selected from history
+            (browse-url-firefox (cdr (assoc selected urls)) t)
+          ;; User entered custom input - treat as search terms
+          (browse-url-firefox (concat "https://www.google.com/search?q="
+                                      (url-hexify-string selected))
+                              t))))))
 
 (general-def
   :states '(motion insert emacs)
