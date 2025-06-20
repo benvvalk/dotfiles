@@ -2979,8 +2979,22 @@ recency."
                                       (url-hexify-string selected))
                               t))))))
 
+(defun benv/google-search-new-window (query)
+  "Perform a Google search in a new Firefox window for QUERY.
+
+If any text is currently selected, use that as the default value
+for QUERY."
+  (interactive
+   (list (if (use-region-p)
+             (read-string "Google search: " (buffer-substring-no-properties (region-beginning) (region-end)))
+           (read-string "Google search: "))))
+  (let ((search-url (format "https://www.google.com/search?q=%s"
+                            (url-hexify-string query))))
+    (browse-url-firefox search-url t)))
+
 (general-def
   :states '(motion insert emacs)
+  "s-g"   'benv/google-search-new-window
   "s-w"   'benv/firefox-visit-history-url)
 
 ;;----------------------------------------
@@ -3024,6 +3038,7 @@ recency."
           ?\M-: ;; `eval-expression`
           ?\M-q ;; quit-window
           ?\M-x ;; `execute-extended-command`
+          ?\s-g ;; benv/google-search-new-window
           ?\s-j ;; evil-window-left
           ?\s-k ;; evil-window-down
           ?\s-l ;; evil-window-up
