@@ -656,6 +656,23 @@ some confusion for a while.")
    "C-v" 'vertico-scroll-up
    "M-v" 'vertico-scroll-down))
 
+(use-package vertico-posframe
+  :config
+
+  ;; Set the frame to a fixed width (in characters).
+  ;;
+  ;; The default behaviour is to resize the width to
+  ;; fit the content. However, that often causes the frame
+  ;; to resize while scrolling through completion list,
+  ;; which is really disconcerting.
+  (setq vertico-posframe-width 90)
+
+  (setq vertico-posframe-parameters
+        '((left-fringe . 24)
+          (right-fringe . 24)))
+
+  (vertico-posframe-mode 1))
+
 ;;----------------------------------------
 ;; consult
 ;;----------------------------------------
