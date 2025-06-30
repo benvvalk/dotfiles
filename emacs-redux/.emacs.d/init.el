@@ -109,6 +109,7 @@
 (setq package-archives
       '(("org" . "https://orgmode.org/elpa/")
         ("gnu" . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/") ;; for `eat' package (`claude-code.el' dependency)
         ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
@@ -2136,6 +2137,19 @@ will change the focus to the target window."
    "M-g" #'gptel-menu))
 
 ;;----------------------------------------
+;; Claude Code integration
+;;----------------------------------------
+
+(use-package claude-code
+  :load-path "~/.emacs.d/site-lisp/claude-code/"
+  :config
+  ;; Note: `claude-code.el' requires the `eat'
+  ;; terminal emulator to function.
+  (use-package eat)
+  (claude-code-mode)
+  :bind ("s-c" . claude-code-transient))
+
+;;----------------------------------------
 ;; treesit
 ;;
 ;; The built-in tree sitter package that
@@ -3055,6 +3069,7 @@ for QUERY."
           ?\M-: ;; `eval-expression`
           ?\M-q ;; quit-window
           ?\M-x ;; `execute-extended-command`
+          ?\s-c ;; `claude-code-command-map`
           ?\s-g ;; benv/google-search-new-window
           ?\s-j ;; evil-window-left
           ?\s-k ;; evil-window-down
