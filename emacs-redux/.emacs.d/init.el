@@ -1736,9 +1736,10 @@ returns exit status 1, for reasons I don't understand.
      :prefix benv/evil-leader-key
      :non-normal-prefix benv/evil-insert-mode-leader-key
      "g s" 'magit-status
-     "s-m" 'magit-status
      "g l" 'benv/magit-log-head
      "g L" 'magit-log-all)
+    (:states '(motion insert emacs)
+     "s-m" 'magit-status)
   :config
     (defun benv/magit-log-head ()
       (interactive)
@@ -1824,9 +1825,10 @@ Determine the correct Unity executable for the project by using `unity-which`."
    "p f" 'projectile-find-file
    "p u" 'benv/projectile-unity
    "p g s" 'benv/projectile-magit-status
-   "s-M" 'benv/projectile-magit-status
    "p g l" 'benv/projectile-magit-log-current
-   "p g L" 'benv/projectile-magit-log-all))
+   "p g L" 'benv/projectile-magit-log-all)
+  (:states '(motion insert emacs)
+   "s-M" 'benv/projectile-magit-status))
 
 ;;----------------------------------------
 ;; winner
