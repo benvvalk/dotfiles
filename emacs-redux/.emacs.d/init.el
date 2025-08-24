@@ -1024,6 +1024,59 @@ window."
    "s-v" #'evil-window-vsplit
    "s-s" #'evil-window-split))
 
+(use-package general
+  :ensure t
+  :config
+  ;; Store buffers in a vector
+  (defvar my-buffer-shortcuts (make-vector 10 nil)
+    "Vector storing buffer assignments for quick access.")
+
+  ;; Assign current buffer to a number
+  (defun my-assign-buffer-to-number (num)
+    "Assign current buffer to key NUM (0-9)."
+    (interactive "nAssign to number (0-9): ")
+    (when (and (>= num 0) (< num 10))
+      (aset my-buffer-shortcuts num (current-buffer))
+      (message "Buffer assigned to %d" num)))
+
+  ;; Switch to a buffer assigned to a number
+  (defun my-switch-to-buffer-number (num)
+    "Switch to buffer assigned to key NUM (0-9)."
+    (interactive "nSwitch to number (0-9): ")
+    (let ((buf (and (>= num 0) (< num 10) (aref my-buffer-shortcuts num))))
+      (if buf
+          (switch-to-buffer buf)
+        (message "No buffer assigned to %d" num))))
+
+  ;; Set up keybindings for all three states
+  (general-define-key
+   :states '(motion insert emacs)
+   :keymaps 'override
+
+   ;; Assign buffer to number keys (C-s-0 through C-s-9)
+   "C-s-0" (lambda () (interactive) (my-assign-buffer-to-number 0))
+   "C-s-1" (lambda () (interactive) (my-assign-buffer-to-number 1))
+   "C-s-2" (lambda () (interactive) (my-assign-buffer-to-number 2))
+   "C-s-3" (lambda () (interactive) (my-assign-buffer-to-number 3))
+   "C-s-4" (lambda () (interactive) (my-assign-buffer-to-number 4))
+   "C-s-5" (lambda () (interactive) (my-assign-buffer-to-number 5))
+   "C-s-6" (lambda () (interactive) (my-assign-buffer-to-number 6))
+   "C-s-7" (lambda () (interactive) (my-assign-buffer-to-number 7))
+   "C-s-8" (lambda () (interactive) (my-assign-buffer-to-number 8))
+   "C-s-9" (lambda () (interactive) (my-assign-buffer-to-number 9))
+
+   ;; Switch to buffer by number (s-0 through s-9)
+   "s-0" (lambda () (interactive) (my-switch-to-buffer-number 0))
+   "s-1" (lambda () (interactive) (my-switch-to-buffer-number 1))
+   "s-2" (lambda () (interactive) (my-switch-to-buffer-number 2))
+   "s-3" (lambda () (interactive) (my-switch-to-buffer-number 3))
+   "s-4" (lambda () (interactive) (my-switch-to-buffer-number 4))
+   "s-5" (lambda () (interactive) (my-switch-to-buffer-number 5))
+   "s-6" (lambda () (interactive) (my-switch-to-buffer-number 6))
+   "s-7" (lambda () (interactive) (my-switch-to-buffer-number 7))
+   "s-8" (lambda () (interactive) (my-switch-to-buffer-number 8))
+   "s-9" (lambda () (interactive) (my-switch-to-buffer-number 9))))
+
 ;;----------------------------------------
 ;; which-window.el: prompt user for target
 ;; window when emacs wants to display a
@@ -3096,6 +3149,26 @@ for QUERY."
           ?\s-x ;; shelldon (run shell command)
           ?\s-m ;; magit-status
           ?\s-M ;; benv/projectile-magit-status
+          ?\s-0 ;; switch to buffer 0
+          ?\s-1 ;; switch to buffer 1
+          ?\s-2 ;; switch to buffer 2
+          ?\s-3 ;; switch to buffer 3
+          ?\s-4 ;; switch to buffer 4
+          ?\s-5 ;; switch to buffer 5
+          ?\s-6 ;; switch to buffer 6
+          ?\s-7 ;; switch to buffer 7
+          ?\s-8 ;; switch to buffer 8
+          ?\s-9 ;; switch to buffer 9
+          ?\s-\C-0 ;; assign current buffer to Win+0
+          ?\s-\C-1 ;; assign current buffer to Win+1
+          ?\s-\C-2 ;; assign current buffer to Win+2
+          ?\s-\C-3 ;; assign current buffer to Win+3
+          ?\s-\C-4 ;; assign current buffer to Win+4
+          ?\s-\C-5 ;; assign current buffer to Win+5
+          ?\s-\C-6 ;; assign current buffer to Win+6
+          ?\s-\C-7 ;; assign current buffer to Win+7
+          ?\s-\C-8 ;; assign current buffer to Win+8
+          ?\s-\C-9 ;; assign current buffer to Win+9
           ))
 
   ;; The above `exwm-input-prefix-keys'
