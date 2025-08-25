@@ -2044,6 +2044,22 @@ will change the focus to the target window."
 (add-to-list 'auto-mode-alist '("\\.jslib\\'" . js-mode))
 
 ;;----------------------------------------
+;; python
+;;----------------------------------------
+
+(use-package dape
+	:config
+    (add-to-list 'dape-configs
+                 `(debugpy-remote-attach
+                   modes (python-mode python-ts-mode)
+                   host (lambda () (read-string "Host: " "localhost"))
+                   port (lambda () (read-number "Port: "))
+                   :request "attach"
+                   :type "python"
+                   :justMyCode nil
+                   :showReturnValue t)))
+
+;;----------------------------------------
 ;; dtrt: automatically detect indentation settings from source file
 ;; (indent offset and indent-tabs-mode)
 ;;----------------------------------------
