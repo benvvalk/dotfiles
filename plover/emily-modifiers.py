@@ -15,6 +15,7 @@ spelling = {
         "H"     : "h",
         "EU"    : "i",
         "AOEU"    : "i", # magnum
+        "WR"    : "i",
         "SKWR"  : "j",
         "SKWRAEU" : "j", # magnum
         "K"     : "k",
