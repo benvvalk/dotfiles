@@ -2746,9 +2746,15 @@ recency."
 ;; html editing
 ;;----------------------------------------
 
-(use-package mhtml-mode
-  :config
-  (setq sgml-basic-offset 4))
+;; `web-mode' handles syntax highlighting of mixed HTML, CSS, and
+;; Javascript much better than `mhtml-mode' (Emacs' default mode
+;; for HTML files).
+(use-package web-mode
+  :mode ("\\.html\\'" . web-mode)
+  ;; Note: For some reason `auto-revert-mode' is disabled by default
+  ;; in `web-mode', even though I have turned on `global-auto-revert'
+  ;; mode above.
+  :hook (web-mode . (lambda () (auto-revert-mode))))
 
 ;;----------------------------------------
 ;; email (mu4e)
