@@ -1324,6 +1324,7 @@ exist, the current window will be split to create it."
    "p"   'org-cliplink))
 
 (use-package orgit
+  :disabled
   :config
   (defun benv/replace-orgit-rev-link-description (&rest args)
     "Replace the description of the most recently stored org link, if the
@@ -1807,6 +1808,9 @@ returns exit status 1, for reasons I don't understand.
     (add-hook 'magit-status-mode-hook 'remove-dos-eol)
     (add-hook 'magit-diff-mode-hook 'remove-dos-eol)
     (use-package orgit))
+
+(use-package forge
+  :after magit)
 
 ;;----------------------------------------
 ;; projectile
