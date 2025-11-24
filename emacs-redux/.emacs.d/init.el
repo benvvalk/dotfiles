@@ -2214,6 +2214,38 @@ will change the focus to the target window."
    "M-g" #'gptel-menu))
 
 ;;----------------------------------------
+;; agent-shell (ACP client for emacs)
+;;----------------------------------------
+
+(use-package agent-shell
+  :config
+  ;; Use a minimal style for the banner line that appears at the top
+  ;; of `agent-shell' buffers.
+  ;;
+  ;; The default style is `graphical', but that renders very weirdly
+  ;; on my Framework laptop -- the Anthropic logo and the font are
+  ;; both huge, which makes the banner take up about 15% of my screen
+  ;; height.
+  (setq agent-shell-header-style 'text)
+
+  ;; Disable the welcome message with the huge "Claude Code" logo
+  ;; ASCII art.
+  (setq agent-shell-show-welcome-message nil)
+
+  ;; Don't show AI company logos in the completion list, when starting
+  ;; a new agent shell with `M-x agent-shell'. The logo seem to cause
+  ;; lag on my Framework laptop.
+  ;;
+  ;; There is a bug that causes "nilnil" to be prepended to each
+  ;; completion candidate, but it's still better than the lag.
+  (setq agent-shell-show-config-icons nil)
+
+  ;; Configure authentication for Claude Code.
+  (setq agent-shell-anthropic-authentication
+      (agent-shell-anthropic-make-authentication
+       :api-key (lambda () (auth-source-pass-get 'secret "console.anthropic.com/awesomesaucelabs@gmail.com/api-key")))))
+
+;;----------------------------------------
 ;; Claude Code integration
 ;;----------------------------------------
 
