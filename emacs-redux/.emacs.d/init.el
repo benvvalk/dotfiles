@@ -130,6 +130,7 @@
 ;; save minibuffer command history between sessions
 (use-package savehist
   :config
+  (setq history-length 5000) ; default is 100, which is not enough!
   (savehist-mode))
 
 ;;----------------------------------------
