@@ -1128,6 +1128,10 @@ file."
 
   (add-hook #'compilation-mode-hook #'benv/compilation-mode-setup)
 
+  ;; Enable ANSI color processing in compilation buffers
+  (require 'ansi-color)
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+
   ;; Advice to make Windows-style file paths clickable in
   ;; `compilation-mode' buffers.
   (advice-add 'compilation-find-file :around #'benv/compilation-find-file-advice)
