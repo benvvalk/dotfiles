@@ -4,7 +4,6 @@
         username = "benv";
         homeDirectory = "/home/benv";
         packages = [
-            pkgs.plover.dev
             pkgs-emacs.emacs
         ];
         stateVersion = "24.05";
@@ -36,10 +35,4 @@
             if [ ! -e .emacs.d -a -d dotfiles/emacs-redux ]; then stow --dir=dotfiles emacs-redux; fi
         '';
     };
-
-    # Automatically starts user-level systemd service for Syncthing.
-    #
-    # Initial set-up to connect to other machines and share folders needs to be
-    # done manually through the web UI.
-    services.syncthing.enable = true;
 }
