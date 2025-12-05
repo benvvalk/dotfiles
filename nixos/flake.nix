@@ -6,7 +6,7 @@
     description = "Ben's system configuration";
    
     inputs = {
-        nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+        nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
         # The `nixpkgs` commit where the `emacs` package provides emacs-29.1.
         # I want to stick with emacs-29.1 because it is the version
