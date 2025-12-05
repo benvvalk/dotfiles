@@ -15,6 +15,8 @@
     programs.bash = {
         enable = true;
         initExtra = ''
+            export EDITOR=vim
+
             # Symlink shared `.gnupg` and `.password-store` directories from
             # Syncthing to my home directory.
             #
