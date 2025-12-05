@@ -9,6 +9,9 @@
         stateVersion = "25.05";
     };
 
+    # Let home-manager install/update its own binary.
+    programs.home-manager.enable = true;
+
     programs.bash = {
         enable = true;
         initExtra = ''
