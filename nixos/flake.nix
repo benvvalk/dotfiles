@@ -8,6 +8,10 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
+        # For secrets management in NixOS.
+        # Tutorial: https://www.youtube.com/watch?v=G5f6GC7SnhU
+        sops-nix.url = "github:Mic92/sops-nix";
+
         # The `nixpkgs` commit where the `emacs` package provides emacs-29.1.
         # I want to stick with emacs-29.1 because it is the version
         # that I know works well with my `init.el`.
@@ -26,13 +30,14 @@
         };
     };
 
-    outputs = { nixpkgs, nixpkgs-emacs, home-manager, ... }:
+    outputs = { nixpkgs, nixpkgs-emacs, home-manager, ... }@inputs:
         let
             system = "x86_64-linux";
         in
         {
             nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
                 inherit system;
+                specialArgs = { inherit inputs; };
                 modules = [ ./configuration.nix ];
             };
 
