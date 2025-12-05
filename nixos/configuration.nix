@@ -69,6 +69,40 @@
     #media-session.enable = true;
   };
 
+  # Syncthing
+
+  sops.secrets."syncthing-key" = {
+    owner = "benv";
+    format = "binary";
+    sopsFile = ./secrets/syncthing/key.pem;
+  };
+
+  sops.secrets."syncthing-cert" = {
+    owner = "benv";
+    format = "binary";
+    sopsFile = ./secrets/syncthing/cert.pem;
+  };
+
+  sops.secrets."syncthing/mac-m1-mini-device-id" = {
+    owner = "benv";
+  };
+
+  services.syncthing = {
+     enable = true;
+     user = "benv";
+     group = "users";
+     dataDir = "/home/benv";
+     key = config.sops.secrets."syncthing-key".path;
+     cert = config.sops.secrets."syncthing-cert".path;
+     settings = {
+       mac-m1-mini = {
+         id = builtins.toString config.sops.secrets."syncthing/mac-m1-mini-device-id".path;
+       };
+     };
+     openDefaultPorts = true; # use default ports for data syncing and peer discovery
+     extraFlags = [ "--no-default-folder" ]; # don't create empty `~/Sync` folder on first run
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
