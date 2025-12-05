@@ -90,6 +90,11 @@
      home-manager
      stow
      vim
+     
+     # For secrets management in NixOS.
+     # Tutorial: https://www.youtube.com/watch?v=G5f6GC7SnhU
+     age
+     sops
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
