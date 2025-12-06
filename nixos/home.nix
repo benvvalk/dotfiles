@@ -44,6 +44,44 @@
         '';
     };
 
+    # Plover configuration.
+    #
+    # Note: `plover-flake` doesn't seem to have any options for
+    # automatically configuring the dictionary list, so I still need
+    # to do that manually in the Plover GUI.
+    #
+    # Here is my dictionary list:
+    #
+    # ~/dotfiles/plover/ben-fingerspelling.py
+    # ~/dotfiles/plover/attached-numbers.py
+    # ~/dotfiles/plover/emily-modifiers.py
+    # ~/dotfiles/plover/emily-symbols.py
+    # ~/dotfiles/plover/user.json
+    # ~/.config/plover/commands.json (e.g. TKUPT -> update dictionary)
+    # ~/.config/plover/main.json
+
+    # Allow home-manager to clobber existing file (if any).
+    home.file.".config/plover/plover.cfg".force = true;
+
+    imports = [
+        inputs.plover-flake.homeManagerModules.plover
+    ];
+
+    programs.plover = {
+      enable = true;
+      package = inputs.plover-flake.packages.${system}.plover.withPlugins (
+        ps: with ps; [
+            plover-python-dictionary
+        ]
+      );
+      settings = {
+          "Machine Configuration" = {
+            machine_type = "Gemini PR";
+            auto_start = true;
+          };
+      };
+    };
+
     programs.ssh = {
       enable = true;
       matchBlocks = {

@@ -20,6 +20,9 @@
         # https://www.youtube.com/watch?v=cZDiqGWPHKI
         nixpkgs-emacs.url = "github:nixos/nixpkgs/b58e19b11fe72175fd7a9e014a4786a91e99da5f";
 
+        # https://github.com/opensteno/plover-flake
+        plover-flake.url = "github:openstenoproject/plover-flake";
+
         # The video I followed for initial setup of `home-manager`:
         # https://www.youtube.com/watch?v=FcC2dzecovw
         home-manager = {
