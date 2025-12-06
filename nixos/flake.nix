@@ -8,6 +8,12 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
+        # Tutorial: https://www.youtube.com/watch?v=GaM_paeX7TI
+        firefox-addons = {
+            url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
+
         # The `nixpkgs` commit where the `emacs` package provides emacs-29.4.
         # I want to stick with emacs-29.4 because it is the version
         # that I know works well with my `init.el`.

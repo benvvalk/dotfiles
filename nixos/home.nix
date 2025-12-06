@@ -46,6 +46,19 @@
         '';
     };
 
+    # Allow home-manager to clobber existing file (if any).
+    home.file.".mozilla/firefox/profiles.ini".force = true;
+
+    programs.firefox =  {
+        enable = true;
+        profiles.benv = {
+          extensions.packages = with inputs.firefox-addons.packages.${system}; [
+              tridactyl
+              ublock-origin
+          ];
+        };
+    };
+
     # Plover configuration.
     #
     # Note: `plover-flake` doesn't seem to have any options for
