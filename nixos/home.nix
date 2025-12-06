@@ -3,8 +3,9 @@
     home = {
         username = "benv";
         homeDirectory = "/home/benv";
-        packages = [
+        packages = with pkgs; [
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
+            gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
         ];
         stateVersion = "25.05";
     };
