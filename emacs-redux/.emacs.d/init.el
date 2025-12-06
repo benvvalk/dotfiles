@@ -3161,6 +3161,13 @@ for QUERY."
 
   :config
 
+  ;; This fixes a strange focus problem in EXWM, where the cursor
+  ;; remains hollow after selecting a window.
+  ;;
+  ;; I found the solution at:
+  ;; https://github.com/ch11ng/exwm/issues/889#issuecomment-1874977844
+  (setq x-no-window-manager t)
+
   ;; Machine-specific screen/workpace configuration.
   (let ((hostname (system-name)))
     (cond ((equal hostname "guix")
