@@ -26,7 +26,7 @@
         };
     };
 
-    outputs = { nixpkgs, nixpkgs-emacs, home-manager, ... }:
+    outputs = { nixpkgs, home-manager, ... }@inputs:
         let
             system = "x86_64-linux";
         in
@@ -38,10 +38,8 @@
 
             homeConfigurations.benv = home-manager.lib.homeManagerConfiguration {
                 pkgs = nixpkgs.legacyPackages.${system};
+                extraSpecialArgs = { inherit inputs system; };
                 modules = [ ./home.nix ];
-                extraSpecialArgs = {
-                    pkgs-emacs = nixpkgs-emacs.legacyPackages.${system};
-                };
             };
         };
 }

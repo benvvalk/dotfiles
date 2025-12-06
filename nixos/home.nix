@@ -1,10 +1,10 @@
-{ config, pkgs, pkgs-emacs, ... }: {
+{ config, pkgs, inputs, system, ... }: {
 
     home = {
         username = "benv";
         homeDirectory = "/home/benv";
         packages = [
-            pkgs-emacs.emacs
+            inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
         ];
         stateVersion = "25.05";
     };
