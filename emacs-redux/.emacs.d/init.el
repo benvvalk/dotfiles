@@ -3276,6 +3276,12 @@ for QUERY."
   :load-path "~/.emacs.d/site-lisp/sdcv-mode")
 
 ;;----------------------------------------
+;; nix-mode
+;;----------------------------------------
+
+(use-package nix-mode)
+
+;;----------------------------------------
 ;; Start emacs server and set EDITOR=emacsclient.
 ;;
 ;; I added this so that `jj describe` would show a new buffer in my
