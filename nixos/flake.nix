@@ -8,8 +8,8 @@
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
-        # The `nixpkgs` commit where the `emacs` package provides emacs-29.1.
-        # I want to stick with emacs-29.1 because it is the version
+        # The `nixpkgs` commit where the `emacs` package provides emacs-29.4.
+        # I want to stick with emacs-29.4 because it is the version
         # that I know works well with my `init.el`.
         # 
         # Here I am using the technique for pinning Nix package
@@ -18,7 +18,7 @@
         #
         # "Getting Started with Nix Home Manager",
         # https://www.youtube.com/watch?v=cZDiqGWPHKI
-        nixpkgs-emacs.url = "github:nixos/nixpkgs/160b762eda6d139ac10ae081f8f78d640dd523eb";
+        nixpkgs-emacs.url = "github:nixos/nixpkgs/b58e19b11fe72175fd7a9e014a4786a91e99da5f";
 
         # The video I followed for initial setup of `home-manager`:
         # https://www.youtube.com/watch?v=FcC2dzecovw
