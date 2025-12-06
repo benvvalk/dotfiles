@@ -39,6 +39,23 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.xserver.displayManager = {
+    # Prefixing the `emacs` start command with `EXWM=1` or `export
+    # EXWM=1 &&` doesn't work for some reason, but adding it to
+    # `sessionCommands` does.
+    sessionCommands = "export EXWM=1";
+    session = [
+       {
+         name = "EXWM";
+         manage = "desktop";
+         start = ''
+            emacs --maximized --debug-init;
+            waitPID=$!
+         '';
+       }
+    ];
+  };
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
