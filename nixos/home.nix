@@ -6,7 +6,8 @@
         packages = with pkgs; [
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
-            sqlite # for my emacs command: `benv/firefox-visit-history-url`
+            ripgrep # for `M-x rg` in emacs
+            sqlite # for `benv/firefox-visit-history-url` in emacs
         ];
         stateVersion = "25.05";
     };
