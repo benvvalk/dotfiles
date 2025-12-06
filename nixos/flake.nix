@@ -20,6 +20,8 @@
         # https://www.youtube.com/watch?v=cZDiqGWPHKI
         nixpkgs-emacs.url = "github:nixos/nixpkgs/160b762eda6d139ac10ae081f8f78d640dd523eb";
 
+        # The video I followed for initial setup of `home-manager`:
+        # https://www.youtube.com/watch?v=FcC2dzecovw
         home-manager = {
             url = "github:nix-community/home-manager/release-25.05";
             inputs.nixpkgs.follows = "nixpkgs";
