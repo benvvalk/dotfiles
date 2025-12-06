@@ -4,8 +4,10 @@
         username = "benv";
         homeDirectory = "/home/benv";
         packages = with pkgs; [
+            alsa-utils # for `alsamixer`
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
+            gnome-terminal
             ripgrep # for `M-x rg` in emacs
             sqlite # for `benv/firefox-visit-history-url` in emacs
         ];
