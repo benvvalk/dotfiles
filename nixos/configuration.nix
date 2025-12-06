@@ -159,7 +159,7 @@
   users.users.benv = {
     isNormalUser = true;
     description = "Ben Vandervalk";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "dialout" ];
     packages = with pkgs; [
     #  thunderbird
     ];
