@@ -41,6 +41,16 @@
         '';
     };
 
+    programs.ssh = {
+      enable = true;
+      matchBlocks = {
+        "github.com" = {
+          user = "git";
+          identityFile = "~/.ssh/benvvalk_ed25519";
+        };
+      };
+    };
+
     # Automatically start Syncthing as a user-level systemd service.
     #
     # Note: I need to do the initial setup of Syncthing manually:
