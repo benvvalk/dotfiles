@@ -48,7 +48,26 @@
         '';
     };
 
-    # Allow home-manager to clobber existing file (if any).
+    # Allow home-manager to clobber existing config file (if any).
+    #
+    # This means that all Plover settings are lost when I run
+    # `home-manager switch`. In particular, I need to manually
+    # reconfigure the Plover machine settings (keyboard device file)
+    # and the dictionary list in the Plover GUI. (Note: I recorded my
+    # dictionary list below, so that I can easily restore it.)
+    #
+    # NOTE: I've noticed that my settings are preserved if the Plover
+    # GUI is open when I run `home-manager switch`, probably because
+    # the GUI automatically saves the working config to disk.
+    #
+    # IDEA: I could also pass the `-b $FILE_EXTENSION` option to
+    # `home-manager switch`, but I would need to embed the date or
+    # some other unique identifier in `$FILE_EXTENSION`, otherwise the
+    # `home-manager switch` will fail on the second run because the
+    # backup file already exists. Also, I would need replace the new
+    # Nix-generated config file with the backup file in order to
+    # restore my settings (perhaps with a custom script).
+
     home.file.".mozilla/firefox/profiles.ini".force = true;
 
     programs.firefox =  {
