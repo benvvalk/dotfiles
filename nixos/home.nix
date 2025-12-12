@@ -5,6 +5,7 @@
         homeDirectory = "/home/benv";
         packages = with pkgs; [
             alsa-utils # for `alsamixer`
+            direnv # for emacs-direnv
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
