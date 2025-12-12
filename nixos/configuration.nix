@@ -134,6 +134,35 @@
       '';
   };
 
+  # Basic postgres config for local development/testing of
+  # `sponsoredissues.org`.
+  services.postgresql = {
+    enable = true;
+    ensureUsers = [
+      {
+        name = "benv";
+        ensureClauses.createdb = true; # grant permission to create new databases (e.g. `createdb` command)
+      }
+    ];
+    # When running `psql` without any options, the default behaviour
+    # is to connect to a database with the same name as the current
+    # user (e.g. "benv"). It saves some possible
+    # confusion/inconvenience if we create this database by
+    # default. (It can also be created manually by running `createdb
+    # benv`.)
+    ensureDatabases = [ "benv" ];
+    # Allow passwordless access for local system users, over a Unix
+    # domain socket. The `10` argument specifies the priority relative
+    # to other overrides (if any). `peer` means that postgres will use
+    # a one-to-one mapping between Linux user accounts and postgres
+    # user accounts, and use Linux's built-in methods for user
+    # authentication.
+    authentication = pkgs.lib.mkOverride 10 ''
+      # TYPE  DATABASE        USER            ADDRESS         METHOD
+      local   all             all                             peer
+    '';
+  };
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
