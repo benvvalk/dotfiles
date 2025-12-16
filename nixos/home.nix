@@ -1,5 +1,11 @@
 { config, pkgs, inputs, system, ... }: {
 
+    # Note: In order to create a normal python virtual
+    # environment for `sponsoredissues.org`,
+    # I needed to add the following packages:
+    # `postgresql`, `postgresql.pg_config`, `python3`.
+    # See my notes from Dec 16, 2025 for further
+    # reminders/explanation.
     home = {
         username = "benv";
         homeDirectory = "/home/benv";
@@ -10,6 +16,9 @@
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gnome-terminal
+            postgresql # for `sponsoredissues.org` development (see note above)
+            postgresql.pg_config # for `sponsoredissues.org` development (see note above)
+            python3 # for local `sponsoredissues.org` development
             ripgrep # for `M-x rg` in emacs
             sqlite # for `benv/firefox-visit-history-url` in emacs
             vlc # video player
