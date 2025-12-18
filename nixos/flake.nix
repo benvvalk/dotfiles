@@ -7,6 +7,7 @@
    
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+        nixpkgs-next.url = "github:nixos/nixpkgs/nixos-25.11";
 
         # Tutorial: https://www.youtube.com/watch?v=GaM_paeX7TI
         firefox-addons = {
@@ -37,9 +38,13 @@
         };
     };
 
-    outputs = { nixpkgs, home-manager, ... }@inputs:
+    outputs = { nixpkgs, nixpkgs-next, home-manager, ... }@inputs:
         let
             system = "x86_64-linux";
+            pkgs-next = import nixpkgs-next {
+                inherit system;
+                config.allowUnfree = true; # for `claude-code` package
+            };
         in
         {
             nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -49,7 +54,7 @@
 
             homeConfigurations.benv = home-manager.lib.homeManagerConfiguration {
                 pkgs = nixpkgs.legacyPackages.${system};
-                extraSpecialArgs = { inherit inputs system; };
+                extraSpecialArgs = { inherit pkgs-next inputs system; };
                 modules = [ ./home.nix ];
             };
         };

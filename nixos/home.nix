@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, system, ... }: {
+{ config, pkgs, pkgs-next, inputs, system, ... }: {
 
     # Note: In order to create a normal python virtual
     # environment for `sponsoredissues.org`,
@@ -11,6 +11,8 @@
         homeDirectory = "/home/benv";
         packages = with pkgs; [
             alsa-utils # for `alsamixer`
+            pkgs-next.claude-code
+            pkgs-next.claude-code-acp
             direnv # for emacs-direnv
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             filezilla # graphical FTP client
