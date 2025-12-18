@@ -54,7 +54,14 @@
     session = [
        {
          name = "EXWM";
-         manage = "desktop";
+         # Note: I'm not exactly sure what this setting does, but
+         # changing it from "desktop" -> "window" solved a problem
+         # with long delays (~ 20 seconds) when running `gpg`/`pass`
+         # commands under EXWM. I guess it has something to do with
+         # the initial environment setup on login (perhaps starting a
+         # DBus session, or setting GNOME environment variables that
+         # affect the behaviour of `gnome-keyring-daemon`).
+         manage = "window";
          start = ''
             emacs --maximized --debug-init;
             waitPID=$!
