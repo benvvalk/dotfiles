@@ -223,6 +223,20 @@
      vim
   ];
 
+  # Install/configure Steam.
+  #
+  # Notes:
+  #
+  # * See "Is NixOS The Best Gaming Distro | Linux Gaming Setup"
+  # for other options that can be used for Steam configuration:
+  # https://youtu.be/qlfm3MEbqYA?t=327
+  #
+  # * There is no home-manager module for Steam, because some aspects
+  # of Steam configuration require root permissions
+  # (e.g. installing `gamemode` daemon).
+
+  programs.steam.enable = true;
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
