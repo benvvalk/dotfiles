@@ -1,4 +1,8 @@
-{ config, pkgs, pkgs-next, inputs, system, ... }: {
+{ config, pkgs, inputs, system, ... }: {
+
+    # Allow unfree packages (e.g. proprietary software)
+    # Note: I initially added this for `claude-code`.
+    nixpkgs.config.allowUnfree = true;
 
     # Note: In order to create a normal python virtual
     # environment for `sponsoredissues.org`,
@@ -11,8 +15,8 @@
         homeDirectory = "/home/benv";
         packages = with pkgs; [
             alsa-utils # for `alsamixer`
-            pkgs-next.claude-code
-            pkgs-next.claude-code-acp
+            claude-code # terminal-based LLM agent
+            claude-code-acp # needed for using Claude Code with `agent-shell` in emacs
             direnv # for emacs-direnv
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             filezilla # graphical FTP client

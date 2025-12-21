@@ -6,8 +6,7 @@
     description = "Ben's system configuration";
    
     inputs = {
-        nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-        nixpkgs-next.url = "github:nixos/nixpkgs/nixos-25.11";
+        nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
         # Tutorial: https://www.youtube.com/watch?v=GaM_paeX7TI
         firefox-addons = {
@@ -33,18 +32,14 @@
         # The video I followed for initial setup of `home-manager`:
         # https://www.youtube.com/watch?v=FcC2dzecovw
         home-manager = {
-            url = "github:nix-community/home-manager/release-25.05";
+            url = "github:nix-community/home-manager/release-25.11";
             inputs.nixpkgs.follows = "nixpkgs";
         };
     };
 
-    outputs = { nixpkgs, nixpkgs-next, home-manager, ... }@inputs:
+    outputs = { nixpkgs, home-manager, ... }@inputs:
         let
             system = "x86_64-linux";
-            pkgs-next = import nixpkgs-next {
-                inherit system;
-                config.allowUnfree = true; # for `claude-code` package
-            };
         in
         {
             nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
@@ -54,7 +49,7 @@
 
             homeConfigurations.benv = home-manager.lib.homeManagerConfiguration {
                 pkgs = nixpkgs.legacyPackages.${system};
-                extraSpecialArgs = { inherit pkgs-next inputs system; };
+                extraSpecialArgs = { inherit inputs system; };
                 modules = [ ./home.nix ];
             };
         };
