@@ -24,6 +24,7 @@
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gh # GitHub CLI tool
             gnome-terminal
+            jq # querying/transforming JSON data
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
