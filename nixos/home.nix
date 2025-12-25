@@ -194,9 +194,5 @@
     # `nixos/syncthing-as-system-service` branch of my `dotfiles` repo.
     services.syncthing = {
        enable = true;
-       # Don't create an empty `~/Sync` folder by default. When initially
-       # syncing folders from my Mac M1 Mini, it feels safer and clearer
-       # if there isn't already an (empty) `~/Sync` folder on this machine.
-       extraOptions = ["--no-default-folder"];
     };
 }
