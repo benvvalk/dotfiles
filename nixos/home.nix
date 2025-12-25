@@ -21,6 +21,7 @@
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
+            gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gnome-terminal
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
@@ -96,6 +97,14 @@
         };
     };
 
+    # Make the `gpg` binary available on PATH.
+    #
+    # Note: The main part of my gpg-related configuration is in the
+    # `services.gpg-agent` block below.
+    programs.gpg = {
+        enable = true;
+    };
+
     # Plover configuration.
     #
     # Note: `plover-flake` doesn't seem to have any options for
@@ -142,6 +151,20 @@
           identityFile = "~/.ssh/benvvalk_ed25519";
         };
       };
+    };
+
+    # gpg-agent configuration
+    #
+    # Note: Setting `enableScDaemon = false` fixed a problem with
+    # `gpg-agent` hanging for ~20 seconds before prompting me for a
+    # password. Setting `noAllowExternalCache = true` is also a common
+    # solution to the hanging problem, although it had no effect in my
+    # case (it does no harm to set it anyway).
+    services.gpg-agent = {
+        enable = true;
+        enableScDaemon = false; # smart card daemon (for devices like YubiKey)
+        pinentry.package = pkgs.pinentry-gnome3;
+        noAllowExternalCache = true; # https://superuser.com/a/1792323
     };
 
     # Automatically start Syncthing as a user-level systemd service.
