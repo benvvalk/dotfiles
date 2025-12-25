@@ -23,6 +23,7 @@
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gnome-terminal
+            (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
             python3 # for local `sponsoredissues.org` development
