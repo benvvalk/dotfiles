@@ -305,6 +305,9 @@
 (use-package evil-multiedit
   :config
   (setq evil-multiedit-follow-matches t)
+  ;; Enable Ex command `:iedit REGEX' that allows you to invoke
+  ;; evil-multiedit with a regular expression
+  (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match)
   :general
   (:states '(normal visual multiedit)
    "C-M-<down>"  'evil-multiedit-match-and-next
