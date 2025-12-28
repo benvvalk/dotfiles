@@ -2052,8 +2052,11 @@ will change the focus to the target window."
 ;; Unity-specific extensions for javascript
 ;; source files
 
-(add-to-list 'auto-mode-alist '("\\.jspre\\'" . js-mode))
-(add-to-list 'auto-mode-alist '("\\.jslib\\'" . js-mode))
+(use-package js-mode
+  :mode (("\\.jspre\\'" . js-mode)
+         ("\\.jslib\\'" . js-mode))
+  :custom
+  (js-indent-level 2))
 
 ;;----------------------------------------
 ;; python
