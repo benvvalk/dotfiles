@@ -289,7 +289,7 @@
 ;; Support for editing with multiple cursors.
 ;;
 ;; I also tried `evil-mc`, but for some reason it was insanely bugged
-;; when I tried it with my emacs configuration on macOS`(perhaps an
+;; when I tried it with my emacs configuration on macOS (perhaps an
 ;; unexpected interaction with another emacs package). For example,
 ;; when I created multiple cursors and started typing characters in
 ;; Insert mode, only a subset of the characters were replicated at the
