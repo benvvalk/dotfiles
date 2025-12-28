@@ -2739,7 +2739,24 @@ recency."
 
 (use-package elisp-mode
   :config
-  (electric-pair-mode))
+  (electric-pair-mode)
+  (defun benv/pp (sexp)
+    "Pretty print SEXP in a popup buffer.
+
+I wrote function this because evaluating `(pp var)' with `M-:`
+(`eval') often results in truncated output in the \"*Messages*\"
+buffer, when examining large/complex expressions.
+
+In addition, it's more convenient for the result to pop up
+immediately in an isolated buffer, rather than having
+to switch to the \"*Messages*\" buffer and then search through
+the messages for the relevant output."
+    (let ((buf (get-buffer-create "*PP Output*")))
+      (with-current-buffer buf
+        (erase-buffer)
+        (pp sexp buf)
+        (emacs-lisp-mode))
+      (pop-to-buffer buf))))
 
 (use-package lispy
   :hook (elisp-mode . lispy-mode)
