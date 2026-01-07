@@ -1,0 +1,99 @@
+#        -*- Dockerfile -*-
+#
+# Recipe to build a container image including a terminal-only Emacs, PGmacs and its dependencies.
+# Container size is 64MB on AMD64.
+#
+# To build the container locally (not needed for an end user):
+#
+#    podman build -f etc/Containerfile --tag pgmacs .
+#
+# To run the container:
+#
+#    podman run --net host -ti localhost/pgmacs
+#
+#
+# Note: we don't include support for SchemaSpy, either in the form of installing podman in the
+# container, or installing Java and the SchemaSpy + JDBC jars, because we will be running in a
+# terminal and won't be able to display images.
+#
+# We go to the trouble of byte-compiling our Emacs Lisp files, but don't attempt native compilation,
+# because the Alpine emacs-nox package is built without support for native compilation.
+
+# The upstream location of csv-mode.el is
+#
+#    https://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/csv-mode.el?h=externals/csv-mode
+#
+# but this server is often unable to serve requests.
+
+
+FROM docker.io/alpine:edge as builder
+LABEL stage=builder
+WORKDIR /src
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache git emacs-nox && \
+    wget -q -O peg.el "https://git.savannah.gnu.org/cgit/emacs/elpa.git/plain/peg.el?h=externals/peg" && \
+    wget -q -O csv-mode.el "https://github.com/emacsmirror/csv-mode/raw/refs/heads/master/csv-mode.el" && \
+    git clone --depth 1 https://github.com/emarsden/pg-el.git && \
+    git clone --depth 1 https://github.com/emarsden/pgmacs.git && \
+    emacs -Q --batch -l /src/peg.el --eval '(byte-compile-file "/src/peg.el")' \
+      -l /src/csv-mode.el --eval '(byte-compile-file "/src/csv-mode.el")' \
+      -l /src/pg-el/pg.el --eval '(byte-compile-file "/src/pg-el/pg.el")' \
+      --eval '(byte-compile-file "/src/pg-el/pg-geometry.el")' \
+      --eval '(byte-compile-file "/src/pg-el/pg-gis.el")' \
+      --eval '(byte-compile-file "/src/pg-el/pg-lo.el")' \
+      -l /src/pgmacs/pgmacstbl.el --eval '(byte-compile-file "/src/pgmacs/pgmacstbl.el")' \
+      -l /src/pgmacs/pgmacs-sql-keywords.el --eval '(byte-compile-file "/src/pgmacs/pgmacs-sql-keywords.el")' \
+      -l /src/pgmacs/pgmacs-schemaspy.el --eval '(byte-compile-file "/src/pgmacs/pgmacs-schemaspy.el")' \
+      -l /src/pgmacs/pgmacs-chrome.el --eval '(byte-compile-file "/src/pgmacs/pgmacs-chrome.el")' \
+      --eval '(byte-compile-file "/src/pgmacs/pgmacs.el")'
+
+
+FROM docker.io/alpine:edge
+LABEL org.opencontainers.image.description "The Emacs-based browser/editor for PostgreSQL."
+LABEL org.opencontainers.image.title "PGmacs"
+LABEL org.opencontainers.image.url "https://github.com/emarsden/pgmacs"
+LABEL org.opencontainers.image.source "https://github.com/emarsden/pgmacs"
+LABEL org.opencontainers.image.version "0.29"
+LABEL org.opencontainers.image.authors "eric.marsden@risk-engineering.org"
+LABEL org.opencontainers.image.licenses "GPLv3"
+
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache emacs-nox ncurses && \
+    mkdir /elisp && \
+    chown root:root /elisp && \
+    chmod a=rwx,o+t /elisp && \
+    ls -l /usr/share/emacs/site-lisp && \
+    echo "(push \"/elisp\" load-path)" > /usr/share/emacs/site-lisp/site-start.el && \
+    echo "(require 'pgmacs)" >> /usr/share/emacs/site-lisp/site-start.el 
+
+COPY --from=builder --chown=root:root /src/peg.el /elisp
+COPY --from=builder --chown=root:root /src/peg.elc /elisp
+COPY --from=builder --chown=root:root /src/csv-mode.el /elisp
+COPY --from=builder --chown=root:root /src/csv-mode.elc /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg.el /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg.elc /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-geometry.el /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-geometry.elc /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-gis.el /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-gis.elc /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-lo.el /elisp
+COPY --from=builder --chown=root:root /src/pg-el/pg-lo.elc /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacstbl.el /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacstbl.elc /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-sql-keywords.el /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-sql-keywords.elc /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-schemaspy.el /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-schemaspy.elc /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-chrome.el /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs-chrome.elc /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs.el /elisp
+COPY --from=builder --chown=root:root /src/pgmacs/pgmacs.elc /elisp
+
+WORKDIR /app
+# For details: https://chadaustin.me/2024/01/truecolor-terminal-emacs/
+ENV TERM=xterm-256color
+ENTRYPOINT ["/usr/bin/emacs", "-f", "pgmacs"]
+
+

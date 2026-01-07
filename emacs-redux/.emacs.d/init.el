@@ -3289,6 +3289,38 @@ for QUERY."
 (use-package nix-mode)
 
 ;;----------------------------------------
+;; pgmacs: postgres client
+;;----------------------------------------
+
+(use-package pgmacs
+  :config
+  (defun benv/pgmacs (dbname)
+    "Connect to local PostgreSQL database DBNAME using pgmacs.
+  Automatically detects the Unix socket path and current user.
+
+I wrote this wrapper method because pg.el/pgmacs isn't very smart
+about figuring out of correct connection string. It seems that you
+need to explicitly tell it the location of the Unix socket file."
+    (interactive "sDatabase name: ")
+    (let* ((user (or (getenv "USER") (user-login-name)))
+           ;; Get the socket directory from psql
+           (socket-dir-output (shell-command-to-string
+                              (format "psql -t -A -c 'SHOW unix_socket_directories;' 'postgresql:///%s' 2>/dev/null || echo '/var/run/postgresql'" dbname)))
+           (socket-dir (string-trim socket-dir-output))
+           ;; Get the port from psql
+           (port-output (shell-command-to-string
+                        (format "psql -t -A -c 'SHOW port;' 'postgresql:///%s' 2>/dev/null || echo '5432'" dbname)))
+           (port (string-trim port-output))
+           ;; Construct the full socket path
+           (socket-path (format "%s/.s.PGSQL.%s" socket-dir port))
+           ;; URL-encode the socket path
+           (encoded-socket-path (url-hexify-string socket-path))
+           ;; Construct the full URI
+           (uri (format "postgresql://%s@%s/%s" user encoded-socket-path dbname)))
+      (message "Connecting to: %s" uri)
+      (pgmacs-open-uri uri))))
+
+;;----------------------------------------
 ;; Start emacs server and set EDITOR=emacsclient.
 ;;
 ;; I added this so that `jj describe` would show a new buffer in my
