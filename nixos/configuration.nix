@@ -16,6 +16,13 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Note: For better support of my very recent GPU (Radeon RX 9070),
+  # I added this line to update from the default kernel version of
+  # 6.12.63 -> 6.18.2. That's what `pkgs.linuxPackages_latest`
+  # resolves to when I have `nixpkgs` set to `nixos-25.11` in
+  # `flake.nix`.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
