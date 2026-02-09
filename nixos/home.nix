@@ -54,6 +54,8 @@
                 '';
             })
         ];
+        # Extra directories to add to PATH.
+        sessionPath = [ "$HOME/bin" ];
         stateVersion = "25.05";
     };
 
