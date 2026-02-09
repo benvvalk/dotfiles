@@ -205,6 +205,9 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Install redis service for local web development (sponsoredissues.org).
+  services.redis.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.benv = {
     isNormalUser = true;
