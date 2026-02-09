@@ -208,6 +208,20 @@
   # Install redis service for local web development (sponsoredissues.org).
   services.redis.enable = true;
 
+  # Sunshine: Remote desktop / game streaming server.
+  #
+  # The sunshine service needs to be started manually
+  # as a user-level service. (Even though there is an
+  # a `service.sunshine.autoStart` option, it doesn't seem to
+  # work.)
+  #
+  # If I remember correctly, the command to start the service is:
+  # `systemctl --user start sunshine`.
+  services.sunshine = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.benv = {
     isNormalUser = true;
