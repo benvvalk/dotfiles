@@ -42,6 +42,17 @@
             sqlite # for `benv/firefox-visit-history-url` in emacs
             unixtools.netstat # classic Unix networking util
             vlc # video player
+
+            (writeShellApplication {
+                name = "trash";
+                text = ''
+                #!/usr/bin/env bash
+                set -eu -o pipefail
+
+                mkdir -p ~/trash
+                mv --backup=numbered "$@" ~/trash
+                '';
+            })
         ];
         stateVersion = "25.05";
     };
