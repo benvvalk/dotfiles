@@ -7,7 +7,7 @@
     # Note: In order to create a normal python virtual
     # environment for `sponsoredissues.org`,
     # I needed to add the following packages:
-    # `postgresql`, `postgresql.pg_config`, `python3`.
+    # `postgresql`, `postgresql.pg_config`, `python3`, `pyright`.
     # See my notes from Dec 16, 2025 for further
     # reminders/explanation.
     home = {
@@ -15,23 +15,32 @@
         homeDirectory = "/home/benv";
         packages = with pkgs; [
             alsa-utils # for `alsamixer`
+            argc # command-line arguments parsing tool for bash
             claude-code # terminal-based LLM agent
             claude-code-acp # needed for using Claude Code with `agent-shell` in emacs
             direnv # for emacs-direnv
+            doctl # DigitalOcean CLI
+            evince # PDF viewer
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gh # GitHub CLI tool
-            gnome-terminal
+            gnome-terminal # terminal emulator
+            google-chrome # web browser
             gosmee # smee.io client for local webhook testing
+            inetutils # for `telnet`
             jq # querying/transforming JSON data
+            jwt-cli # JSON web token (generate app tokens for GitHub REST API)
+            killall # kill processes by name
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
+            pyright # Python linter / LSP server
             python3 # for local `sponsoredissues.org` development
             ripgrep # for `M-x rg` in emacs
             sqlite # for `benv/firefox-visit-history-url` in emacs
+            unixtools.netstat # classic Unix networking util
             vlc # video player
         ];
         stateVersion = "25.05";
