@@ -3,7 +3,6 @@
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -175,6 +174,7 @@ The number of columns by which a line is shifted.
 This applies to the shifting operators \\[evil-shift-right] and \
 \\[evil-shift-left]."
   :type 'integer
+  :safe #'integerp
   :group 'evil)
 
 (defcustom evil-shift-round t
@@ -539,41 +539,39 @@ ubiquity of prefix arguments."
   "Whether `C-w' deletes a word in Insert/Ex/Search state."
   :type 'boolean
   :group 'evil
-  :set #'(lambda (sym value)
-           (set-default sym value)
-           (when (and (boundp 'evil-insert-state-map)
-                      (boundp 'evil-replace-state-map))
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-insert-state-map (kbd "C-w"))
-                        'evil-delete-backward-word))
-               (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
-               (define-key evil-replace-state-map (kbd "C-w") 'evil-window-map))
-              ((and value
-                    (eq (lookup-key evil-insert-state-map (kbd "C-w"))
-                        'evil-window-map))
-               (define-key evil-insert-state-map (kbd "C-w") 'evil-delete-backward-word)
-               (define-key evil-replace-state-map (kbd "C-w") 'evil-delete-backward-word))))
-           (when (boundp 'evil-ex-search-keymap)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-ex-search-keymap (kbd "C-w"))
-                        #'backward-kill-word))
-               (define-key evil-ex-search-keymap (kbd "C-w") 'evil-search-yank-word))
-              ((and value
-                    (eq (lookup-key evil-ex-search-keymap (kbd "C-w"))
-                        'evil-search-yank-word))
-               (define-key evil-ex-search-keymap (kbd "C-w") #'backward-kill-word))))
-           (when (boundp 'evil-ex-completion-map)
-             (cond
-              ((and (not value)
-                    (eq (lookup-key evil-ex-completion-map (kbd "C-w"))
-                        #'backward-kill-word))
-               (define-key evil-ex-completion-map (kbd "C-w") nil))
-              ((and value
-                    (eq (lookup-key evil-ex-completion-map (kbd "C-w"))
-                        nil))
-               (define-key evil-ex-completion-map (kbd "C-w") #'backward-kill-word))))))
+  :set (lambda (sym value)
+         (set-default sym value)
+         (when (and (boundp 'evil-insert-state-map)
+                    (boundp 'evil-replace-state-map))
+           (cond
+            ((and (not value)
+                  (eq (lookup-key evil-insert-state-map (kbd "C-w"))
+                      'evil-delete-backward-word))
+             (define-key evil-insert-state-map (kbd "C-w") 'evil-window-map)
+             (define-key evil-replace-state-map (kbd "C-w") 'evil-window-map))
+            ((and value
+                  (eq (lookup-key evil-insert-state-map (kbd "C-w"))
+                      'evil-window-map))
+             (define-key evil-insert-state-map (kbd "C-w") 'evil-delete-backward-word)
+             (define-key evil-replace-state-map (kbd "C-w") 'evil-delete-backward-word))))
+         (when (boundp 'evil-command-line-map)
+           (cond
+            ((and (not value)
+                  (eq (lookup-key evil-command-line-map (kbd "C-w"))
+                      'evil-delete-backward-word))
+             (define-key evil-command-line-map (kbd "C-w") nil))
+            ((and value
+                  (null (lookup-key evil-command-line-map (kbd "C-w"))))
+             (define-key evil-command-line-map (kbd "C-w") 'evil-delete-backward-word))))
+         (when (boundp 'evil-ex-search-keymap)
+           (cond
+            ((and (not value)
+                  (null (lookup-key evil-ex-search-keymap (kbd "C-w"))))
+             (define-key evil-ex-search-keymap (kbd "C-w") 'evil-search-yank-word))
+            ((and value
+                  (eq (lookup-key evil-ex-search-keymap (kbd "C-w"))
+                      'evil-search-yank-word))
+             (define-key evil-ex-search-keymap (kbd "C-w") nil))))))
 
 (defcustom evil-want-C-h-delete nil
   "Whether `C-h' deletes a char in Insert state."
@@ -928,6 +926,7 @@ expression matching the buffer's name and STATE is one of `normal',
     internal-ange-ftp-mode
     haskell-interactive-mode
     prolog-inferior-mode
+    racket-repl-mode
     reb-mode
     shell-mode
     slime-repl-mode
@@ -1031,6 +1030,7 @@ intercepted."
     forward-sentence
     forward-sexp
     forward-word
+    goto-char
     goto-last-change
     ibuffer-backward-line
     ibuffer-forward-line
@@ -1125,7 +1125,7 @@ that line."
   :type 'boolean
   :group 'evil)
 (make-obsolete-variable
- evil-want-visual-char-semi-exclusive
+ 'evil-want-visual-char-semi-exclusive
  "Semi-exclusivity prevents selecting text + 1st char of next line,
 without having to introduce new niche functionality.
 Prefer to set `evil-v$-excludes-newline' to non-nil."
@@ -1353,7 +1353,7 @@ line. If this option is non-nil, this behavior is reversed."
   "Face for interactive replacement text."
   :group 'evil)
 
-(defcustom evil-command-window-height 8
+(defcustom evil-command-window-height 7
   "Height (in lines) of the command line window.
 Set to 0 to use the default height for `split-window'."
   :type 'integer
@@ -1740,6 +1740,16 @@ instead of `buffer-undo-list'.")
   "The kind of Visual selection.
 This is a selection as defined by `evil-define-visual-selection'.")
 
+(evil-define-local-var evil-prev-visual-point nil
+  "The previous position of point in Visual state, a marker.")
+
+(evil-define-local-var evil-prev-visual-mark nil
+  "The previous position of mark in Visual state, a marker.")
+
+(evil-define-local-var evil-prev-visual-selection nil
+  "The previous kind of Visual selection.
+This is a selection as defined by `evil-define-visual-selection'.")
+
 ;; we could infer the direction by comparing `evil-visual-mark'
 ;; and `evil-visual-point', but destructive operations may
 ;; displace the markers
@@ -1891,12 +1901,21 @@ would ignore `:close-all' actions and invoke the provided functions on
 
 ;;; Ex
 
-(defvar evil-ex-map (make-sparse-keymap)
+(define-obsolete-variable-alias 'evil-ex-map 'evil-ex-shortcut-map "1.15.0")
+(defvar evil-ex-shortcut-map (make-sparse-keymap)
   "Keymap for Ex.
 Key sequences bound in this map are immediately executed.")
 
+;; Intentionally does not inherit from `minibuffer-local-map', as users
+;; are encouraged to instead set this as the parent of that keymap.
+(defvar evil-command-line-map (make-sparse-keymap)
+  "Keymap used for the various Evil command-lines.
+Modifying this keymap corresponds to using the \":cmap\" Vim command.
+See `evil-ex-completion-map' and `evil-ex-search-keymap' which inherit
+from this keymap.")
+
 (defvar evil-ex-completion-map (make-sparse-keymap)
-  "Completion keymap for Ex.")
+  "Keymap for Ex.")
 
 (defvar evil-ex-initial-input nil
   "Additional initial content of the Ex command line.
@@ -1980,14 +1999,6 @@ when Ex is started interactively.")
   "Non-nil if the previous was a search.
 Otherwise the previous command is assumed as substitute.")
 
-;;; Command line window
-
-(evil-define-local-var evil-command-window-execute-fn nil
-  "The command to execute when exiting the command line window.")
-
-(evil-define-local-var evil-command-window-cmd-key nil
-  "The key for the command that opened the command line window (:, /, or ?).")
-
 ;; The lazy-highlighting framework
 (evil-define-local-var evil-ex-active-highlights-alist nil
   "An alist of currently active highlights.")
@@ -1997,8 +2008,6 @@ Otherwise the previous command is assumed as substitute.")
 
 (defvar evil-ex-search-keymap (make-sparse-keymap)
   "Keymap used in ex-search-mode.")
-(define-key evil-ex-search-keymap [escape] #'abort-recursive-edit)
-(set-keymap-parent evil-ex-search-keymap minibuffer-local-map)
 
 (defcustom evil-want-empty-ex-last-command t
   "Whether to default to evil-ex-previous-command at empty ex prompt."

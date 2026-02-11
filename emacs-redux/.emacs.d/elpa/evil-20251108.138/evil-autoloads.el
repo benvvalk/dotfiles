@@ -57,6 +57,11 @@ Searches in `evil-digraphs-table-user' and `evil-digraphs-table'.
 (register-definition-prefixes "evil-jumps" '("evil-"))
 
 
+;;; Generated autoloads from evil-keybindings.el
+
+(register-definition-prefixes "evil-keybindings" '("evil--set-motion-state"))
+
+
 ;;; Generated autoloads from evil-macros.el
 
 (register-definition-prefixes "evil-macros" '("evil-"))

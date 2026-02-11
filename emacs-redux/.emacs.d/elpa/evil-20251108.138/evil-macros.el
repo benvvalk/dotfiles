@@ -3,7 +3,6 @@
 ;; Author: Vegard Øye <vegard_oye at hotmail.com>
 ;; Maintainer: Vegard Øye <vegard_oye at hotmail.com>
 
-;; Version: 1.15.0
 
 ;;
 ;; This file is NOT part of GNU Emacs.
@@ -137,17 +136,17 @@ Optional keyword arguments are:
             interactive '("<c>")))
     ;; collect docstring
     (when (and (> (length body) 1)
-               (or (eq (car-safe (car-safe body)) 'format)
-                   (stringp (car-safe body))))
+               (or (eq (car-safe (car body)) #'format)
+                   (stringp (car body))))
       (setq doc (pop body)))
     ;; collect keywords
     (setq keys (plist-put keys :repeat 'motion))
-    (while (keywordp (car-safe body))
+    (while (keywordp (car body))
       (setq key (pop body)
             arg (pop body)
             keys (plist-put keys key arg)))
     ;; collect `interactive' specification
-    (when (eq (car-safe (car-safe body)) 'interactive)
+    (when (eq (car-safe (car body)) 'interactive)
       (setq interactive (cdr (pop body))))
     ;; macro expansion
     `(progn
@@ -172,21 +171,18 @@ the beginning or end of the current line."
      (when (save-excursion (goto-char end) (bolp))
        (setq end (max beg (1- end))))
      ;; Do not include the newline in Normal state
-     (and (not evil-move-beyond-eol)
-          (not (evil-visual-state-p))
-          (not (evil-operator-state-p))
-          (setq end (max beg (1- end))))
+     (or evil-move-beyond-eol
+         (evil-visual-state-p) (evil-operator-state-p)
+         (setq end (max beg (1- end))))
      (evil-with-restriction beg end
        (condition-case err
            (progn ,@body)
          (beginning-of-buffer
-          (if (= (point-min) beg)
-              (signal 'beginning-of-line nil)
-            (signal (car err) (cdr err))))
+          (signal (if (= (point-min) beg) 'beginning-of-line (car err))
+                  (cdr err)))
          (end-of-buffer
-          (if (= (point-max) end)
-              (signal 'end-of-line nil)
-            (signal (car err) (cdr err))))))))
+          (signal (if (= (point-max) end) 'end-of-line (car err))
+                  (cdr err)))))))
 
 (defun evil-eobp (&optional pos)
   "Whether point is at end-of-buffer with regard to end-of-line."
@@ -368,27 +364,26 @@ Optional keyword arguments:
   (let* ((args (delq '&optional args))
          (count (or (pop args) 'count))
          (args (when args `(&optional ,@args)))
-         (interactive '((interactive "<c><v>")))
-         arg doc key keys)
+         (interactive '(interactive "<c><v>"))
+         doc keys)
     ;; collect docstring
-    (when (stringp (car-safe body))
+    (when (stringp (car body))
       (setq doc (pop body)))
     ;; collect keywords
     (setq keys (plist-put keys :extend-selection t))
-    (while (keywordp (car-safe body))
-      (setq key (pop body)
-            arg (pop body)
-            keys (plist-put keys key arg)))
+    (while (keywordp (car body))
+      (setq keys (plist-put keys (pop body) (pop body))))
     ;; interactive
-    (when (eq (car-safe (car-safe body)) 'interactive)
-      (setq interactive (list (pop body))))
+    (when (eq (car-safe (car body)) 'interactive)
+      (setq interactive (pop body)))
     ;; macro expansion
     `(evil-define-motion ,object (,count ,@args)
        ,@(when doc `(,doc))
        ,@keys
-       ,@interactive
+       ,interactive
        (setq ,count (or ,count 1))
        (when (/= ,count 0)
+         ;; FIXME: These let-bindings shadow variables in args
          (let ((type (evil-type ',object evil-visual-char))
                (extend (and (evil-visual-state-p)
                             (evil-get-command-property
@@ -763,13 +758,13 @@ via KEY-VALUE pairs. BODY should evaluate to a list of values.
    '(("(\\(evil-\\(?:ex-\\)?define-\
 \\(?:[^ k][^ e][^ y]\\|[-[:word:]]\\{4,\\}\\)\\)\
 \\>[ \f\t\n\r\v]*\\(\\(?:\\sw\\|\\s_\\)+\\)?"
-      (1 font-lock-keyword-face)
-      (2 font-lock-function-name-face nil t))
+      (1 'font-lock-keyword-face)
+      (2 'font-lock-function-name-face nil t))
      ("(\\(evil-\\(?:delay\\|narrow\\|signal\\|save\\|with\\(?:out\\)?\\)\
 \\(?:-[-[:word:]]+\\)?\\)\\>\[ \f\t\n\r\v]+"
-      1 font-lock-keyword-face)
+      1 'font-lock-keyword-face)
      ("(\\(evil-\\(?:[-[:word:]]\\)*loop\\)\\>[ \f\t\n\r\v]+"
-      1 font-lock-keyword-face))))
+      1 'font-lock-keyword-face))))
 
 (provide 'evil-macros)
 
