@@ -732,6 +732,7 @@ some confusion for a while.")
    "C-x C-j" #'consult-dir-jump-file)
   (:states '(motion normal emacs)
    :prefix benv/evil-leader-key
+   :non-normal-prefix benv/evil-insert-mode-leader-key
    "c d" #'consult-dir))
 
 ;; Package that defines many additional `consult` commands
