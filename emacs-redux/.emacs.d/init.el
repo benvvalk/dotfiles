@@ -1007,25 +1007,25 @@ window."
    "y f" 'benv/yank-filename
    "y d" 'benv/yank-directory
    )
-  (:states '(motion normal insert emacs)
-   "M-J" 'benv/enlarge-window
-   "M-K" 'benv/shrink-window
-   "M-H" 'benv/shrink-window-horizontally
-   "M-L" 'benv/enlarge-window-horizontally
-   "s-j" #'evil-window-left
-   "s-k" #'evil-window-down
-   "s-l" #'evil-window-up
-   "s-;" #'evil-window-right
-   "s-J" #'windmove-swap-states-left
-   "s-K" #'windmove-swap-states-down
-   "s-L" #'windmove-swap-states-up
-   "s-:" #'windmove-swap-states-right
-   "s-u" #'winner-undo
-   "s-U" #'winner-redo
-   "s-d" #'delete-window
-   "s-o" #'delete-other-windows
-   "s-v" #'evil-window-vsplit
-   "s-s" #'evil-window-split))
+  :bind
+  ("M-J" . benv/enlarge-window)
+  ("M-K" . benv/shrink-window)
+  ("M-H" . benv/shrink-window-horizontally)
+  ("M-L" . benv/enlarge-window-horizontally)
+  ("s-j" . evil-window-left)
+  ("s-k" . evil-window-down)
+  ("s-l" . evil-window-up)
+  ("s-;" . evil-window-right)
+  ("s-J" . windmove-swap-states-left)
+  ("s-K" . windmove-swap-states-down)
+  ("s-L" . windmove-swap-states-up)
+  ("s-:" . windmove-swap-states-right)
+  ("s-u" . winner-undo)
+  ("s-U" . winner-redo)
+  ("s-d" . delete-window)
+  ("s-o" . delete-other-windows)
+  ("s-v" . evil-window-vsplit)
+  ("s-s" . evil-window-split))
 
 (use-package general
   :ensure t
