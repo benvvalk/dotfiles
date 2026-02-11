@@ -3171,6 +3171,15 @@ for QUERY."
   "s-w"   'benv/firefox-visit-history-url)
 
 ;;----------------------------------------
+;; Emacs profiler (built-in)
+;;----------------------------------------
+
+(use-package profiler
+  :bind
+  ("s-p" . profiler-start)
+  ("s-P" . profiler-stop))
+
+;;----------------------------------------
 ;; EXWM
 ;;----------------------------------------
 
