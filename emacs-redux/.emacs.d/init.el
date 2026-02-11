@@ -527,10 +527,6 @@ and echo it in the minibuffer."
   "t l" 'visual-line-mode
   "u"   'universal-argument)
 
-(general-def
-  :states '(motion insert emacs)
-  "s-b"   'consult-buffer)
-
 ;; Note: The <next>/<prior> lines remap the PageDown/PageUp keys
 ;; to half-screen jumps, as is done by the default C-d/C-u bindings
 ;; in evil/vim.
@@ -691,6 +687,8 @@ some confusion for a while.")
   ;; Disable "live previews" when selecting a new buffers.
   ;; I find it very distracting.
   (consult-customize consult-buffer :preview-key "M-.")
+  :bind
+  ("s-b" . consult-buffer)
   :general
   (:states '(motion insert emacs)
    :prefix benv/evil-leader-key
