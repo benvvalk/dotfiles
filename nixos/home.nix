@@ -217,4 +217,65 @@
     services.syncthing = {
        enable = true;
     };
+
+    systemd.user.services.sponsoredissues-django = {
+      Unit = {
+        Description = "Start local Django web server for sponsoredissues.org";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.writeShellScript "sponsoredissues-django" ''
+          #!/run/current-system/sw/bin/bash
+          set -eu -o pipefail
+          cd $HOME/git/sponsoredissues.org-dev
+          source .envrc
+          ./manage.py makemigrations
+          ./manage.py migrate
+          ./manage.py createcachetable
+          ./manage.py collectstatic --no-input
+          ./manage.py runserver
+        ''}";
+      };
+    };
+
+    systemd.user.services.sponsoredissues-celery-worker = {
+      Unit = {
+        Description = "Start local Celery worker for sponsoredissues.org";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.writeShellScript "sponsoredissues-celery-worker" ''
+          #!/run/current-system/sw/bin/bash
+          set -eu -o pipefail
+          cd $HOME/git/sponsoredissues.org-dev
+          source .envrc
+          PYTHONUNBUFFERED=1 celery -A sponsoredissues worker
+        ''}";
+      };
+    };
+
+    systemd.user.services.sponsoredissues-gosmee = {
+      Unit = {
+        Description = "Start local webhook proxy for sponsoredissues.org";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.writeShellScript "sponsoredissues-gosmee" ''
+          #!/run/current-system/sw/bin/bash
+          set -eu -o pipefail
+          cd $HOME/git/sponsoredissues.org-dev
+          source .envrc
+          ${pkgs.gosmee}/bin/gosmee client \
+             --saveDir $HOME/tmp/gosmee \
+             $SMEE_URL \
+             http://localhost:8000/site/accounts/github/login/callback/
+        ''}";
+      };
+    };
 }
