@@ -2633,6 +2633,9 @@ recency."
     (interactive)
     (let* ((benv/vertico-truncate-lines nil)
            (vertico-sort-function nil)
+           ;; if we are inside a project, run the command from the project root
+           (project (project-current))
+           (default-directory (if project (project-root project) default-directory))
            (command (completing-read "Select command: " shell-command-history)))
       ;; Call shelldon interactively, then insert the selected command
       (minibuffer-with-setup-hook
