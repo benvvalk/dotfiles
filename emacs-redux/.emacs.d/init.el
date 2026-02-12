@@ -2646,6 +2646,29 @@ recency."
             (goto-char (point-max)))
         (call-interactively #'shelldon))))
 
+  (defun benv/shelldon-remember-shell-command (shell-command)
+    "Record the shell command that was used to generate the output for
+a shelldon buffer, as a buffer-local variable."
+    (setq-local benv/shelldon-shell-command shell-command))
+
+  (advice-add #'shelldon-async-command :after #'benv/shelldon-remember-shell-command)
+
+  (defun benv/shelldon-kill-and-rerun ()
+    "Kill the process for the current shelldon buffer and re-run it.
+Wait 2 seconds before running the new command, in case the old process
+was slow to shutdown."
+    (interactive)
+    (unless (local-variable-p 'benv/shelldon-shell-command)
+      (user-error "This is not a shelldon output buffer."))
+    (if-let ((proc (get-buffer-process (current-buffer)))
+             (wait-seconds 2))
+        (progn (kill-process proc)
+               (message "Waiting %s seconds for command to shutdown..." wait-seconds)
+               (run-at-time wait-seconds nil
+                            (lambda ()
+                              (funcall #'shelldon-async-command benv/shelldon-shell-command))))
+      (shelldon-async-command benv/shelldon-shell-command)))
+
   (defun benv/shelldon-run-line-in-neighbor-window (dir)
     (interactive)
     (when-let ((line (thing-at-point 'line t)))
