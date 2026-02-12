@@ -1151,7 +1151,10 @@ file."
   (:states '(motion emacs)
    :keymaps 'compilation-mode-map
    "RET" 'compilation-display-error
-   "C-RET" 'compile-goto-error))
+   "C-RET" 'compile-goto-error)
+
+  :bind
+  ("s-c" . project-compile))
 
 ;;----------------------------------------
 ;; ediff
@@ -2265,8 +2268,7 @@ will change the focus to the target window."
   ;; Note: `claude-code.el' requires the `eat'
   ;; terminal emulator to function.
   (use-package eat)
-  (claude-code-mode)
-  :bind ("s-c" . claude-code-transient))
+  (claude-code-mode))
 
 ;;----------------------------------------
 ;; treesit
