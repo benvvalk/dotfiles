@@ -3368,6 +3368,12 @@ for QUERY."
 (use-package nix-mode)
 
 ;;----------------------------------------
+;; daemons: emacs UI to manage systemd services
+;;----------------------------------------
+
+(use-package daemons)
+
+;;----------------------------------------
 ;; pgmacs: postgres client
 ;;----------------------------------------
 
