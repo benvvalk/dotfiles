@@ -2412,6 +2412,24 @@ result into current buffer (e.g. minibuffer)."
            (command (completing-read "cmd: " shell-command-history)))
       (insert command)))
 
+  (defun benv/shell-command-from-history ()
+    "Select a command from shell command history and use it prefill the shell-command prompt."
+    (interactive)
+    (let* ((benv/vertico-truncate-lines nil)
+           (vertico-sort-function nil)
+           (project (project-current))
+           ;; if we are inside a project, run the command from the project root
+           (default-directory (if project (project-root project) default-directory))
+           (command (completing-read "Select command: " shell-command-history)))
+      ;; Call shelldon interactively, then insert the selected command
+      (minibuffer-with-setup-hook
+          (lambda ()
+            ;; This function runs when the minibuffer is set up
+            (insert command)
+            ;; Move cursor to end of inserted text
+            (goto-char (point-max)))
+        (call-interactively #'shell-command))))
+
   (defun benv/filter-region-or-buffer-with-shell-command (shell-command)
     "Run a shell command, feeding the selected region to standard input (STDIN).
 If no region is currently selected, send the entire contents of the current buffer
@@ -2500,6 +2518,8 @@ display a buffer with the STDOUT/STDERR from the command."
    :non-normal-prefix benv/evil-insert-mode-leader-key
    "!" #'benv/shell-command-on-buffer
    "|" #'benv/filter-region-or-buffer-with-shell-command)
+  :bind
+  ("M-!" . benv/shell-command-from-history)
   :config
   (set-exec-path-from-shell-path))
 
