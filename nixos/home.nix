@@ -38,6 +38,7 @@
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
             pyright # Python linter / LSP server
             python3 # for local `sponsoredissues.org` development
+            qbittorrent
             ripgrep # for `M-x rg` in emacs
             sqlite # for `benv/firefox-visit-history-url` in emacs
             unixtools.netstat # classic Unix networking util
