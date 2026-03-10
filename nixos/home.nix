@@ -21,7 +21,7 @@
             direnv # for emacs-direnv
             doctl # DigitalOcean CLI
             evince # PDF viewer
-            inputs.nixpkgs-emacs.legacyPackages.${system}.emacs
+            inputs.nixpkgs-emacs.legacyPackages.${system}.emacs # emacs-29.4
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
