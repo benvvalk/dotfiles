@@ -2743,7 +2743,7 @@ was slow to shutdown."
    "x h J" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'down))
    "x h K" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'up))
    "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
-  (:states '(motion emacs)
+  (:states '(motion normal insert emacs)
    "s-r" #'benv/shelldon-from-history
    "s-x" #'shelldon)
   :init
