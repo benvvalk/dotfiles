@@ -14,17 +14,19 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
-        # The `nixpkgs` commit where the `emacs` package provides emacs-29.4.
-        # I want to stick with emacs-29.4 because it is the version
-        # that I know works well with my `init.el`.
-        # 
+        # The `nixpkgs` commit that provides emacs-30.2. Upgrading to
+        # a new Emacs version tends to also require updating packages
+        # in my `init.el` to solve compatibility problems. So I like
+        # to pin my Emacs version, and only upgrade when I explicitly
+        # choose to do so.
+        #
         # Here I am using the technique for pinning Nix package
-        # versions that is described at timestamp 00:20:15 of the
+        # versions that is described at timestamp 00:20:12 of the
         # following video:
         #
         # "Getting Started with Nix Home Manager",
-        # https://www.youtube.com/watch?v=cZDiqGWPHKI
-        nixpkgs-emacs.url = "github:nixos/nixpkgs/b58e19b11fe72175fd7a9e014a4786a91e99da5f";
+        # https://youtu.be/cZDiqGWPHKI?t=1212
+        nixpkgs-emacs.url = "github:nixos/nixpkgs/0c39f3b5a9a234421d4ad43ab9c7cf64840172d0";
 
         # https://github.com/opensteno/plover-flake
         plover-flake.url = "github:openstenoproject/plover-flake";
