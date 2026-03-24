@@ -26,6 +26,7 @@
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gh # GitHub CLI tool
+            go # golang compiler and CLI tools
             gnome-terminal # terminal emulator
             google-chrome # web browser
             gosmee # smee.io client for local webhook testing
@@ -33,6 +34,8 @@
             jq # querying/transforming JSON data
             jwt-cli # JSON web token (generate app tokens for GitHub REST API)
             killall # kill processes by name
+            nautilus # GNOME file manager
+            nodejs-slim # for tree-sitter, for elisp-tred development
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
@@ -41,6 +44,7 @@
             qbittorrent
             ripgrep # for `M-x rg` in emacs
             sqlite # for `benv/firefox-visit-history-url` in emacs
+            tree-sitter # tree-sitter CLI, for Elisp-Tred development
             unixtools.netstat # classic Unix networking util
             vlc # video player
 
