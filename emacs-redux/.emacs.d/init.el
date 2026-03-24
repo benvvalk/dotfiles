@@ -511,7 +511,7 @@ and echo it in the minibuffer."
   :prefix benv/evil-leader-key
   :non-normal-prefix benv/evil-insert-mode-leader-key
   "b b" 'switch-to-buffer
-  "b d" 'kill-this-buffer
+  "b d" 'kill-current-buffer
   "b r" 'rename-buffer
   "b R" 'rename-buffer
   "e b" 'eval-buffer
