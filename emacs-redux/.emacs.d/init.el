@@ -2226,6 +2226,8 @@ will change the focus to the target window."
   (:states '(motion normal insert emacs)
    "M-g" #'gptel-menu))
 
+(use-package gptel-agent)
+
 ;;----------------------------------------
 ;; agent-shell (ACP client for emacs)
 ;;----------------------------------------
