@@ -23,10 +23,9 @@
 ;; This file adds support for the Kagi FastGPT LLM API to gptel
 
 ;;; Code:
-(require 'gptel)
 (require 'cl-generic)
-(eval-when-compile
-  (require 'cl-lib))
+(eval-when-compile (require 'cl-lib))
+(eval-and-compile (require 'gptel-request))
 
 (declare-function gptel-context--wrap "gptel-context")
 
@@ -38,7 +37,10 @@
 (cl-defmethod gptel--parse-response ((_backend gptel-kagi) response info)
   (let* ((data (plist-get response :data))
          (output (plist-get data :output))
-         (references (plist-get data :references)))
+         (references (plist-get data :references))
+         (tokens (plist-get data :tokens)))
+    (when tokens
+      (plist-put info :tokens (list :input tokens :output tokens)))
     (if (eq references :null) (setq references nil))
     (if (eq output :null) (setq output nil))
     (when references
@@ -71,7 +73,8 @@
                      (concat "\n\n" (mapconcat #'identity ref-strings "\n")))))
     (concat output references)))
 
-;; TODO: Add model and backend-specific request-params support
+;; TODO: Add support for model/backend-specific request-params and
+;; gptel--request-params
 (cl-defmethod gptel--request-data ((_backend gptel-kagi) prompts)
   "JSON encode PROMPTS for Kagi."
   (pcase-exhaustive (gptel--model-name gptel-model)
@@ -115,15 +118,6 @@
                        (list :text prompts)
                      ""))))
           prompts)))))
-
-(cl-defmethod gptel--wrap-user-prompt ((_backend gptel-kagi) prompts)
-  (cond
-   ((plist-get prompts :url)
-    (message "Ignoring gptel context for URL summary request."))
-   ((plist-get prompts :query)
-    (cl-callf gptel-context--wrap (plist-get prompts :query)))
-   ((plist-get prompts :text)
-    (cl-callf gptel-context--wrap (plist-get prompts :text)))))
 
 ;;;###autoload
 (cl-defun gptel-make-kagi
@@ -186,7 +180,7 @@ Example:
     (prog1 backend
       (setf (alist-get name gptel--known-backends
                        nil nil #'equal)
-                  backend))))
+            backend))))
 
 (provide 'gptel-kagi)
 ;;; gptel-kagi.el ends here

@@ -14,21 +14,19 @@
 (autoload 'gptel-mode "gptel" "\
 Minor mode for interacting with LLMs.
 
-This is a minor mode.  If called interactively, toggle the `GPTel
-mode' mode.  If the prefix argument is positive, enable the mode,
-and if it is zero or negative, disable the mode.
+This is a minor mode.  If called interactively, toggle the `GPTel mode'
+mode.  If the prefix argument is positive, enable the mode, and if it is
+zero or negative, disable the mode.
 
-If called from Lisp, toggle the mode if ARG is `toggle'.  Enable
-the mode if ARG is nil, omitted, or is a positive number.
-Disable the mode if ARG is a negative number.
+If called from Lisp, toggle the mode if ARG is `toggle'.  Enable the
+mode if ARG is nil, omitted, or is a positive number.  Disable the mode
+if ARG is a negative number.
 
 To check whether the minor mode is enabled in the current buffer,
-evaluate `gptel-mode'.
+evaluate the variable `gptel-mode'.
 
-The mode's hook is called both when the mode is enabled and when
-it is disabled.
-
-\\{gptel-mode-map}
+The mode's hook is called both when the mode is enabled and when it is
+disabled.
 
 (fn &optional ARG)" t)
 (autoload 'gptel-send "gptel" "\
@@ -113,7 +111,7 @@ parameters (as plist keys) and values supported by the API.  Use
 these to set parameters that gptel does not provide user options
 for.
 
-(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"x-api-key\" \\=\\, key) (\"anthropic-version\" . \"2023-06-01\") (\"anthropic-beta\" . \"pdfs-2024-09-25\") (\"anthropic-beta\" . \"prompt-caching-2024-07-31\"))))) (MODELS gptel--anthropic-models) (HOST \"api.anthropic.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/messages\"))")
+(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"x-api-key\" \\=\\, key) (\"anthropic-version\" . \"2023-06-01\") (\"anthropic-beta\" . \"extended-cache-ttl-2025-04-11\"))))) (MODELS gptel--anthropic-models) (HOST \"api.anthropic.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/messages\"))")
 (function-put 'gptel-make-anthropic 'lisp-indent-function 1)
 (register-definition-prefixes "gptel-anthropic" '("gptel--anthropic-"))
 
@@ -128,10 +126,14 @@ Keyword arguments:
 REGION - AWS region name (e.g. \"us-east-1\")
 MODELS - The list of models supported by this backend
 MODEL-REGION - one of apac, eu, us or nil
+AWS-PROFILE - the aws profile to use for aws configure export-credentials
+AWS-BEARER-TOKEN - the aws bearer-token for authenticating with AWS
 CURL-ARGS - additional curl args
 STREAM - Whether to use streaming responses or not.
+REQUEST-PARAMS - a plist of additional HTTP request
+parameters (as plist keys) and values supported by the API.
 
-(fn NAME &key REGION (MODELS gptel--bedrock-models) (MODEL-REGION nil) (STREAM nil) CURL-ARGS (PROTOCOL \"https\"))")
+(fn NAME &key REGION (MODELS gptel--bedrock-models) (MODEL-REGION nil) STREAM CURL-ARGS REQUEST-PARAMS AWS-PROFILE AWS-BEARER-TOKEN (PROTOCOL \"https\"))")
 (function-put 'gptel-make-bedrock 'lisp-indent-function 1)
 (register-definition-prefixes "gptel-bedrock" '("gptel-"))
 
@@ -147,30 +149,14 @@ DATA-BUF is the buffer where the request prompt is constructed.
 
 (fn CALLBACK DATA-BUF)")
 (autoload 'gptel-context--collect "gptel-context" "\
-Get the list of all active context overlays.")
+Get the list of all active context sources from CONTEXT-ALIST.
+
+CONTEXT-ALIST defaults to the current value of `gptel-context'.
+
+Ignore overlays, buffers and files that are not live or readable.
+
+(fn &optional CONTEXT-ALIST)")
 (register-definition-prefixes "gptel-context" '("gptel-context-"))
-
-
-;;; Generated autoloads from gptel-curl.el
-
-(autoload 'gptel-curl-get-response "gptel-curl" "\
-Fetch response to prompt in state FSM from the LLM using Curl.
-
-FSM is the state machine driving this request.
-
-FSM is the state machine driving this request.  Its INFO slot
-contains the data required for setting up the request.  INFO is a
-plist with the following keys, among others:
-- :data     (the data being sent)
-- :buffer   (the gptel buffer)
-- :position (marker at which to insert the response).
-- :callback (optional, the request callback)
-
-Call CALLBACK with the response and INFO afterwards.  If omitted
-the response is inserted into the current buffer after point.
-
-(fn FSM)")
-(register-definition-prefixes "gptel-curl" '("gptel-curl-"))
 
 
 ;;; Generated autoloads from gptel-gemini.el
@@ -193,7 +179,7 @@ information, in the form
  (model-name . plist)
 
 For a list of currently recognized plist keys, see
-`gptel--gemini-models'. An example of a model specification
+`gptel--gemini-models'.  An example of a model specification
 including both kinds of specs:
 
 :models
@@ -228,7 +214,7 @@ parameters (as plist keys) and values supported by the API.  Use
 these to set parameters that gptel does not provide user options
 for.
 
-(fn NAME &key CURL-ARGS HEADER KEY REQUEST-PARAMS (STREAM nil) (HOST \"generativelanguage.googleapis.com\") (PROTOCOL \"https\") (MODELS gptel--gemini-models) (ENDPOINT \"/v1beta/models\"))")
+(fn NAME &key CURL-ARGS HEADER KEY REQUEST-PARAMS (STREAM nil) (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"X-goog-api-key\" \\=\\, key))))) (HOST \"generativelanguage.googleapis.com\") (PROTOCOL \"https\") (MODELS gptel--gemini-models) (ENDPOINT \"/v1beta/models\"))")
 (function-put 'gptel-make-gemini 'lisp-indent-function 1)
 (register-definition-prefixes "gptel-gemini" '("gptel--gemini-"))
 
@@ -294,7 +280,7 @@ for.
 
 ;;; Generated autoloads from gptel-integrations.el
 
-(register-definition-prefixes "gptel-integrations" '("gptel-mcp-"))
+(register-definition-prefixes "gptel-integrations" '("gptel-"))
 
 
 ;;; Generated autoloads from gptel-kagi.el
@@ -456,7 +442,7 @@ parameters (as plist keys) and values supported by the API.  Use
 these to set parameters that gptel does not provide user options
 for.
 
-(fn NAME &key CURL-ARGS MODELS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.openai.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\"))")
+(fn NAME &key CURL-ARGS (MODELS gptel--openai-models) STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.openai.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\"))")
 (function-put 'gptel-make-openai 'lisp-indent-function 1)
 (autoload 'gptel-make-azure "gptel-openai" "\
 Register an Azure backend for gptel with NAME.
@@ -544,7 +530,7 @@ Example:
  :protocol \"http\"
  :host \"localhost:4891\"
  :models \\='(mistral-7b-openorca.Q4_0.gguf))")
-(register-definition-prefixes "gptel-openai" '("gptel-"))
+(register-definition-prefixes "gptel-openai" '("gptel--openai-"))
 
 
 ;;; Generated autoloads from gptel-openai-extras.el
@@ -620,7 +606,7 @@ Register a DeepSeek backend for gptel with NAME.
 
 For the meanings of the keyword arguments, see `gptel-make-openai'.
 
-(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.deepseek.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\") (MODELS \\='((deepseek-reasoner :capabilities (tool reasoning) :context-window 64 :input-cost 0.55 :output-cost 2.19) (deepseek-chat :capabilities (tool) :context-window 64 :input-cost 0.27 :output-cost 1.1))))")
+(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.deepseek.com\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\") (MODELS \\='((deepseek-reasoner :capabilities (tool reasoning) :context-window 128 :input-cost 0.56 :output-cost 1.68) (deepseek-chat :capabilities (tool) :context-window 128 :input-cost 0.56 :output-cost 1.68))))")
 (function-put 'gptel-make-deepseek 'lisp-indent-function 1)
 (autoload 'gptel-make-xai "gptel-openai-extras" "\
 Register an xAI backend for gptel with NAME.
@@ -636,7 +622,7 @@ false.
 The other keyword arguments are all optional.  For their meanings
 see `gptel-make-openai'.
 
-(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.x.ai\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\") (MODELS \\='((grok-3-latest :description \"Grok 3\" :capabilities \\='(tool-use json) :context-window 131072 :input-cost 3 :output-cost 15) (grok-3-fast-latest :description \"Faster Grok 3\" :capabilities \\='(tool-use json) :context-window 131072 :input-cost 5 :output-cost 25) (grok-3-mini-latest :description \"Mini Grok 3\" :capabilities \\='(tool-use json reasoning) :context-window 131072 :input-cost 0.3 :output-cost 0.5) (grok-3-mini-fast-latest :description \"Faster mini Grok 3\" :capabilities \\='(tool-use json reasoning) :context-window 131072 :input-cost 0.6 :output-cost 4) (grok-2-vision-1212 :description \"Grok 2 Vision\" :capabilities \\='(tool-use json) :mime-types \\='(\"image/jpeg\" \"image/png\" \"image/gif\" \"image/webp\") :context-window 32768 :input-cost 2 :output-cost 10))))")
+(fn NAME &key CURL-ARGS STREAM KEY REQUEST-PARAMS (HEADER (lambda nil (when-let* ((key (gptel--get-api-key))) \\=`((\"Authorization\" \\=\\, (concat \"Bearer \" key)))))) (HOST \"api.x.ai\") (PROTOCOL \"https\") (ENDPOINT \"/v1/chat/completions\") (MODELS \\='((grok-4-1-fast-reasoning :description \"Fast tool-calling model\" :capabilities (tool-use json reasoning) :context-window 2000 :input-cost 0.2 :output-cost 0.5) (grok-4-1-fast-non-reasoning :description \"Fast tool-calling model (non-reasoning)\" :capabilities (tool-use json) :context-window 2000 :input-cost 0.2 :output-cost 0.5) (grok-code-fast-1 :description \"Fast reasoning model for agentic coding\" :capabilities (tool-use json reasoning) :context-window 256 :input-cost 0.2 :output-cost 1.5) (grok-4-fast-reasoning :description \"Fast tool-calling model\" :capabilities (tool-use json reasoning) :context-window 2000 :input-cost 0.2 :output-cost 0.5) (grok-4-fast-non-reasoning :description \"Fast tool-calling model (non-reasoning)\" :capabilities (tool-use json) :context-window 2000 :input-cost 0.2 :output-cost 0.5) (grok-4 :description \"Grok Flagship model\" :capabilities (tool-use json reasoning) :context-window 256 :input-cost 3 :output-cost 15) (grok-3-mini :description \"Mini Grok 3\" :capabilities (tool-use json reasoning) :context-window 131 :input-cost 0.3 :output-cost 0.5) (grok-3 :description \"Grok 3\" :capabilities (tool-use json reasoning) :context-window 131 :input-cost 3 :output-cost 15) (grok-2-vision-1212 :description \"Grok 2 Vision\" :capabilities (tool-use json media) :mime-types (\"image/jpeg\" \"image/png\" \"image/gif\" \"image/webp\") :context-window 32 :input-cost 2 :output-cost 10))))")
 (function-put 'gptel-make-xai 'lisp-indent-function 1)
 (register-definition-prefixes "gptel-openai-extras" '("gptel--p"))
 
@@ -662,6 +648,28 @@ cleaning up after.
 
 (fn START-MARKER)")
 (register-definition-prefixes "gptel-org" '("gptel-"))
+
+
+;;; Generated autoloads from gptel-request.el
+
+(autoload 'gptel-curl-get-response "gptel-request" "\
+Fetch response to prompt in state FSM from the LLM using Curl.
+
+FSM is the state machine driving this request.
+
+FSM is the state machine driving this request.  Its INFO slot
+contains the data required for setting up the request.  INFO is a
+plist with the following keys, among others:
+- :data     (the data being sent)
+- :buffer   (the gptel buffer)
+- :position (marker at which to insert the response).
+- :callback (optional, the request callback)
+
+Call CALLBACK with the response and INFO afterwards.  If omitted
+the response is inserted into the current buffer after point.
+
+(fn FSM)")
+(register-definition-prefixes "gptel-request" '("gptel-"))
 
 
 ;;; Generated autoloads from gptel-rewrite.el

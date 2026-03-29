@@ -27,8 +27,8 @@
 ;;; Code:
 (require 'cl-lib)
 (require 'map)
-(require 'gptel)
 (require 'mail-parse)
+(eval-and-compile (require 'gptel-request))
 
 (declare-function gptel-context--collect-media "gptel-context")
 (declare-function gptel-context--wrap "gptel-context")
@@ -37,6 +37,26 @@
                              (:copier nil)
                              (:include gptel-backend))
   model-region)
+
+(defun gptel--bedrock-update-tokens (usage info)
+  "Update token usage information from USAGE.
+USAGE is part of the response, INFO is the request plist.
+
+This function accumulates token counts across multiple turns in a
+multi-turn request (e.g., during tool use where results are fed
+back to the LLM)."
+  (when usage
+    (let* ((tokens (plist-get info :tokens))
+           (input (+ (or (plist-get usage :inputTokens) 0)
+                     (or (plist-get tokens :input) 0)))
+           (output (+ (or (plist-get usage :outputTokens) 0)
+                      (or (plist-get tokens :output) 0)))
+           (cached (+ (or (plist-get usage :cacheReadInputTokens) 0)
+                      (or (plist-get tokens :cached) 0)))
+           (cache (+ (or (plist-get usage :cacheWriteInputTokens) 0)
+                     (or (plist-get tokens :cache) 0))))
+      (list :input input :output output
+            :cache cache :cached cached))))
 
 (defconst gptel-bedrock--prompt-type
   ;; For documentation purposes only -- this describes the type of prompt objects that get passed
@@ -59,13 +79,22 @@
 
 (cl-defmethod gptel--request-data ((backend gptel-bedrock) prompts)
   "Prepare request data for AWS Bedrock BACKEND from PROMPTS."
-  (nconc
-   `(:messages [,@prompts] :inferenceConfig (:maxTokens ,(or gptel-max-tokens 500)))
-   (when gptel--system-message `(:system [(:text ,gptel--system-message)]))
-   (when gptel-temperature `(:temperature ,gptel-temperature))
-   (when (and gptel-use-tools gptel-tools)
-     `(:toolConfig (:toolChoice ,(if (eq gptel-use-tools 'force) '(:any '()) '(:auto '()))
-                    :tools ,(gptel--parse-tools backend gptel-tools))))))
+  ;; First, build the core Bedrock request data structure.
+  (let ((base-request-data
+         (nconc
+          `(:messages [,@prompts] :inferenceConfig (:maxTokens ,(or gptel-max-tokens 500)))
+          (when gptel--system-message `(:system [(:text ,gptel--system-message)]))
+          (when gptel-temperature `(:temperature ,gptel-temperature))
+          (when (and gptel-use-tools gptel-tools)
+            `(:toolConfig (:toolChoice ,(if (eq gptel-use-tools 'force) '(:any '()) '(:auto '()))
+                           :tools ,(gptel--parse-tools backend gptel-tools)))))))
+
+    ;; Finally, merge all potential :request-params sources.
+    (gptel--merge-plists
+     base-request-data               ; The core data we just built
+     gptel--request-params           ; Global/buffer-local gptel--request-params
+     (gptel-backend-request-params backend) ; From `gptel-make-bedrock` call
+     (gptel--model-request-params gptel-model)))) ; From the model's properties
 
 (cl-defmethod gptel--parse-tools ((_backend gptel-bedrock) tools)
   "Parse TOOLS and return a list of ToolSpecification objects.
@@ -87,10 +116,8 @@ TOOLS is a list of `gptel-tool' structs, which see."
 
 Mutate state INFO with response metadata."
   (plist-put info :stop-reason (plist-get response :stopReason))
-  (plist-put info :input-tokens
-             (map-nested-elt response '(:usage :inputTokens)))
-  (plist-put info :output-tokens
-             (map-nested-elt response '(:usage :outputTokens)))
+  (plist-put info :tokens (gptel--bedrock-update-tokens
+                           (plist-get response :usage) info))
 
   (let* ((message (map-nested-elt response '(:output :message)))
          (content-strs (thread-last (plist-get message :content)
@@ -127,31 +154,13 @@ Assumes this is a conversation with alternating roles."
            (list :role (if role "user" "assistant")
                  :content `[(:text ,text)])))
 
-(cl-defmethod gptel--wrap-user-prompt ((_backend gptel-bedrock) prompts &optional inject-media)
-  "Inject context into a conversation.
+(cl-defmethod gptel--inject-media ((_backend gptel-bedrock) prompts)
+  "Wrap the first user prompt in PROMPTS with included media files.
 
-PROMPTS is list of prompt objects.  If INJECT-MEDIA is non-nil
-inject the media files from context into the beginning of the
-conversation; otherwise inject the context into the last prompt."
-  (if inject-media
-      (gptel-bedrock--inject-media-context prompts)
-    (gptel-bedrock--inject-text-context prompts)))
-
-(defun gptel-bedrock--inject-media-context (prompts)
-  "Inject media files from context into a conversation.
-Media files will be added at the beginning of the conversation.
-PROMPTS should be a non-empty list of prompt objects."
+Media files, if present, are placed in `gptel-context'."
   (when-let* ((media-list (gptel-context--collect-media)))
     (cl-callf2 vconcat (gptel-bedrock--parse-multipart media-list)
                (plist-get (car prompts) :content))))
-
-(defun gptel-bedrock--inject-text-context (prompts)
-  "Inject text context into the last prompt object from a conversation.
-PROMPTS should be a non-empty list of prompt objects."
-  (cl-assert prompts nil "Expected a non-empty list of prompts")
-  (when-let* ((wrapped (gptel-context--wrap nil)))
-    (cl-callf2 vconcat `[(:text ,wrapped)]
-               (plist-get (car (last prompts)) :content))))
 
 (defvar-local gptel-bedrock--stream-cursor nil
   "Marker to indicate last point parsed.")
@@ -189,8 +198,8 @@ INFO is a plist containing the request context."
               (push event (car acc-cell)))
             (pcase event-type
               ("metadata"
-               (plist-put info :input-tokens (map-nested-elt event '(:payload :usage :inputTokens)))
-               (plist-put info :output-tokens (map-nested-elt event '(:payload :usage :outputTokens))))
+               (plist-put info :tokens (gptel--bedrock-update-tokens
+                                        (map-nested-elt event '(:payload :usage)) info)))
               ("contentBlockDelta"
                (when-let ((delta-text (map-nested-elt event '(:payload :delta :text))))
                  (push delta-text strings)))
@@ -361,16 +370,19 @@ received."
                   (start (car block-events))
                   (deltas (cdr block-events)))
              (when-let ((tool-use (map-nested-elt start '(:payload :start :toolUse))))
-               (let ((id (plist-get tool-use :toolUseId))
-                     (name (plist-get tool-use :name))
-                     (input (gptel--json-read-string
-                             (mapconcat
-                              (lambda (delta) (map-nested-elt delta '(:payload :delta :toolUse :input)))
-                              deltas))))
+               (let* ((id (plist-get tool-use :toolUseId))
+                      (name (plist-get tool-use :name))
+                      (input-str
+                       (mapconcat (lambda (delta) (map-nested-elt
+                                              delta '(:payload :delta :toolUse :input)))
+                                  deltas))
+                      (input (unless (string-blank-p input-str)
+                               (gptel--json-read-string input-str))))
                  (push
                   (list :toolUse (list :input input :name name :toolUseId id))
                   contents)))
-             (when-let ((texts (delq nil (mapcar (lambda (d) (map-nested-elt d '(:payload :delta :text))) deltas))))
+             (when-let ((texts (delq nil (mapcar (lambda (d) (map-nested-elt d '(:payload :delta :text)))
+                                                 deltas))))
                (push (list :text (apply #'concat texts)) contents))
              ;; Currently we discard any reasoning content but this would be the spot to handle it
              ))
@@ -467,6 +479,44 @@ The output is a vector of entries in Bedrock API format."
 
 ;; gptel--inject-prompt not needed since the default implementation works here
 
+(cl-defmethod gptel--inject-tool-call ((_backend gptel-bedrock) data tool-call new-call)
+  "Replace TOOL-CALL in query DATA with NEW-CALL.
+
+BACKEND is the `gptel-backend'.  See the generic function documentation
+for details.  This implementation handles the AWS Bedrock API."
+  ;; FIXME: We currently assume that the tool call being modified is in the last
+  ;; position in the messages array.
+  (if-let* ((messages (plist-get data :messages))
+            (entry (aref messages (1- (length messages))))
+            (contents (plist-get entry :content))
+            (id (plist-get tool-call :id))
+            (indexed-call
+             (cl-loop for chunk across contents
+                      for i upfrom 0
+                      for tool-use = (plist-get chunk :toolUse)
+                      if (and tool-use (equal (plist-get tool-use :toolUseId) id))
+                      return (list i chunk tool-use)
+                      finally return nil))
+            (index (nth 0 indexed-call))
+            (chunk (nth 1 indexed-call))
+            (call (nth 2 indexed-call)))
+      (if (null new-call)
+          (if (= (length contents) 1)
+              (plist-put data :messages (substring messages nil -1))
+            (plist-put entry :content
+                       (vconcat (substring contents 0 index)
+                                (substring contents (1+ index)))))
+        (when-let* ((args (plist-get new-call :args)))
+          (setq call (plist-put call :input args)))
+        (when-let* ((name (plist-get new-call :name)))
+          (setq call (plist-put call :name name)))
+        (plist-put chunk :toolUse call))
+    (display-warning
+     '(gptel tool-call)
+     (format "Could not inject updated tool-call arguments for tool call %s, %s"
+             (plist-get tool-call :name)
+             (truncate-string-to-width (prin1-to-string new-call) 50 nil nil t)))))
+
 (cl-defmethod gptel--parse-tool-results ((_backend gptel-bedrock) tool-use-requests)
   "Return a backend-appropriate prompt containing tool call results.
 
@@ -487,8 +537,17 @@ conversation."
 (defvar gptel-bedrock--aws-profile-cache nil
   "Cache for AWS profile credentials in the form of (PROFILE . CREDS).")
 
+(defvar gptel-bedrock-aws-cli-command (executable-find "aws")
+  "Path to the AWS CLI command.
+
+Can be customized to use a specific AWS CLI installation,
+e.g. \"/usr/local/bin/aws\".")
+
 (defun gptel-bedrock--fetch-aws-profile-credentials (profile &optional clear-cache)
   "Fetch & cache AWS credentials for PROFILE using aws-cli.
+
+If PROFILE is the keyword ':static', then it fetches IAM credentials
+from the aws-cli without any profile argument.
 
 Non-nil CLEAR-CACHE will refresh credentials."
   (let* ((creds-json
@@ -497,8 +556,9 @@ Non-nil CLEAR-CACHE will refresh credentials."
              (or (and (not clear-cache) (cdr cell))
                  (setf (cdr cell)
                        (with-temp-buffer
-		           (unless (zerop (call-process "aws" nil t nil "configure" "export-credentials"
-					                (format "--profile=%s" profile)))
+		           (unless (zerop (apply #'call-process gptel-bedrock-aws-cli-command
+                                                 nil t nil "configure" "export-credentials"
+                                                 (unless (eql profile :static) (list (format "--profile=%s" profile)))))
 		             (user-error "Failed to get AWS credentials from profile"))
 		         (json-parse-string (buffer-string)))))))
 	 (expiration (if-let (exp (gethash "Expiration" creds-json))
@@ -513,8 +573,15 @@ Non-nil CLEAR-CACHE will refresh credentials."
        (gptel-bedrock--fetch-aws-profile-credentials profile t))
       (t (user-error "AWS credentials expired for profile: %s" profile)))))
 
-(defun gptel-bedrock--get-credentials ()
+(defun gptel-bedrock--get-credentials (profile)
   "Return the AWS credentials to use for the request.
+
+If credentials are not available based on the AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN environment variables,
+aws configure export-credentials is used to obtain credentials.
+PROFILE specifies the AWS profile to use for retrieving
+credentials.  If PROFILE is unset, AWS_PROFILE environment
+variable is used.
 
 Returns a list of 2-3 elements, depending on whether a session
 token is needed, with this form: (AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY
@@ -524,23 +591,29 @@ Convenient to use with `cl-multiple-value-bind'"
   (let ((key-id (getenv "AWS_ACCESS_KEY_ID"))
         (secret-key (getenv "AWS_SECRET_ACCESS_KEY"))
         (token (getenv "AWS_SESSION_TOKEN"))
-	(profile (getenv "AWS_PROFILE")))
+	(profile (or profile (getenv "AWS_PROFILE"))))
     (cond
-      ((and key-id secret-key) (cl-values key-id secret-key token))
       ((and profile) (gptel-bedrock--fetch-aws-profile-credentials profile))
-      (t (user-error "Missing AWS credentials; currently only environment variables are supported")))))
+      ((and key-id secret-key) (cl-values key-id secret-key token))
+      (t (user-error "Missing AWS credentials; provide them either via environment variables or specify PROFILE when calling gptel-make-bedrock")))))
 
 (defvar gptel-bedrock--model-ids
   ;; https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html
-  '((claude-sonnet-4-20250514    . "anthropic.claude-sonnet-4-20250514-v1:0")
+  '((claude-sonnet-4-6           . "anthropic.claude-sonnet-4-6")
+    (claude-opus-4-6             . "anthropic.claude-opus-4-6-v1")
+    (claude-sonnet-4-5-20250929  . "anthropic.claude-sonnet-4-5-20250929-v1:0")
+    (claude-haiku-4-5-20251001   . "anthropic.claude-haiku-4-5-20251001-v1:0")
+	(claude-opus-4-5-20251101    . "anthropic.claude-opus-4-5-20251101-v1:0")
+    (claude-opus-4-1-20250805    . "anthropic.claude-opus-4-1-20250805-v1:0")
+    (claude-sonnet-4-20250514    . "anthropic.claude-sonnet-4-20250514-v1:0")
     (claude-opus-4-20250514      . "anthropic.claude-opus-4-20250514-v1:0")
     (claude-3-7-sonnet-20250219  . "anthropic.claude-3-7-sonnet-20250219-v1:0")
     (claude-3-5-sonnet-20241022  . "anthropic.claude-3-5-sonnet-20241022-v2:0")
     (claude-3-5-sonnet-20240620  . "anthropic.claude-3-5-sonnet-20240620-v1:0")
     (claude-3-5-haiku-20241022   . "anthropic.claude-3-5-haiku-20241022-v1:0")
     (claude-3-opus-20240229      . "anthropic.claude-3-opus-20240229-v1:0")
-    (claude-3-sonnet-20240229    . "anthropic.claude-3-sonnet-20240229-v1:0")
     (claude-3-haiku-20240307     . "anthropic.claude-3-haiku-20240307-v1:0")
+    (nova-2-lite-v1              . "amazon.nova-2-lite-v1:0")
     (mistral-7b                  . "mistral.mistral-7b-instruct-v0:2")
     (mistral-8x7b                . "mistral.mixtral-8x7b-instruct-v0:1")
     (mistral-large-2402          . "mistral.mistral-large-2402-v1:0")
@@ -568,28 +641,34 @@ IDs can be added or replaced by calling
 (defun gptel-bedrock--get-model-id (model &optional region)
   "Return the Bedrock model ID for MODEL.
 
-REGION is one of apac, eu or us."
+REGION is one of global, apac, eu or us."
   (concat
    (when region
-     (or (member region '(apac eu us))
+     (or (member region '(global apac eu us))
 	 (error "Unknown Bedrock region %s" region))
      (concat (symbol-name region) "."))
    (or (alist-get model gptel-bedrock--model-ids nil nil #'eq)
        (error "Unknown Bedrock model: %s" model))))
 
-(defun gptel-bedrock--curl-args (region)
-  "Generate the curl arguments to get a bedrock request signed for use in REGION."
-  ;; https://curl.se/docs/manpage.html#--aws-sigv4
-  (cl-multiple-value-bind (key-id secret token) (gptel-bedrock--get-credentials)
-    (nconc
-     (list
-      "--user" (format "%s:%s" key-id secret)
-      "--aws-sigv4" (format "aws:amz:%s:bedrock" region))
-     (unless (memq system-type '(windows-nt ms-dos))
-       ;; Without this curl swallows the output
-       (list "--output" "/dev/stdout"))
-     (when token
-       (list (format "-Hx-amz-security-token: %s" token))))))
+(defun gptel-bedrock--curl-args (region profile bearer-token)
+  "Generate the curl arguments to get a bedrock request signed for use in REGION.
+
+PROFILE specifies the aws profile to use for aws configure
+export-credentials.  BEARER-TOKEN is the token used for authentication."
+  (let ((bearer-token (or bearer-token (getenv "AWS_BEARER_TOKEN_BEDROCK")))
+        (output-args (unless (memq system-type '(windows-nt ms-dos))
+                       '("--output" "/dev/stdout"))))
+    (if bearer-token
+        (append
+         (list "-H" (format "Authorization: Bearer %s" bearer-token))
+         output-args)
+      (cl-multiple-value-bind (key-id secret token) (gptel-bedrock--get-credentials profile)
+        (append
+         (list "--user" (format "%s:%s" key-id secret)
+               "--aws-sigv4" (format "aws:amz:%s:bedrock" region))
+         output-args
+         (when token (list "-H" (format "x-amz-security-token: %s" token))))))))
+
 
 (defun gptel-bedrock--curl-version ()
   "Check Curl version required for gptel-bedrock."
@@ -604,8 +683,8 @@ REGION is one of apac, eu or us."
           region
           (models gptel--bedrock-models)
 	  (model-region nil)
-          (stream nil)
-	  curl-args
+          stream curl-args request-params
+          aws-profile aws-bearer-token
           (protocol "https"))
   "Register an AWS Bedrock backend for gptel with NAME.
 
@@ -614,12 +693,17 @@ Keyword arguments:
 REGION - AWS region name (e.g. \"us-east-1\")
 MODELS - The list of models supported by this backend
 MODEL-REGION - one of apac, eu, us or nil
+AWS-PROFILE - the aws profile to use for aws configure export-credentials
+AWS-BEARER-TOKEN - the aws bearer-token for authenticating with AWS
 CURL-ARGS - additional curl args
-STREAM - Whether to use streaming responses or not."
+STREAM - Whether to use streaming responses or not.
+REQUEST-PARAMS - a plist of additional HTTP request
+parameters (as plist keys) and values supported by the API."
   (declare (indent 1))
-  (unless (and gptel-use-curl (version<= "8.5" (gptel-bedrock--curl-version)))
-    (error "Bedrock-backend requires curl >= 8.5, but gptel-use-curl := %s, curl-version := %s"
-           gptel-use-curl (gptel-bedrock--curl-version)))
+  (unless (or aws-bearer-token (getenv "AWS_BEARER_TOKEN_BEDROCK"))
+    (unless (and gptel-use-curl (version<= "8.9" (gptel-bedrock--curl-version)))
+      (error "Bedrock-backend requires curl >= 8.9, but gptel-use-curl := %s, curl-version := %s"
+             gptel-use-curl (gptel-bedrock--curl-version))))
   (let ((host (format "bedrock-runtime.%s.amazonaws.com" region)))
     (setf (alist-get name gptel--known-backends nil nil #'equal)
           (gptel--make-bedrock
@@ -627,18 +711,18 @@ STREAM - Whether to use streaming responses or not."
            :host host
            :header nil           ; x-amz-security-token is set in curl-args if needed
            :models (gptel--process-models models)
-	   :model-region model-region
+           :model-region model-region
            :protocol protocol
            :endpoint "" ; Url is dynamically constructed based on other args
            :stream stream
            :coding-system (and stream 'binary)
-           :curl-args (lambda () (append curl-args (gptel-bedrock--curl-args region)))
+           :curl-args (lambda () (append curl-args (gptel-bedrock--curl-args region aws-profile aws-bearer-token)))
+           :request-params request-params
            :url
            (lambda ()
              (concat protocol "://" host
                      "/model/" (gptel-bedrock--get-model-id gptel-model model-region)
-                     "/" (if stream "converse-stream" "converse")))
-           ))))
+                     "/" (if stream "converse-stream" "converse")))))))
 
 (provide 'gptel-bedrock)
 ;;; gptel-bedrock.el ends here

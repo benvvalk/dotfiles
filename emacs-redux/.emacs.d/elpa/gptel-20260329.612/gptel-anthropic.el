@@ -25,7 +25,7 @@
 (require 'cl-generic)
 (require 'cl-lib)
 (require 'map)
-(require 'gptel)
+(eval-and-compile (require 'gptel-request))
 
 (defvar json-object-type)
 
@@ -39,6 +39,22 @@
 (cl-defstruct (gptel-anthropic (:constructor gptel--make-anthropic)
                                (:copier nil)
                                (:include gptel-backend)))
+
+(defun gptel--anthropic-update-tokens (usage info)
+  "Update token usage information from USAGE.
+USAGE is part of the response, INFO is the request plist."
+  (when usage
+    (let* ((tokens (plist-get info :tokens))
+           (input (+ (plist-get usage :input_tokens)
+                     (or (plist-get tokens :input) 0)))
+           (output (+ (plist-get usage :output_tokens)
+                      (or (plist-get tokens :output) 0)))
+           (cached (+ (plist-get usage :cache_read_input_tokens)
+                      (or (plist-get tokens :cached) 0)))
+           (cache (+ (plist-get usage :cache_creation_input_tokens)
+                     (or (plist-get tokens :cache) 0))))
+      (list :input input :output output
+            :cache cache :cached cached))))
 
 ;; NOTE the crucial difference between
 ;; - (push val (plist-get info :key)) and
@@ -94,7 +110,8 @@ information if the stream contains it.  Not my best work, I know."
                 ("text" (push (plist-get cblock :text) content-strs))
                 ("tool_use" (plist-put info :tool-use
                                        (cons (list :id (plist-get cblock :id)
-                                                   :name (plist-get cblock :name))
+                                                   :name (plist-get cblock :name)
+                                                   :input nil) ;ensure :input key is always present
                                              (plist-get info :tool-use))))
                 ("thinking" (plist-put info :reasoning (plist-get cblock :thinking))
                  (plist-put info :reasoning-block 'in)))))
@@ -146,8 +163,9 @@ information if the stream contains it.  Not my best work, I know."
                         (plist-put tool-call :input nil)
                         (plist-put tool-call :id (plist-get tool-call :id)))
                       tool-use))
-              (plist-put info :output-tokens
-                         (map-nested-elt response '(:usage :output_tokens)))
+              ;; Capture token usage
+              (plist-put info :tokens (gptel--anthropic-update-tokens
+                                       (plist-get response :usage) info))
               (plist-put info :stop-reason
                          (map-nested-elt response '(:delta :stop_reason)))))))
       (error (goto-char pt)))
@@ -166,8 +184,8 @@ information if the stream contains it.  Not my best work, I know."
 
 Mutate state INFO with response metadata."
   (plist-put info :stop-reason (plist-get response :stop_reason))
-  (plist-put info :output-tokens
-             (map-nested-elt response '(:usage :output_tokens)))
+  (plist-put info :tokens (gptel--anthropic-update-tokens
+                           (plist-get response :usage) info))
   (cl-loop
    with content = (plist-get response :content)
    for cblock across content
@@ -206,18 +224,27 @@ Mutate state INFO with response metadata."
 (cl-defmethod gptel--request-data ((backend gptel-anthropic) prompts)
   "JSON encode PROMPTS for sending to ChatGPT."
   (let ((prompts-plist
-         `(:model ,(gptel--model-name gptel-model)
-           :stream ,(or gptel-stream :json-false)
-           :max_tokens ,(or gptel-max-tokens 4096)
-           :messages [,@prompts])))
+         `( :model ,(gptel--model-name gptel-model)
+            :stream ,(or gptel-stream :json-false)
+            :max_tokens ,(or gptel-max-tokens 4096)
+            :messages [,@prompts]))
+        (cachep (and (or (eq gptel-cache t) (memq 'system gptel-cache))
+                     (gptel--model-capable-p 'cache))))
     (when gptel--system-message
-      (if (and (or (eq gptel-cache t) (memq 'system gptel-cache))
-               (gptel--model-capable-p 'cache))
-          ;; gptel--system-message is guaranteed to be a string
-          (plist-put prompts-plist :system
-                     `[(:type "text" :text ,gptel--system-message
-                        :cache_control (:type "ephemeral"))])
-        (plist-put prompts-plist :system gptel--system-message)))
+      ;; gptel--system-message is a string or a list of strings
+      (plist-put
+       prompts-plist :system
+       (cond
+        ((consp gptel--system-message)  ;multi-part system message
+         (vconcat (mapcar (lambda (part)
+                            (nconc (list :type "text" :text part)
+                                   (and cachep
+                                        (list :cache_control
+                                              '(:type "ephemeral")))))
+                          gptel--system-message)))
+        (cachep `[(:type "text" :text ,gptel--system-message
+                         :cache_control (:type "ephemeral"))])
+        (t gptel--system-message))))
     (when gptel-temperature
       (plist-put prompts-plist :temperature gptel-temperature))
     (when gptel-use-tools
@@ -230,11 +257,28 @@ Mutate state INFO with response metadata."
                      (gptel--model-capable-p 'cache))
             (nconc (aref tools-array (1- (length tools-array)))
                    '(:cache_control (:type "ephemeral")))))))
+    (when gptel--schema
+      (plist-put prompts-plist :tools
+                 (vconcat
+                  (list (gptel--parse-schema backend gptel--schema))
+                  (plist-get prompts-plist :tools)))
+      (plist-put prompts-plist :tool_choice
+                 `(:type "tool" :name ,gptel--ersatz-json-tool)))
     ;; Merge request params with model and backend params.
     (gptel--merge-plists
      prompts-plist
+     gptel--request-params
      (gptel-backend-request-params gptel-backend)
      (gptel--model-request-params  gptel-model))))
+
+(cl-defmethod gptel--parse-schema ((_backend gptel-anthropic) schema)
+  ;; Unlike the other backends, Anthropic generates JSON using a tool call.  We
+  ;; write the tool here, meant to be added to :tools.
+  (list
+   :name "response_json"
+   :description "Record JSON output according to user prompt"
+   :input_schema (gptel--preprocess-schema
+                  (gptel--dispatch-schema-type schema))))
 
 (cl-defmethod gptel--parse-tools ((_backend gptel-anthropic) tools)
   "Parse TOOLS to the Anthropic API tool definition spec.
@@ -295,6 +339,41 @@ TOOL-USE is a list of plists containing tool names, arguments and call results."
 
 ;; NOTE: No `gptel--inject-prompt' method required for gptel-anthropic, since
 ;; this is handled by its defgeneric implementation
+
+(cl-defmethod gptel--inject-tool-call ((_backend gptel-anthropic) data tool-call new-call)
+  "Replace TOOL-CALL in query DATA with NEW-CALL.
+
+BACKEND is the `gptel-backend'.  See the generic function documentation
+for details.  This implementation handles the Anthropic API."
+  ;; FIXME: We currently assume that the tool call being modified is in the last
+  ;; position in the messages array.
+  (if-let* ((messages (plist-get data :messages))
+            (entry (aref messages (1- (length messages))))
+            (contents (plist-get entry :content))
+            (id (plist-get tool-call :id))
+            (indexed-call
+             (cl-loop for chunk across contents
+                      for i upfrom 0
+                      if (equal (plist-get chunk :id) id)
+                      return (cons i chunk)
+                      finally return nil))
+            (index (car indexed-call))
+            (call (cdr indexed-call)))
+      (if (null new-call)
+          (if (= (length contents) 1)
+              (plist-put data :messages (substring messages nil -1))
+            (plist-put entry :content
+                       (vconcat (substring contents 0 index)
+                                (substring contents (1+ index)))))
+        (when-let* ((args (plist-get new-call :args)))
+          (plist-put call :input args))
+        (when-let* ((name (plist-get new-call :name)))
+          (plist-put call :name name)))
+    (display-warning
+     '(gptel tool-call)
+     (format "Could not inject updated tool-call arguments for tool call %s, %s"
+             (plist-get tool-call :name)
+             (truncate-string-to-width (prin1-to-string new-call) 50 nil nil t)))))
 
 ;; TODO: Remove these functions (#792)
 (defun gptel--anthropic-format-tool-id (tool-id)
@@ -375,6 +454,7 @@ TOOL-USE is a list of plists containing tool names, arguments and call results."
                             ;; (id (gptel--anthropic-format-tool-id id))
                             (name (plist-get tool-call :name))
                             (arguments (plist-get tool-call :args)))
+                       (unless id (setq id (gptel--anthropic-format-tool-id nil)))
                        (plist-put tool-call :id id)
                        (plist-put tool-call :result
                                   (string-trim (buffer-substring-no-properties
@@ -412,7 +492,8 @@ TOOL-USE is a list of plists containing tool names, arguments and call results."
           (if (stringp last-message)
               (plist-put
                (car (last prompts)) :content
-               `[(:type "text" :text ,last-message :cache_control (:type "ephemeral"))])
+               `[(:type "text" :text ,last-message
+                  :cache_control (:type "ephemeral"))])
             (nconc (aref (plist-get (car (last prompts)) :content) 0)
                    '(:cache_control (:type "ephemeral"))))))
     prompts))
@@ -452,10 +533,7 @@ format."
    `(:type ,type
      :source (:type "base64"
               :media_type ,(plist-get part :mime)
-              :data ,(gptel--base64-encode media))
-     ;; TODO Make media caching a user option
-     ,@(and (gptel--model-capable-p 'cache)
-        '(:cache_control (:type "ephemeral"))))
+              :data ,(gptel--base64-encode media)))
    into parts-array
    else if (plist-get part :textfile) collect
    `(:type "text"
@@ -465,34 +543,21 @@ format."
    into parts-array
    finally return (vconcat parts-array)))
 
-(cl-defmethod gptel--wrap-user-prompt ((_backend gptel-anthropic) prompts
-                                       &optional inject-media)
-  "Wrap the last user prompt in PROMPTS with the context string.
+(cl-defmethod gptel--inject-media ((_backend gptel-anthropic) prompts)
+  "Wrap the first user prompt in PROMPTS with included media files.
 
-If INJECT-MEDIA is non-nil wrap it with base64-encoded media
-files in the context."
-  (if inject-media
-      ;; Wrap the first user prompt with included media files/contexts
-      (when-let* ((media-list (gptel-context--collect-media)))
-        (cl-callf (lambda (current)
-                    (vconcat
-                     (gptel--anthropic-parse-multipart media-list)
-                     (cl-typecase current
-                       (string `((:type "text" :text ,current)))
-                       (vector current)
-                       (t current))))
-            (plist-get (car prompts) :content)))
-    ;; Wrap the last user prompt with included text contexts
+Media files, if present, are placed in `gptel-context'."
+  (when-let* ((media-list (gptel-context--collect-media)))
     (cl-callf (lambda (current)
-                (cl-etypecase current
-                  (string (gptel-context--wrap current))
-                  (vector (if-let* ((wrapped (gptel-context--wrap nil)))
-                              (vconcat `((:type "text" :text ,wrapped))
-                                       current)
-                            current))))
-        (plist-get (car (last prompts)) :content))))
+                (vconcat
+                 (gptel--anthropic-parse-multipart media-list)
+                 (cl-typecase current
+                   (string `((:type "text" :text ,current)))
+                   (vector current)
+                   (t current))))
+        (plist-get (car prompts) :content))))
 
-;; (if-let* ((context-string (gptel-context--string gptel-context--alist)))
+;; (if-let* ((context-string (gptel-context--string gptel-context)))
 ;;     (cl-callf (lambda (previous)
 ;;                 (cl-typecase previous
 ;;                   (string (concat context-string previous))
@@ -502,13 +567,29 @@ files in the context."
 ;;         (plist-get (car (last prompts)) :content)))
 
 (defconst gptel--anthropic-models
-  '((claude-3-7-sonnet-20250219
-     :description "Hybrid model capable of standard thinking and extended thinking modes"
+  '((claude-sonnet-4-6
+     :description "The best combination of speed and intelligence"
      :capabilities (media tool-use cache)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
      :context-window 200
      :input-cost 3
      :output-cost 15
+     :cutoff-date "2025-08")
+    (claude-sonnet-4-5-20250929
+     :description "High-performance model with exceptional reasoning and efficiency"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 3
+     :output-cost 15
+     :cutoff-date "2025-07")
+    (claude-haiku-4-5-20251001
+     :description "Near-frontier intelligence at blazing speeds with extended thinking"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 1
+     :output-cost 5
      :cutoff-date "2025-02")
     (claude-sonnet-4-20250514
      :description "High-performance model with exceptional reasoning and efficiency"
@@ -518,7 +599,23 @@ files in the context."
      :input-cost 3
      :output-cost 15
      :cutoff-date "2025-03")
-    (claude-opus-4-20250514
+    (claude-opus-4-6
+     :description "Most capable model for complex reasoning and advanced coding"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 5
+     :output-cost 25
+     :cutoff-date "2025-08")
+    (claude-opus-4-5-20251101
+     :description "Most capable model for complex reasoning and advanced coding"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 5
+     :output-cost 25
+     :cutoff-date "2025-03")
+    (claude-opus-4-1-20250805
      :description "Most capable model for complex reasoning and advanced coding"
      :capabilities (media tool-use cache)
      :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
@@ -526,6 +623,22 @@ files in the context."
      :input-cost 15
      :output-cost 75
      :cutoff-date "2025-03")
+    (claude-opus-4-20250514
+     :description "Anthropic's previous flagship model"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 15
+     :output-cost 75
+     :cutoff-date "2025-03")
+    (claude-3-7-sonnet-20250219
+     :description "Hybrid model capable of standard thinking and extended thinking modes"
+     :capabilities (media tool-use cache)
+     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp" "application/pdf")
+     :context-window 200
+     :input-cost 3
+     :output-cost 15
+     :cutoff-date "2025-02")
     (claude-3-5-sonnet-20241022
      :description "Highest level of intelligence and capability"
      :capabilities (media tool-use cache)
@@ -556,14 +669,6 @@ files in the context."
      :context-window 200
      :input-cost 15
      :output-cost 75
-     :cutoff-date "2023-08")
-    (claude-3-sonnet-20240229
-     :description "Balance of intelligence and speed (legacy model)"
-     :capabilities (media tool-use)
-     :mime-types ("image/jpeg" "image/png" "image/gif" "image/webp")
-     :context-window 200
-     :input-cost 3
-     :output-cost 15
      :cutoff-date "2023-08")
     (claude-3-haiku-20240307
      :description "Fast and most compact model for near-instant responsiveness"
@@ -604,8 +709,7 @@ URL `https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-tab
            (lambda () (when-let* ((key (gptel--get-api-key)))
                    `(("x-api-key" . ,key)
                      ("anthropic-version" . "2023-06-01")
-                     ("anthropic-beta" . "pdfs-2024-09-25")
-                     ("anthropic-beta" . "prompt-caching-2024-07-31")))))
+                     ("anthropic-beta" . "extended-cache-ttl-2025-04-11")))))
           (models gptel--anthropic-models)
           (host "api.anthropic.com")
           (protocol "https")
