@@ -16,6 +16,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # Enable support for NTFS filesystem.
+  # I use this to format my external backup USB drives as NTFS,
+  # so I can read them on both Windows and Linux.
+  boot.supportedFilesystems = [ "ntfs" ];
+
   # Note: For better support of my very recent GPU (Radeon RX 9070),
   # I added this line to update from the default kernel version of
   # 6.12.63 -> 6.18.2. That's what `pkgs.linuxPackages_latest`
