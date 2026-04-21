@@ -178,9 +178,18 @@
       enable = true;
       enableDefaultConfig = false;
       matchBlocks = {
+        "bitbucket.org" = {
+          user = "git";
+          identityFile = "~/.ssh/benvvalk_ed25519";
+        };
         "github.com" = {
           user = "git";
           identityFile = "~/.ssh/benvvalk_ed25519";
+        };
+        "github-awesomesauce" = {
+          user = "git";
+          hostname = "github.com";
+          identityFile = "~/.ssh/awesomesauce_ed25519";
         };
       };
     };
