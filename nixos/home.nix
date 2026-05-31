@@ -25,11 +25,13 @@
             filezilla # graphical FTP client
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
+            gdb # GNU debugger
             gh # GitHub CLI tool
             go # golang compiler and CLI tools
             gnome-terminal # terminal emulator
             google-chrome # web browser
             gosmee # smee.io client for local webhook testing
+            gparted # view/edit/format drive partitions
             inetutils # for `telnet`
             jq # querying/transforming JSON data
             jwt-cli # JSON web token (generate app tokens for GitHub REST API)
@@ -46,7 +48,9 @@
             sqlite # for `benv/firefox-visit-history-url` in emacs
             tree-sitter # tree-sitter CLI, for Elisp-Tred development
             unixtools.netstat # classic Unix networking util
+            yq # query tool for JSON and YAML
             vlc # video player
+            xkill # click on X11 window to kill it
 
             (writeShellApplication {
                 name = "trash";
