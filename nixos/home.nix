@@ -39,6 +39,7 @@
             nautilus # GNOME file manager
             nodejs-slim # for tree-sitter, for elisp-tred development
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
+            pianoteq.standard-trial_8
             postgresql # for `sponsoredissues.org` development (see note above)
             postgresql.pg_config # for `sponsoredissues.org` development (see note above)
             pyright # Python linter / LSP server
