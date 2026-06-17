@@ -32,7 +32,9 @@
             google-chrome # web browser
             gosmee # smee.io client for local webhook testing
             gparted # view/edit/format drive partitions
+            imagemagick # command-line tools for image processing
             inetutils # for `telnet`
+            inkscape # SVG editor
             jq # querying/transforming JSON data
             jwt-cli # JSON web token (generate app tokens for GitHub REST API)
             killall # kill processes by name
