@@ -278,25 +278,4 @@
         ''}";
       };
     };
-
-    systemd.user.services.sponsoredissues-gosmee = {
-      Unit = {
-        Description = "Start local webhook proxy for sponsoredissues.org";
-      };
-      Install = {
-        WantedBy = [ "default.target" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.writeShellScript "sponsoredissues-gosmee" ''
-          #!/run/current-system/sw/bin/bash
-          set -eu -o pipefail
-          cd $HOME/git/sponsoredissues.org-dev
-          source .envrc
-          ${pkgs.gosmee}/bin/gosmee client \
-             --saveDir $HOME/tmp/gosmee \
-             $SMEE_URL \
-             http://localhost:8000/site/accounts/github/login/callback/
-        ''}";
-      };
-    };
 }
