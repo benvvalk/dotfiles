@@ -2630,15 +2630,22 @@ recency."
           (vertico-sort-function nil))
       (shelldon-output-history)))
 
-  (defun benv/shelldon-from-history ()
+  (defun benv/shelldon-from-history (arg)
     "Select a command from shell command history and use it prefill a shelldon prompt."
-    (interactive)
+    (interactive "P")
     (let* ((benv/vertico-truncate-lines nil)
            (vertico-sort-function nil)
            ;; if we are inside a project, run the command from the project root
            (project (project-current))
            (default-directory (if project (project-root project) default-directory))
-           (command (completing-read "Select command: " shell-command-history)))
+           (command (completing-read "Select command: " shell-command-history))
+           ;; don't show output buffer if interactive argument was used
+           ;; (e.g. `C-u M-x (benv/shelldon-from-history)').
+           (display-buffer-alist (if arg
+                                     (cons '("\\*shelldon:" (display-buffer-no-window) (allow-no-window . t))
+                                           display-buffer-alist)
+                                   (cons '("\\*shelldon:" display-buffer-same-window)
+                                           display-buffer-alist))))
       ;; Call shelldon interactively, then insert the selected command
       (minibuffer-with-setup-hook
           (lambda ()
@@ -2647,6 +2654,11 @@ recency."
             ;; Move cursor to end of inserted text
             (goto-char (point-max)))
         (call-interactively #'shelldon))))
+
+  (defun benv/shelldon-from-history-no-output ()
+    (interactive)
+    (let ((current-prefix-arg '(4)))
+      (call-interactively #'benv/shelldon-from-history)))
 
   (defun benv/shelldon-remember-shell-command (shell-command)
     "Record the shell command that was used to generate the output for
@@ -2747,6 +2759,7 @@ was slow to shutdown."
    "x h L" (lambda () (interactive) (benv/shelldon-buffer-in-neighbor-window-and-focus 'right)))
   (:states '(motion normal insert emacs)
    "s-r" #'benv/shelldon-from-history
+   "s-R" #'benv/shelldon-from-history-no-output
    "s-x" #'shelldon)
   :init
   (evil-set-initial-state 'shell-mode 'normal))

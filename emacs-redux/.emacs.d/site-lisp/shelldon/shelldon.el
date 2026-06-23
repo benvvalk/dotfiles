@@ -137,7 +137,7 @@ impose the use of a shell (with its need to quote arguments)."
 	    ;; Use the comint filter for proper handling of
 	    ;; carriage motion (see comint-inhibit-carriage-motion).
             (set-process-filter proc #'comint-output-filter))
-            (switch-to-buffer buffer)))))
+            (display-buffer buffer)))))
   nil)
 
 (define-derived-mode shelldon-mode shell-mode "Shelldon"
