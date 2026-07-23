@@ -85,11 +85,11 @@
 
   services.kmonad = {
       enable = true;
-      keyboards.dell.device = "/dev/input/by-path/pci-0000:16:00.0-usbv2-0:3.2:1.0-event-kbd";
+      keyboards.dell.device = "/dev/input/by-id/usb-Dell_Dell_USB_Keyboard-event-kbd";
       keyboards.dell.config = ''
          (defcfg
            ;; For Linux
-           input  (device-file "/dev/input/by-path/pci-0000:16:00.0-usbv2-0:3.2:1.0-event-kbd")
+           input  (device-file "/dev/input/by-id/usb-Dell_Dell_USB_Keyboard-event-kbd")
            output (uinput-sink
                        "My KMonad output"
                        "sleep 1 && xset r rate 250 90"
