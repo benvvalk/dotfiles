@@ -235,15 +235,17 @@
     #     set the GUI user/password. Use the user/password from
     #     my password store so that I won't forget it.
     #
-    # Previously, I tried making a very fancy/automated Syncthing setup as a
-    # system-level service in `configuration.nix`, but I found that it was
-    # lacking some important options, and the extra complexity really wasn't
-    # worth the benefits. For example, it doesn't seem possible to safely set
-    # the GUI user/password via `sops-nix`, because it can only read the
-    # user/password attributes from a string rather than a file.
+    # Previously, I tried making a very fancy/automated Syncthing
+    # setup as a system-level service in `configuration.nix`. However,
+    # I ran into a roadblock when trying to automatically set the
+    # Syncthing GUI user/password using `sops-nix`. The problem was
+    # that the Nix configuration option for the GUI password had to be
+    # set from an inline string, whereas `sops-nix` requires reading
+    # the password from an encrypted file.
     #
-    # My abandoned attempt to make an automated Syncthing setup is on the
-    # `nixos/syncthing-as-system-service` branch of my `dotfiles` repo.
+    # My abandoned attempt to make an automated Syncthing setup is on
+    # the `nixos/syncthing-as-system-service` branch of my `dotfiles`
+    # repo.
     services.syncthing = {
        enable = true;
     };
