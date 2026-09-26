@@ -18,11 +18,13 @@
             argc # command-line arguments parsing tool for bash
             claude-code # terminal-based LLM agent
             claude-code-acp # needed for using Claude Code with `agent-shell` in emacs
+            inputs.nixpkgs-demucs-rs.legacyPackages.${system}.demucs-rs # stem splitter (split MP3 into separate tracks per instrument)
             direnv # for emacs-direnv
             doctl # DigitalOcean CLI
             evince # PDF viewer
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs # emacs-29.4
             filezilla # graphical FTP client
+            flameshot # screenshot tool
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
             gdb # GNU debugger
@@ -37,9 +39,11 @@
             inkscape # SVG editor
             jq # querying/transforming JSON data
             jwt-cli # JSON web token (generate app tokens for GitHub REST API)
+            kdePackages.kdenlive # video editor
             killall # kill processes by name
             nautilus # GNOME file manager
             nodejs-slim # for tree-sitter, for elisp-tred development
+            obs-studio # video recording software
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
             pianoteq.standard-trial_8
             postgresql # for `sponsoredissues.org` development (see note above)
@@ -48,10 +52,15 @@
             python3 # for local `sponsoredissues.org` development
             qbittorrent
             ripgrep # for `M-x rg` in emacs
+            satty # screenshot annotation tool
+            showmethekey # show keypresses in Wayland (for tree-guide.el video)
+            sox # mix .wav files
             sqlite # for `benv/firefox-visit-history-url` in emacs
+            swappy # screenshot annotation tool
             tree-sitter # tree-sitter CLI, for Elisp-Tred development
             unixtools.netstat # classic Unix networking util
             yq # query tool for JSON and YAML
+            inputs.nixpkgs-yt-dlp.legacyPackages.${system}.yt-dlp # YouTube video/audio downloader and streamer (CLI)
             vlc # video player
             xkill # click on X11 window to kill it
 

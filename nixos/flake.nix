@@ -28,6 +28,17 @@
         # https://youtu.be/cZDiqGWPHKI?t=1212
         nixpkgs-emacs.url = "github:nixos/nixpkgs/0c39f3b5a9a234421d4ad43ab9c7cf64840172d0";
 
+        # Stem splitter (split mp3 into separate .wav files for
+        # bass, drums, vocals, etc.).
+        #
+        # Package did not exist in NixOS-25.11.
+        nixpkgs-demucs-rs.url = "github:nixos/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410";
+
+        # YouTube downloader for video/audio files.
+        # This needs to be frequently updated, because YouTube often
+        # makes changes that break the downloader.
+        nixpkgs-yt-dlp.url = "github:nixos/nixpkgs/nixos-unstable";
+
         # https://github.com/opensteno/plover-flake
         plover-flake.url = "github:openstenoproject/plover-flake";
 
