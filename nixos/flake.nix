@@ -57,7 +57,7 @@
         {
             nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
                 inherit system;
-                modules = [ ./configuration.nix ];
+                modules = [ ./hosts/desktop/configuration.nix ];
             };
 
             homeConfigurations.benv = home-manager.lib.homeManagerConfiguration {
