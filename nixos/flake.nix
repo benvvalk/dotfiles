@@ -55,9 +55,15 @@
             system = "x86_64-linux";
         in
         {
-            nixosConfigurations.desktop = nixpkgs.lib.nixosSystem {
+            nixosConfigurations = {
+              desktop = nixpkgs.lib.nixosSystem {
                 inherit system;
                 modules = [ ./hosts/desktop/configuration.nix ];
+              };
+              laptop = nixpkgs.lib.nixosSystem {
+                inherit system;
+                modules = [ ./hosts/laptop/configuration.nix ];
+              };
             };
 
             homeConfigurations = {
@@ -65,6 +71,11 @@
                 pkgs = nixpkgs.legacyPackages.${system};
                 extraSpecialArgs = { inherit inputs system; };
                 modules = [ ./hosts/desktop/home.nix ];
+              };
+              "benv@laptop" = home-manager.lib.homeManagerConfiguration {
+                pkgs = nixpkgs.legacyPackages.${system};
+                extraSpecialArgs = { inherit inputs system; };
+                modules = [ ./hosts/laptop/home.nix ];
               };
             };
         };
