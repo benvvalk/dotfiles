@@ -60,10 +60,12 @@
                 modules = [ ./hosts/desktop/configuration.nix ];
             };
 
-            homeConfigurations.benv = home-manager.lib.homeManagerConfiguration {
+            homeConfigurations = {
+              "benv@desktop" = home-manager.lib.homeManagerConfiguration {
                 pkgs = nixpkgs.legacyPackages.${system};
                 extraSpecialArgs = { inherit inputs system; };
-                modules = [ ./home.nix ];
+                modules = [ ./hosts/desktop/home.nix ];
+              };
             };
         };
 }
