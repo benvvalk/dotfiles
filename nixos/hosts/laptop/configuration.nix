@@ -81,6 +81,7 @@
   environment.systemPackages = with pkgs; [
     git
     home-manager
+    openvpn
     stow
     vim
   ];
@@ -97,6 +98,43 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  # Set up NordVPN via an OpenVPN service, because there is no
+  # easy-to-use package/service for NordVPN in nixpkgs-25.11, and I
+  # couldn't figure out how to use the NordVPN service that's
+  # available in nixpkgs-unstable. Setting up NordVPN via OpenVPN was
+  # a pain in the ass. I had to log into the NordVPN website, select a
+  # specific VPN server, then click to download it's OpenVPN
+  # configuration file (.ovpn). I also had to download "server
+  # credentials" (i.e. a separate username/password pair) and save
+  # them to `/etc/openvpn/nord-creds.txt`.
+  #
+  # Then, when I was testing the VPN, I discovered it had an "IPv6
+  # leak", which I fixed by fully disabling IPv6 in my configuration
+  # (see below).
+  services.openvpn.servers = {
+    nordvpn-ca2173 = {
+      config = ''
+         config /etc/openvpn/ca2173.nordvpn.com.tcp_2.6.ovpn
+         auth-user-pass /etc/openvpn/nord-creds.txt
+      '';
+      autoStart = false;       # enable VPN by default?
+      updateResolvConf = true; # route DNS requests through VPN?
+    };
+  };
+
+  # The OpenVPN setup above has an "IPv6 leak". That
+  # can probably be fixed by changing settings in the `.ovpn`
+  # config file, but I feel it's simpler/safer to just
+  # disable IPv6 altogether.
+  #
+  # I discovered there was an IPv6 leak while testing the OpenVPN
+  # setup. The geographic location and IPv4 address reported by `curl
+  # ipinfo.io` changed as expected when enabling/disabling the VPN,
+  # but the IPv6 address returned by `curl ifconfig.me` remained the
+  # same regardless of whether the VPN was enabled/disabled.
+  boot.kernelParams = [ "ipv6.disable=1" ];
+  networking.enableIPv6 = false;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
