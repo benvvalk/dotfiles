@@ -60,30 +60,6 @@
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  services.xserver.displayManager = {
-    # Prefixing the `emacs` start command with `EXWM=1` or `export
-    # EXWM=1 &&` doesn't work for some reason, but adding it to
-    # `sessionCommands` does.
-    sessionCommands = "export EXWM=1";
-    session = [
-       {
-         name = "EXWM";
-         # Note: I'm not exactly sure what this setting does, but
-         # changing it from "desktop" -> "window" solved a problem
-         # with long delays (~ 20 seconds) when running `gpg`/`pass`
-         # commands under EXWM. I guess it has something to do with
-         # the initial environment setup on login (perhaps starting a
-         # DBus session, or setting GNOME environment variables that
-         # affect the behaviour of `gnome-keyring-daemon`).
-         manage = "window";
-         start = ''
-            emacs --maximized --debug-init;
-            waitPID=$!
-         '';
-       }
-    ];
-  };
-
   # Note: `kmonad.device` is defined in `../../common/configuration.nix`
   kmonad.device = "/dev/input/by-id/usb-Dell_Dell_USB_Keyboard-event-kbd";
 
