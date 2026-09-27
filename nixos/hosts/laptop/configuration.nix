@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../common/configuration.nix
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -41,6 +42,9 @@
     layout = "us";
     variant = "";
   };
+
+  # Note: This option is defined in `../../common/configuration.nix`.
+  kmonad.device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
