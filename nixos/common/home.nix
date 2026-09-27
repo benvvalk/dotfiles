@@ -87,18 +87,31 @@
         profileExtra = ''
             export MANPATH=$HOME/.nix-profile/share/man
 
-            # Symlink shared `.gnupg` and `.password-store` directories from
-            # Syncthing to my home directory.
+            # Symlink shared `.gnupg`/`.ssh`/`.password-store` files/dirs from
+            # Syncthing folder to my home directory.
             #
-            # Note: On a new machine, the source directories under `~/Sync`
+            # Note 1: On a new machine, the source directories under `~/Sync`
             # (e.g. `~/Sync/.gnupg`) will not exist until I've done the initial
-            # setup of Syncthing in the web UI, in order to connect this machine to
-            # my other computers. I don't think it's practical to automate that
-            # step, and it only has to be done once anyway.
+            # setup of Syncthing in the web UI, which has to be done manually.
+            # (See notes in Syncthing section of this file.)
+            #
+            # Note 2: `cp -s` creates symlinks instead of copying files, and
+            # `cp --update=none` tells `cp` not to replace any files that
+            # already exist in the destination directory. The latter is important
+            # because `home.nix` automatically creates the `.gnupg/` and `.ssh/`,
+            # and some of the configuration files inside those directories. But
+            # `home.nix` does not automatically generate the gpg/ssh keys, which
+            # is why I copy them from my `~/Sync` folder.I
 
-            if [ ! -e .ssh -a -d Sync/.ssh ]; then ln -s Sync/.ssh .; fi
-            if [ ! -e .gnupg -a -d Sync/.gnupg ]; then ln -s Sync/.gnupg .; fi
-            if [ ! -e .password-store -a -d Sync/.password-store ]; then ln -s Sync/.password-store .; fi
+            if [ -d Sync/.ssh ]; then
+               cp --update=none -as ~/Sync/.ssh/*ed* ~/.ssh
+            fi
+            if [ -d Sync/.gnupg ]; then
+               cp --update=none -as ~/Sync/.gnupg/* ~/.gnupg/
+            fi
+            if [ ! -e .password-store -a -d Sync/.password-store ]; then
+               ln -s Sync/.password-store .
+            fi
 
             # Symlink my dotfiles into my home directory.
             #
