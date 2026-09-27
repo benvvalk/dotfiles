@@ -37,6 +37,10 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
 
+  # Enable X11 server (for EXWM)
+  services.xserver.enable = true;
+  services.xserver.dpi = 209;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
