@@ -47,6 +47,12 @@
     variant = "";
   };
 
+  services.xserver.displayManager.sessionCommands = ''
+    # fix slow default mouse cursor speed
+    touchpad_id=$(xinput list | grep -i touchpad | head -1 | perl -nle 'print $1 if /id=(\d+)/')
+    xinput set-prop $touchpad_id "libinput Accel Speed" 0.5
+  '';
+
   # Note: This option is defined in `../../common/configuration.nix`.
   kmonad.device = "/dev/input/by-path/platform-i8042-serio-0-event-kbd";
 
