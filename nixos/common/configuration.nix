@@ -76,7 +76,13 @@
       # Prefixing the `emacs` start command with `EXWM=1` or `export
       # EXWM=1 &&` doesn't work for some reason, but adding it to
       # `sessionCommands` does.
-      sessionCommands = "export EXWM=1";
+      sessionCommands = ''
+         # keyboard repeat delay/rate
+         xset r rate 250 90
+
+         # tells my `init.el` to enable EXWM
+         export EXWM=1
+      '';
       session = [
         {
           name = "EXWM";
