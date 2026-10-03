@@ -65,6 +65,9 @@
     # jack.enable = true;
   };
 
+  # Install/enable Steam (games store).
+  programs.steam.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
