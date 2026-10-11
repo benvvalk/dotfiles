@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   imports =
@@ -10,6 +10,7 @@
       ./hardware-configuration.nix
       ./modules/cloudflared.nix
       ../../common/configuration.nix
+      inputs.moonshine.nixosModules.default
     ];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -123,28 +124,56 @@
   # Install redis service for local web development (sponsoredissues.org).
   services.redis.enable = true;
 
-  # Sunshine: Remote desktop / game streaming server.
+  # # Sunshine: Remote desktop / game streaming server.
+  # #
+  # # The sunshine service needs to be started manually
+  # # as a user-level service. (Even though there is an
+  # # a `service.sunshine.autoStart` option, it doesn't seem to
+  # # work.)
+  # #
+  # # If I remember correctly, the command to start the service is:
+  # # `systemctl --user start sunshine`.
+  # services.sunshine = {
+  #   enable = true;
+  #   openFirewall = true;
+  # };
+
+  # Moonshine: Remote desktop / game streaming server
   #
-  # The sunshine service needs to be started manually
-  # as a user-level service. (Even though there is an
-  # a `service.sunshine.autoStart` option, it doesn't seem to
-  # work.)
+  # Setup instructions: https://github.com/hgaiser/moonshine/blob/main/nix/README.md
   #
-  # If I remember correctly, the command to start the service is:
-  # `systemctl --user start sunshine`.
-  services.sunshine = {
+  # WebUI for pairing with Moonlight client: http://localhost:47989/pin
+
+  services.moonshine = {
     enable = true;
+    user = "benv";
     openFirewall = true;
+    settings = {
+      application = [
+        {
+          title = "Steam Desktop";
+          command = [
+            "/run/current-system/sw/bin/steam"
+            "-nobigpicture"
+            "-nogamepadui"
+          ];
+        }
+      ];
+    };
   };
+
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.benv = {
     isNormalUser = true;
     description = "Ben Vandervalk";
-    extraGroups = [ "networkmanager" "wheel" "dialout" ];
+    # "dialout": added for Plover
+    # "input": add for Moonshine (might not be needed)
+    extraGroups = [ "networkmanager" "wheel" "dialout" "input" ];
     packages = with pkgs; [
     #  thunderbird
     ];
+    uid = 1000;
   };
 
   # Install firefox.

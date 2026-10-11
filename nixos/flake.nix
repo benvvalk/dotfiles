@@ -48,6 +48,10 @@
             url = "github:nix-community/home-manager/release-25.11";
             inputs.nixpkgs.follows = "nixpkgs";
         };
+
+        moonshine = {
+          url = "github:hgaiser/moonshine/v0.16.1";
+        };
     };
 
     outputs = { nixpkgs, home-manager, ... }@inputs:
@@ -58,6 +62,7 @@
             nixosConfigurations = {
               desktop = nixpkgs.lib.nixosSystem {
                 inherit system;
+                specialArgs = { inherit inputs system; };
                 modules = [ ./hosts/desktop/configuration.nix ];
               };
               laptop = nixpkgs.lib.nixosSystem {
