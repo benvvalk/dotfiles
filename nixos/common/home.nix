@@ -24,6 +24,7 @@
             evince # PDF viewer
             inputs.nixpkgs-emacs.legacyPackages.${system}.emacs # emacs-29.4
             filezilla # graphical FTP client
+            ffmpeg # CLI tool for video editing/processing
             flameshot # screenshot tool
             gcc # `org-roam` needs this to auto-compile its own `sqlite` binary
             gcr # added because of advice here: https://mynixos.com/home-manager/option/services.gpg-agent.pinentry.package
@@ -41,6 +42,7 @@
             jwt-cli # JSON web token (generate app tokens for GitHub REST API)
             kdePackages.kdenlive # video editor
             killall # kill processes by name
+            marktext # Markdown editor
             nautilus # GNOME file manager
             nodejs-slim # for tree-sitter, for elisp-tred development
             obs-studio # video recording software
