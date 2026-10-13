@@ -177,6 +177,14 @@
 
   programs.steam.enable = true;
 
+  # Workaround for `kdenlive` crash when opening color picker or file
+  # chooser in Title Clip editor.
+  #
+  # See: https://github.com/NixOS/nixpkgs/issues/483440
+  environment.extraInit = ''
+    export XDG_DATA_DIRS="$XDG_DATA_DIRS:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+  '';
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
