@@ -2,6 +2,17 @@
 
     imports = [ ../../common/home.nix ];
 
+    home.packages = with pkgs; [
+      gosmee # smee.io client for local webhook testing
+      jwt-cli # JSON web token (generate app tokens for GitHub REST API)
+      kdePackages.kdenlive # video editor
+      obs-studio # video recording software
+      pianoteq.standard-trial_8 # MIDI piano simulator (trial version)
+      postgresql # for `sponsoredissues.org` development (see note above)
+      postgresql.pg_config # for `sponsoredissues.org` development (see note above)
+      showmethekey # show keypresses in Wayland (for tree-guide.el video)
+    ];
+
     systemd.user.services.sponsoredissues-django = {
       Unit = {
         Description = "Start local Django web server for sponsoredissues.org";

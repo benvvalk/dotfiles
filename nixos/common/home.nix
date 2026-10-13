@@ -33,29 +33,21 @@
             go # golang compiler and CLI tools
             gnome-terminal # terminal emulator
             google-chrome # web browser
-            gosmee # smee.io client for local webhook testing
             gparted # view/edit/format drive partitions
             imagemagick # command-line tools for image processing
             inetutils # for `telnet`
             inkscape # SVG editor
             jq # querying/transforming JSON data
-            jwt-cli # JSON web token (generate app tokens for GitHub REST API)
-            kdePackages.kdenlive # video editor
             killall # kill processes by name
             marktext # Markdown editor
             nautilus # GNOME file manager
             nodejs-slim # for tree-sitter, for elisp-tred development
-            obs-studio # video recording software
             (pass.withExtensions (exts: [exts.pass-otp])) # copied from: https://b2g.h11e.de/2024/07/pass-ext/
-            pianoteq.standard-trial_8
-            postgresql # for `sponsoredissues.org` development (see note above)
-            postgresql.pg_config # for `sponsoredissues.org` development (see note above)
             pyright # Python linter / LSP server
             python3 # for local `sponsoredissues.org` development
             qbittorrent
             ripgrep # for `M-x rg` in emacs
             satty # screenshot annotation tool
-            showmethekey # show keypresses in Wayland (for tree-guide.el video)
             sox # mix .wav files
             sqlite # for `benv/firefox-visit-history-url` in emacs
             swappy # screenshot annotation tool
