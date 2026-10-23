@@ -2864,8 +2864,17 @@ the messages for the relevant output."
     (lispy-define-key map "M-(" 'lispy-wrap-round))
   :hook emacs-lisp-mode)
 
-(use-package show-paren-mode
-  :hook (emacs-lisp-mode . show-paren-mode))
+;; Fold/unfold lisp expressions using the TAB key
+(use-package hideshow-org
+  :ensure t
+  :config
+  ;; Bugfix: Don't move the cursor when folding/unfolding!
+  (advice-add #'hs-toggle-hiding
+              :around
+              (lambda (orig-fun)
+                (save-excursion
+                  (funcall orig-fun))))
+  :hook (emacs-lisp-mode . hs-org/minor-mode))
 
 ;;----------------------------------------
 ;; ledger-mode
