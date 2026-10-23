@@ -1194,7 +1194,9 @@ file."
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
-  :hook (org-mode . visual-line-mode)
+  :hook (org-mode . (lambda ()
+                      (visual-line-mode)
+                      (electric-indent-local-mode -1)))
   :custom
   (org-confirm-babel-evaluate . nil)
   :config
