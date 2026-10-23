@@ -2840,7 +2840,6 @@ the messages for the relevant output."
                              (setq-local show-paren-style 'expression))))
 
 (use-package lispy
-  :hook (elisp-mode . lispy-mode)
   :general
   (:keymaps 'lispy-mode-map
    :states '(motion insert emacs)
@@ -2860,7 +2859,8 @@ the messages for the relevant output."
   ;; ones provided by evil-collection in
   ;; ~/.emacs.d/elpa/evil-collection-20210401.1012/modes/lispy/evil-collection-lispy.el
   (let ((map evil-collection-lispy-mode-map-special))
-    (lispy-define-key map "M-(" 'lispy-wrap-round)))
+    (lispy-define-key map "M-(" 'lispy-wrap-round))
+  :hook emacs-lisp-mode)
 
 (use-package show-paren-mode
   :hook (emacs-lisp-mode . show-paren-mode))
