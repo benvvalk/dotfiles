@@ -267,6 +267,7 @@
   :init
   (setq evil-collection-setup-minibuffer t)
   :config
+  (delete 'lispy evil-collection-mode-list)
   (setq evil-collection-key-blacklist
         (list benv/evil-leader-key
               benv/major-mode-leader-key
