@@ -2834,6 +2834,11 @@ the messages for the relevant output."
     :load-path "~/git/tree-guide.el/"
     :hook emacs-lisp-mode))
 
+;; Highlight current lisp expression
+(use-package paren
+  :hook (emacs-lisp-mode . (lambda ()
+                             (setq-local show-paren-style 'expression))))
+
 (use-package lispy
   :hook (elisp-mode . lispy-mode)
   :general
