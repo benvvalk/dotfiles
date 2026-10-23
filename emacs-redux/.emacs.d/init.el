@@ -2827,6 +2827,13 @@ the messages for the relevant output."
 (use-package aggressive-indent
   :hook emacs-lisp-mode)
 
+;; Render guides to show parent-child structure of code
+(when (file-directory-p "~/git/tree-guide.el/")
+  (use-package tree-guide
+    ;; first run: `git clone https://github.com/benvvalk/tree-guide.el.git`
+    :load-path "~/git/tree-guide.el/"
+    :hook emacs-lisp-mode))
+
 (use-package lispy
   :hook (elisp-mode . lispy-mode)
   :general
