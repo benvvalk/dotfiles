@@ -3334,6 +3334,7 @@ for QUERY."
           ?\s-v ;; evil-window-vsplit
           ?\s-s ;; evil-window-split
           ?\s-r ;; benv/shelldon-from-history
+          ?\s-R ;; benv/shelldon-from-history-no-output
           ?\s-b ;; consult-buffer
           ?\s-n ;; org-roam-find-file
           ?\s-w ;; benv/firefox-visit-history-url
