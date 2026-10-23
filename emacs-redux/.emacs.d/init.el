@@ -973,41 +973,40 @@ window."
 
   :general
   (:states '(motion insert emacs)
-   :prefix benv/evil-leader-key
-   :non-normal-prefix benv/evil-insert-mode-leader-key
-   "b h" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'left))
-   "b j" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'down))
-   "b k" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'up))
-   "b l" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'right))
-   "b H" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'left))
-   "b J" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'down))
-   "b K" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'up))
-   "b L" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'right))
-   "f y" 'benv/yank-filename
-   "d y" 'benv/yank-directory
-   "w h" (lambda () (interactive) (benv/mirror-window 'left))
-   "w j" (lambda () (interactive) (benv/mirror-window 'down))
-   "w k" (lambda () (interactive) (benv/mirror-window 'up))
-   "w l" (lambda () (interactive) (benv/mirror-window 'right))
-   "w H" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'left))
-   "w J" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'down))
-   "w K" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'up))
-   "w L" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'right))
-   "' h" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'left))
-   "' j" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'down))
-   "' k" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'up))
-   "' l" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'right))
-   "' H" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'left))
-   "' J" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'down))
-   "' K" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'up))
-   "' L" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'right))
-   "w M" 'delete-other-windows
-   "w o" 'delete-other-windows
-   "w s" 'split-window-below
-   "w v" 'split-window-right
-   "y f" 'benv/yank-filename
-   "y d" 'benv/yank-directory
-   )
+           :prefix benv/evil-leader-key
+           :non-normal-prefix benv/evil-insert-mode-leader-key
+           "b h" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'left))
+           "b j" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'down))
+           "b k" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'up))
+           "b l" (lambda () (interactive) (benv/switch-to-buffer-in-dir 'right))
+           "b H" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'left))
+           "b J" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'down))
+           "b K" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'up))
+           "b L" (lambda () (interactive) (benv/switch-to-buffer-in-dir-and-focus 'right))
+           "f y" 'benv/yank-filename
+           "d y" 'benv/yank-directory
+           "w h" (lambda () (interactive) (benv/mirror-window 'left))
+           "w j" (lambda () (interactive) (benv/mirror-window 'down))
+           "w k" (lambda () (interactive) (benv/mirror-window 'up))
+           "w l" (lambda () (interactive) (benv/mirror-window 'right))
+           "w H" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'left))
+           "w J" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'down))
+           "w K" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'up))
+           "w L" (lambda () (interactive) (benv/mirror-window-in-dir-and-focus 'right))
+           "' h" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'left))
+           "' j" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'down))
+           "' k" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'up))
+           "' l" (lambda () (interactive) (benv/evil-goto-mark-in-dir 'right))
+           "' H" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'left))
+           "' J" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'down))
+           "' K" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'up))
+           "' L" (lambda () (interactive) (benv/evil-goto-mark-in-dir-and-focus 'right))
+           "w M" 'delete-other-windows
+           "w o" 'delete-other-windows
+           "w s" 'split-window-below
+           "w v" 'split-window-right
+           "y f" 'benv/yank-filename
+           "y d" 'benv/yank-directory)
   :bind
   ("M-J" . benv/enlarge-window)
   ("M-K" . benv/shrink-window)
