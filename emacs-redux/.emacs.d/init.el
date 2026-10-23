@@ -2823,6 +2823,10 @@ the messages for the relevant output."
         (emacs-lisp-mode))
       (pop-to-buffer buf))))
 
+;; Automatically re-indent code during editing
+(use-package aggressive-indent
+  :hook emacs-lisp-mode)
+
 (use-package lispy
   :hook (elisp-mode . lispy-mode)
   :general
